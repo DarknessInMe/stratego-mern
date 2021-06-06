@@ -1,5 +1,31 @@
+* {
+	box-sizing: border-box;
+}
+
 body {
 	margin: 0;
 	padding: 0;
-	box-sizing: border-box;
+}
+
+.game {
+	display: flex;
+	flex-direction: column;
+
+	&__row {
+		display: flex;
+	}
+
+	&__ceil {
+		width: 58px;
+		height: 58px;
+
+		&_aqueous {
+			background-color: blue;
+		}
+
+		&_common {
+			background-color: green;
+			border: 1px solid black;
+		}
+	}
 }
