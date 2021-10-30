@@ -1,0 +1,1 @@
+export { FigureEntity, Figure } from './game';
