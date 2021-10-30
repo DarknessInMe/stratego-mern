@@ -16,4 +16,10 @@ interface FigureEntity {
     figure: Figure
 }
 
-export { FigureEntity, Figure }
+interface WaterEntity {
+    x: number,
+    y: number,
+    water: true,
+}
+
+export { FigureEntity, Figure, WaterEntity }

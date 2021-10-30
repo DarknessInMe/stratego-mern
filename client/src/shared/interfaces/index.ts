@@ -1,1 +1,1 @@
-export { FigureEntity, Figure } from './game';
+export { FigureEntity, Figure, WaterEntity } from './game';

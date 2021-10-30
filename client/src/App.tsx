@@ -1,8 +1,11 @@
 import React from "react";
+import { Board } from "./modules/Board";
 
 const App: React.FC = () => {
 	return (
-		<div></div>
+		<>
+			<Board />
+		</>
 	);
 };
 
