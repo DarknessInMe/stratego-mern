@@ -2,5 +2,14 @@ import React from "react";
 import { render } from "react-dom";
 import App from "./App";
 import "./index.scss";
+import { GameProvider } from './context';
 
-render(<App />, document.getElementById("root"));
+const Root: React.FC = () => {
+
+    return (
+        <GameProvider>
+            <App />
+        </GameProvider>
+    )
+}
+render(<Root />, document.getElementById("root"));
