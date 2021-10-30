@@ -1,7 +1,7 @@
 import { ReactNode  } from 'react';
 
 interface ContextProvider {
-    children: ReactNode ;
+    children: ReactNode;
 }
 
 export { ContextProvider }
