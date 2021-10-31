@@ -1,17 +1,5 @@
 import board from './board';
 
-export {
-    SPY,
-    SCOUT,
-    MINER,
-    SERGEANT,
-    LIEUTENANT,
-    CAPTAIN,
-    MAJOR,
-    COLONEL,
-    GENERAL,
-    MARSHAL,
-    BOMB,
-    FLAG,
-} from './ranks';
+export * from './ranks';
+export * from './rules';
 export { board };

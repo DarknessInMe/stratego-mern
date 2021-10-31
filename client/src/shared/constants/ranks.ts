@@ -87,6 +87,25 @@ const FLAG: Figure = {
     image: FlagIcon,  
 }
 
+interface FigureMap {
+    [key: string]: Figure
+}
+
+const FIGURE_MAP: FigureMap = {
+    "1": SPY,
+    "2": SCOUT,
+    "3": MINER,
+    "4": SERGEANT,
+    "5": LIEUTENANT,
+    "6": CAPTAIN,
+    "7": MAJOR,
+    "8": COLONEL,
+    "9": GENERAL,
+    "10": MARSHAL,
+    [SpecialFigures.BOMB]: BOMB,
+    [SpecialFigures.FLAG]: FLAG,
+}
+
 export {
     SPY,
     SCOUT,
@@ -100,4 +119,5 @@ export {
     MARSHAL,
     BOMB,
     FLAG,
+    FIGURE_MAP,
 }

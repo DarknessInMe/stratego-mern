@@ -22,7 +22,7 @@ const Board: React.FC = () => {
     }
 
     return (
-        <div className="board">
+        <div className="board__section">
             {
                 board.map((line, lineIndex) => 
                     line.map((cell, cellIndex) => boardEntityStrategy(cell, `key-${lineIndex}x${cellIndex}`)))
