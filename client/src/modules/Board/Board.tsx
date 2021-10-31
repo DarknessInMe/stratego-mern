@@ -3,11 +3,14 @@ import { FigureEntity, WaterEntity } from 'shared/interfaces';
 import { BoardEntity } from 'shared/types';
 import { useGameContext } from 'context';
 import { Figure } from './components/Figure';
+import { Land } from './components/Land';
 
 const Board: React.FC = () => {
     const { board } = useGameContext();
 
-    const boardEntityStrategy = (cell: BoardEntity, key: string) => {
+    const boardEntityStrategy = (cell: BoardEntity, lineIndex: number, cellIndex: number) => {
+        const key = `key-${lineIndex}x${cellIndex}`;
+
         switch(true) {
             case !!(cell as FigureEntity)?.figure: {
                 return <Figure key={key} figureData={cell as FigureEntity}/>
@@ -16,7 +19,7 @@ const Board: React.FC = () => {
                 return <div key={key} className="board__cell water"/>
             }
             default: {
-                return <div key={key} className="board__cell land" />;
+                return <Land key={key} x={cellIndex} y={lineIndex}/>;
             }
         }
     }
@@ -25,7 +28,7 @@ const Board: React.FC = () => {
         <div className="board__section">
             {
                 board.map((line, lineIndex) => 
-                    line.map((cell, cellIndex) => boardEntityStrategy(cell, `key-${lineIndex}x${cellIndex}`)))
+                    line.map((cell, cellIndex) => boardEntityStrategy(cell, lineIndex, cellIndex)))
             }
         </div>
     )

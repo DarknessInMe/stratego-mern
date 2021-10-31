@@ -1,2 +1,3 @@
-export { Teams } from './teams';
-export { SpecialFigures } from './special-figures';
+export * from './teams';
+export * from './special-figures';
+export * from './dnd';

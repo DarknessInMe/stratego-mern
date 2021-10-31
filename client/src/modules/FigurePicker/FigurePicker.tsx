@@ -1,22 +1,19 @@
-import { useGameContext } from 'context';
 import React from 'react';
+import { useGameContext } from 'context';
+import { PickerDraggableFigure } from './components/PickerDraggableFigure';
 
 const FigurePicker: React.FC = () => {
-    const { picker, utils } = useGameContext();
+    const { picker } = useGameContext();
 
     return (
         <div className="picker">
             {
-                picker.map((figure, index) => {
-                    return (
-                        <div className="picker__figure soldier" key={index}>
-                            <img src={figure.image}/>
-                            {utils.shouldGenerateRankWeight(figure) && (
-                                <strong className='soldier__rank'>{figure.rankWeight}</strong>
-                            )}
-                        </div>
-                    )
-                })
+                picker.map((figure, index) => 
+                    <PickerDraggableFigure 
+                        figure={figure} 
+                        key={index}
+                        index={index}
+                    />)
             }
         </div>
     )

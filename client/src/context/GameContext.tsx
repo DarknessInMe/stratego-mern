@@ -43,6 +43,8 @@ const GameProvider: FC<ContextProvider> = ({ children }) => {
         _init();
     }, [])
 
+
+
     const shouldGenerateRankWeight = (figure: Figure) => {
         return !([SpecialFigures.BOMB, SpecialFigures.FLAG].includes(figure.rankWeight as SpecialFigures))
     };

@@ -49,13 +49,15 @@ body {
 	display: flex;
 	flex-wrap: wrap;
 	padding: 2px;
+	align-content: flex-start;
 
 	&__figure {
 		width: 62px;
 		height: 62px;
 		border: 1px solid #000;
-		margin: 0 2px;
+		margin: 2px;
 		background-color: red;
+		cursor: grab;
 	}
 }
 
