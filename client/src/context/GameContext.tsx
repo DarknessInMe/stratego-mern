@@ -1,9 +1,9 @@
 import React, { createContext, FC, useContext, useEffect, useState } from 'react';
-import { ContextProvider } from '../shared/interfaces';
-import { board as defaultBoard } from '../shared/constants';
-import { BoardEntity, SetState } from '../shared/types';
-import { SCOUT, GENERAL } from '../shared/constants';
-import { Teams } from '../shared/enums';
+import { ContextProvider } from 'shared/interfaces';
+import { board as defaultBoard } from 'shared/constants';
+import { BoardEntity, SetState } from 'shared/types';
+import { SCOUT, GENERAL } from 'shared/constants';
+import { Teams } from 'shared/enums';
 
 interface GameContext {
     board: BoardEntity[][],

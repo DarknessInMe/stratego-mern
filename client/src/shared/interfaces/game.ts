@@ -1,4 +1,4 @@
-import { Teams, SpecialFigures } from '../enums';
+import { Teams, SpecialFigures } from 'shared/enums';
 
 interface Figure {
     rankWeight: number | SpecialFigures,

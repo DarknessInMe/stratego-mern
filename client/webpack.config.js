@@ -15,6 +15,7 @@ const config = {
 	},
 	resolve: {
 		extensions: [".js", ".jsx", ".ts", ".tsx"],
+		modules: [resolve(__dirname, './src'), 'node_modules'],
 	},
 	module: {
 		rules: [

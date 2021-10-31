@@ -1,7 +1,7 @@
 import React from 'react';
-import { FigureEntity, WaterEntity } from '../../shared/interfaces';
-import { BoardEntity } from '../../shared/types';
-import { useGameContext } from '../../context';
+import { FigureEntity, WaterEntity } from 'shared/interfaces';
+import { BoardEntity } from 'shared/types';
+import { useGameContext } from 'context';
 import { Figure } from './components/Figure';
 
 const Board: React.FC = () => {

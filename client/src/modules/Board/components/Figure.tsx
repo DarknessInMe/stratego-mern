@@ -1,7 +1,7 @@
 import React from 'react';
-import { FigureEntity } from '../../../shared/interfaces';
+import { FigureEntity } from 'shared/interfaces';
 import clsx from 'clsx';
-import { Teams } from '../../../shared/enums';
+import { Teams } from 'shared/enums';
 
 interface Figure {
     figureData: FigureEntity;

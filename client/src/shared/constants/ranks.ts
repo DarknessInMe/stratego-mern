@@ -1,5 +1,5 @@
-import { Figure } from '../interfaces';
-import { SpecialFigures } from '../enums';
+import { Figure } from 'shared/interfaces';
+import { SpecialFigures } from 'shared/enums';
 import { 
     SpyIcon, 
     ScoutIcon,
@@ -13,7 +13,7 @@ import {
     MarshalIcon,
     BombIcon,
     FlagIcon,
-} from '../../assets';
+} from 'assets';
 
 const SPY: Figure = {
     rankName: 'Spy',

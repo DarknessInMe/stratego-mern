@@ -14,7 +14,7 @@
  * ]
  */
 
-import { BoardEntity } from '../types';
+import { BoardEntity } from 'shared/types';
 
 /**
  * water coordinates

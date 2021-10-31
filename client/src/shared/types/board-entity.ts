@@ -1,4 +1,4 @@
-import { FigureEntity, WaterEntity } from '../interfaces';
+import { FigureEntity, WaterEntity } from 'shared/interfaces';
 
 type BoardEntity = FigureEntity | WaterEntity | null;
 
