@@ -1,2 +1,3 @@
-export { FigureEntity, Figure, WaterEntity } from './game';
-export { ContextProvider } from './common';
+export * from './game';
+export * from './common';
+export * from './dnd';
