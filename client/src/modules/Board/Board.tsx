@@ -13,7 +13,14 @@ const Board: React.FC = () => {
 
         switch(true) {
             case !!(cell as FigureEntity)?.figure: {
-                return <Figure key={key} figureData={cell as FigureEntity}/>
+                return (
+                    <Figure 
+                        key={key} 
+                        figureData={cell as FigureEntity} 
+                        x={cellIndex} 
+                        y={lineIndex}
+                    />
+                )
             }
             case (cell as WaterEntity)?.water: {
                 return <div key={key} className="board__cell water"/>

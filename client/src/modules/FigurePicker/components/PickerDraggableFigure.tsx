@@ -10,48 +10,11 @@ interface PickerDraggableFigure {
     index: number,
 }
 
-
-interface DropResult {
-    position: {
-        x: number,
-        y: number,
-    }
-}
-
 const PickerDraggableFigure: React.FC<PickerDraggableFigure> = ({ figure, index }) => {
-    const { utils, setBoard, setPicker } = useGameContext();
+    const { utils } = useGameContext();
     const [, dragRef] = useDrag(() => ({
         type: PickerTypes.FIGURE,
-        item: figure,
-        end: (item, monitor) => {
-            const dropResult = monitor.getDropResult<DropResult>();
-
-            if (!dropResult) return;
-
-            setBoard(prevBoardState => {
-                const { x, y } = dropResult.position;
-                const stateCopy = deepCopy(prevBoardState);
-
-                stateCopy[y][x] = {
-                    team: Teams.RED_TEAM,
-                    selected: false,
-                    position: {
-                        x, y,
-                    },
-                    figure: item,
-                }
-
-                return stateCopy;
-            });
-
-            setPicker(prevPickerState => {
-                const stateCopy = [...prevPickerState];
-                
-                stateCopy.splice(index, 1);
-
-                return stateCopy;
-            })
-        }
+        item: { figure, index },
     }), [figure, index]);
 
     return (

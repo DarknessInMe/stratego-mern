@@ -1,5 +1,9 @@
 enum PickerTypes {
-    FIGURE = 'FIGURE_FROM_PICKER'
+    FIGURE = 'FIGURE_FROM_PICKER',
 }
 
-export { PickerTypes };
+enum BoardTypes {
+    FIGURE = 'FIGURE_FROM_BOARD',
+}
+
+export { PickerTypes, BoardTypes };
