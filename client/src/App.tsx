@@ -1,15 +1,8 @@
-import React from "react";
-import { Board } from "modules/Board";
-import { FigurePicker } from "modules/FigurePicker";
+import React from 'react';
 
 const App: React.FC = () => {
 	return (
-		<>
-			<div className="board">
-				<Board />
-			</div>
-			<FigurePicker />
-		</>
+		<div>Hello</div>
 	);
 };
 
