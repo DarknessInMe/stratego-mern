@@ -32,7 +32,6 @@ module.exports = {
         "react/no-deprecated": ["off"],
         "no-debugger": ["error"],
         "no-invalid-regexp": ["error"],
-        "no-unused-vars": ["error"],
         "no-use-before-define": ["error"],
         "camelcase": ["error", {
             "ignoreDestructuring": true,
@@ -50,5 +49,7 @@ module.exports = {
             "avoidEscape": true,
         }],
         "semi": ["error", "always"],
+        "no-unused-vars": ["off"],
+        "@typescript-eslint/no-unused-vars": ["error"]
     }
 };

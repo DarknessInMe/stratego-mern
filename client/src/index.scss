@@ -12,4 +12,39 @@ body {
 	height: 100%;
 	min-height: 100vh;
 	display: flex;
+	flex-direction: column;
+}
+
+.screen {
+	min-width: 620px;
+	min-height: 620px;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
+}
+
+.board {
+	width: 620px;
+	height: 620px;
+	border: 1px solid #000;
+	box-sizing: content-box;
+	display: flex;
+	flex-wrap: wrap;
+
+	&__cell {
+		width: 62px;
+		height: 62px;
+		border: 1px solid #000;
+	}
+
+	&__water {
+		background-color: aqua;
+	}
+	
+	&__land {
+		background-color: green;
+	}
 }
