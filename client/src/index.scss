@@ -38,13 +38,13 @@ body {
 		width: 62px;
 		height: 62px;
 		border: 1px solid #000;
-	}
 
-	&__water {
-		background-color: aqua;
-	}
-	
-	&__land {
-		background-color: green;
+		&_water {
+			background-color: aqua;
+		}
+		
+		&_land {
+			background-color: green;
+		}
 	}
 }
