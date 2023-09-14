@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { GameCore } from 'core/GameCore';
-import { BoardFieldType } from 'core/Board';
+import { BoardFieldType } from 'shared/types';
 import { CellFactory } from 'components/CellFactory';
 
 const App: React.FC = () => {

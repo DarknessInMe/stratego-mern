@@ -1,4 +1,4 @@
-import { EnvironmentEnum } from 'shared/enums';
+import { EnvironmentEnum } from './enums';
 
 export interface ICell {
     x: number,

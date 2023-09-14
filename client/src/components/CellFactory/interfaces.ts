@@ -1,4 +1,4 @@
-import { ICell } from 'core/Board';
+import { ICell } from 'shared/interfaces';
 
 export interface ICellFactory {
     cell: ICell;

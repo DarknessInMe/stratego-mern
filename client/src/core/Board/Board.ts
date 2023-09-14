@@ -1,5 +1,5 @@
-import { BoardFieldType } from './types';
-import { ICell } from './interfaces';
+import { BoardFieldType } from 'shared/types';
+import { ICell } from 'shared/interfaces';
 import { EnvironmentEnum } from 'shared/enums';
 import { WATER_POSITION } from './constants';
 

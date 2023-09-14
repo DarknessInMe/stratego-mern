@@ -1,3 +1,3 @@
-import { BoardFieldType } from 'core/Board';
+import { BoardFieldType } from 'shared/types';
 
 export type UpdateExternalStateType = (state: BoardFieldType) => void;
