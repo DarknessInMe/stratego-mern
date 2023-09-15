@@ -1,14 +1,13 @@
-import { PieceEnum } from 'shared/enums';
-import { ICell } from 'shared/interfaces';
+import { ICell, IPieceRank } from 'shared/interfaces';
 import { BoardFieldType } from 'shared/types';
 
 export abstract class BasePiece {
     x: number;
     y: number;
-    rank: PieceEnum;
+    rank: IPieceRank;
     currentAvailablePath: ICell[] = [];
 
-    constructor(x: number, y: number, rank: PieceEnum) {
+    constructor(x: number, y: number, rank: IPieceRank) {
         this.x = x;
         this.y = y;
         this.rank = rank;
@@ -16,7 +15,7 @@ export abstract class BasePiece {
 
     abstract getAvailablePath(board: BoardFieldType): ICell[]
 
-    abstract canBeat(enemyRank: PieceEnum): boolean
+    abstract canBeat(enemyRank: IPieceRank): boolean
 
     abstract canMove(target: ICell): boolean
 

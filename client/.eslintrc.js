@@ -5,7 +5,6 @@ module.exports = {
         "browser": true,
         "es2021": true
     },
-    "extends": "plugin:react/recommended",
     "overrides": [
         {
             "env": {
@@ -50,6 +49,6 @@ module.exports = {
         }],
         "semi": ["error", "always"],
         "no-unused-vars": ["off"],
-        "@typescript-eslint/no-unused-vars": ["error"]
+        "@typescript-eslint/no-unused-vars": ["error"],
     }
 };

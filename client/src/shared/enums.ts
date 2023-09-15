@@ -3,7 +3,22 @@ export enum EnvironmentEnum {
     WATER,
 }
 
-export enum PieceEnum {
+export enum PieceNameEnum {
+    SPY = 'SPY',
+    SCOUT = 'SCOUT',
+    MINER = 'MINER',
+    SERGEANT = 'SERGEANT',
+    LIEUTENANT = 'LIEUTENANT',
+    CAPTAIN = 'CAPTAIN',
+    MAJOR = 'MAJOR',
+    COLONEL = 'COLONEL',
+    GENERAL = 'GENERAL',
+    MARSHAL = 'MARSHAL',
+    BOMB = 'BOMB',
+    FLAG = 'FLAG'
+}
+
+export enum PieceWeightEnum {
     SPY = 1,
     SCOUT = 2,
     MINER = 3,
@@ -14,4 +29,6 @@ export enum PieceEnum {
     COLONEL = 8,
     GENERAL = 9,
     MARSHAL = 10,
+    BOMB = 0,
+    FLAG = 0,
 }

@@ -1,10 +1,10 @@
-import { EnvironmentEnum, PieceEnum } from 'shared/enums';
+import { EnvironmentEnum } from 'shared/enums';
 import { BasePiece } from './BasePiece';
-import { ICell } from 'shared/interfaces';
+import { ICell, IPieceRank } from 'shared/interfaces';
 import { BoardFieldType } from 'shared/types';
 
 export class RegularPiece extends BasePiece {
-    constructor(x: number, y: number, rank: PieceEnum) {
+    constructor(x: number, y: number, rank: IPieceRank) {
         super(x, y, rank);
     }
 
@@ -12,8 +12,8 @@ export class RegularPiece extends BasePiece {
         return target.environment !== EnvironmentEnum.WATER;
     }
 
-    canBeat(enemyRank: PieceEnum) {
-        return this.rank >= enemyRank;
+    canBeat(enemyRank: IPieceRank) {
+        return this.rank.weight >= enemyRank.weight;
     }
 
     getAvailablePath(board: BoardFieldType): ICell[] {
