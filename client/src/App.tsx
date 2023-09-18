@@ -1,22 +1,16 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { GameCore } from 'core/GameCore';
-import { BoardFieldType } from 'shared/types';
+import React from 'react';
 import { BoardSection } from 'components/BoardSection';
 import { PieceBankSection } from 'components/PieceBankSection';
+import { RootProvider } from 'context/RootContext';
 
 const App: React.FC = () => {
-	const [board, setBoard] = useState<BoardFieldType>([]);
-	const gameCoreRef = useRef(new GameCore(setBoard));
-
-	useEffect(() => {
-		gameCoreRef.current.init();
-	}, []);
-
-	return (	
-		<div className='screen'>
-			<BoardSection board={board}/>
-			<PieceBankSection />
-		</div>
+	return (
+		<RootProvider>	
+			<div className='screen'>
+				<BoardSection />
+				<PieceBankSection />
+			</div>
+		</RootProvider>
 	);
 };
 

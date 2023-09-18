@@ -32,3 +32,7 @@ export enum PieceWeightEnum {
     BOMB = 0,
     FLAG = 0,
 }
+
+export enum DragTypesEnum {
+    BANK_TO_BOARD = 'BANK_TO_BOARD',
+}

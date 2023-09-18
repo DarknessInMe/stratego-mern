@@ -12,6 +12,7 @@ export const PieceBankSection: React.FC = () => {
                     return (
                         <Piece 
                             key={`${item}-${index}`}
+                            className='piece_stored'
                             rankName={item}
                         />
                     );

@@ -5,6 +5,7 @@ import { BoardFieldType } from 'shared/types';
 
 export class RegularPiece extends BasePiece {
     constructor(x: number, y: number, rank: IPieceRank) {
+        console.log(rank);
         super(x, y, rank);
     }
 

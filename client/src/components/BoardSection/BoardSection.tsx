@@ -1,8 +1,10 @@
 import React from 'react';
-import { IBoardSection } from './interfaces';
 import { CellFactory } from 'components/CellFactory';
+import { useRootContext } from 'context/RootContext';
 
-export const BoardSection: React.FC<IBoardSection> = ({ board }) => {
+export const BoardSection: React.FC = () => {
+    const { board } = useRootContext();
+
     return (
         <div className='screen__section screen__section_main'>
             <div className='board'>

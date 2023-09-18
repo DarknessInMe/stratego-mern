@@ -9,16 +9,24 @@ import { UpdateExternalStateType } from './types';
 
 export class GameCore {
     board: Board | null = null;
+    private version: number = 0;
     private readonly updateExternalState: UpdateExternalStateType;
-
+    
     constructor(updateExternalState: UpdateExternalStateType) {
         this.updateExternalState = updateExternalState;
     }
 
     init() {
-        this.board = new Board();
+        this.board = new Board(this.update.bind(this));
         this.board.initField();
+        this.update();
+    }
 
-        this.updateExternalState(this.board.field);
+    update() {
+        this.version += 1;
+        this.updateExternalState({
+            board: this.board.field,
+            version: this.version,
+        });
     }
 }

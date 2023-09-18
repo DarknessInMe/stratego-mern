@@ -1,3 +1,3 @@
-import { BoardFieldType } from 'shared/types';
+import { IRootState } from 'shared/interfaces';
 
-export type UpdateExternalStateType = (state: BoardFieldType) => void;
+export type UpdateExternalStateType = (state: IRootState) => void;

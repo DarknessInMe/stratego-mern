@@ -19,13 +19,11 @@ export abstract class BasePiece {
 
     abstract canMove(target: ICell): boolean
 
-    moveTo(x: number, y: number): boolean {
-        const isCorrectPath = this.currentAvailablePath.some((cell) => cell.x === x && cell.y === y);
+    isCorrectPath(x: number, y: number): boolean {
+        return this.currentAvailablePath.some((cell) => cell.x === x && cell.y === y);
+    }
 
-        if (!isCorrectPath) {
-            return false;
-        }
-
+    moveTo(x: number, y: number) {
         this.x = x;
         this.y = y;
         this.currentAvailablePath = [];

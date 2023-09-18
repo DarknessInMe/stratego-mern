@@ -1,5 +1,6 @@
 $piece-size: 62px;
 $board-size: calc($piece-size * 10);
+$border-width: 1px;
 
 * {
 	box-sizing: border-box;
@@ -50,7 +51,7 @@ body {
 .board {
 	width: $board-size;
 	height: $board-size;
-	border: 1px solid #000;
+	border: $border-width solid #000;
 	box-sizing: content-box;
 	display: flex;
 	flex-wrap: wrap;
@@ -58,7 +59,7 @@ body {
 	&__cell {
 		width: $piece-size;
 		height: $piece-size;
-		border: 1px solid #000;
+		border: $border-width solid #000;
 
 		&_water {
 			background-color: aqua;
@@ -67,16 +68,22 @@ body {
 		&_land {
 			background-color: green;
 		}
+
+		&_hovered {
+			opacity: 0.6;
+		}
 	}
 }
 
 .piece {
 	display: inline-flex;
 	position: relative;
+	background-color: red;
+	border: $border-width solid #000;
 
 	&__image {
-		width: $piece-size;
-		height: $piece-size;
+		width: calc($piece-size - ($border-width * 2));
+		height: calc($piece-size - ($border-width * 2));
 	}
 
 	&__weight {
@@ -90,7 +97,16 @@ body {
 	}
 
 	&_stored {
-		background-color: red;
+		border: none;
 		margin: 4px;
+	}
+
+	&_stored &__image {
+		width: calc($piece-size);
+		height: calc($piece-size);
+	}
+
+	&_dragged {
+		opacity: 0.6;
 	}
 }
