@@ -11,7 +11,6 @@ export const CellFactory: React.FC<ICellComponentProps> = ({ cell }) => {
             return <Water />;
         }
         case EnvironmentEnum.LAND: {
-            console.log(cell.piece);
             return cell.piece ? <Piece rankName={cell.piece.rank.name} /> : <Land cell={cell} />;
         }
         default: {

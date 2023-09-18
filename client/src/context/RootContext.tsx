@@ -21,10 +21,6 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
 		gameCoreRef.current.init();
 	}, []);
 
-    useEffect(() => {
-        console.log('change', rootState.board);
-    }, [rootState.board]);
-
     return (
         <RootContext.Provider value={{
             board: rootState.board,
