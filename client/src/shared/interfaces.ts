@@ -2,6 +2,7 @@ import { EnvironmentEnum, PieceNameEnum, PieceWeightEnum } from './enums';
 import { BasePiece } from 'core/Pieces';
 import { BoardFieldType, SetBankType } from './types';
 import { GameCore } from 'core/GameCore';
+import { PIECES_SETUP } from 'shared/constants';
 
 export interface IRootState {
     board: BoardFieldType,
@@ -29,7 +30,7 @@ export interface IContextProps {
 
 export interface IRootContextValue {
     board: BoardFieldType,
-    bank: PieceNameEnum[],
+    bank: typeof PIECES_SETUP,
     setBank: SetBankType,
     gameCoreRef: React.MutableRefObject<GameCore>
 }

@@ -15,6 +15,10 @@ export const CellFactory: React.FC<ICellComponentProps> = ({ cell }) => {
                 <Piece 
                     rankName={cell.piece.rank.name}
                     className='piece_landed'
+                    coordinates={{
+                        x: cell.piece.x,
+                        y: cell.piece.y
+                    }}
                 />
             ): <Land cell={cell} />;
         }

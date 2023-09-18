@@ -7,13 +7,12 @@ import React, {
 } from 'react';
 import { GameCore } from 'core/GameCore';
 import { IContextProps, IRootContextValue, IRootState } from 'shared/interfaces';
-import { generateInitSetup } from 'shared/utils';
-import { PieceNameEnum } from 'shared/enums';
+import { PIECES_SETUP } from 'shared/constants';
 
 const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 
 export const RootProvider: React.FC<IContextProps> = ({ children }) => {
-    const [bank, setBank] = useState<PieceNameEnum[]>(generateInitSetup());
+    const [bank, setBank] = useState<typeof PIECES_SETUP>(PIECES_SETUP);
     const [rootState, setRootState] = useState<IRootState>({
         board: [],
         version: 0,

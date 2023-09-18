@@ -16,18 +16,10 @@ export const Land: React.FC<ICellComponentProps> = ({ cell }) => {
             const { board } = gameCoreRef.current;
             
             board.addPieceTo(piece, cell.x, cell.y);
-            setBank((prevBank) => {
-                const bankCopy = [...prevBank];
-                const droppedItemIndex = bankCopy.findIndex(bankItem => bankItem === rankName);
-
-                if (droppedItemIndex < 0) {
-                    return bankCopy;
-                }
-
-                bankCopy.splice(droppedItemIndex, 1);
-
-                return bankCopy;
-            });
+            setBank((prevBank) => ({
+                ...prevBank,
+                [rankName]: prevBank[rankName] - 1,
+            }));
         },
         collect: monitor => ({
             isOver: !!monitor.isOver(),
