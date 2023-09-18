@@ -1,5 +1,5 @@
 import { PieceNameEnum } from 'shared/enums';
-import { PIECES_SETUP } from './constants';
+import { PIECES_SETUP } from 'shared/constants';
 
 export const generateInitSetup = (): PieceNameEnum[] => {
     const setup: PieceNameEnum[] = [];

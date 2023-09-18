@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { generateInitSetup } from './utils';
+import React from 'react';
 import { Piece } from 'components/Piece';
+import { useRootContext } from 'context/RootContext';
 
 export const PieceBankSection: React.FC = () => {
-    const [bank] = useState(generateInitSetup());
+    const { bank } = useRootContext();
 
     return (
         <div className='screen__section screen__section_secondary'>
