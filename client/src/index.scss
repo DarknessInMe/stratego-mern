@@ -79,11 +79,11 @@ body {
 	display: inline-flex;
 	position: relative;
 	background-color: red;
-	border: $border-width solid #000;
+	margin: 4px;
 
 	&__image {
-		width: calc($piece-size - ($border-width * 2));
-		height: calc($piece-size - ($border-width * 2));
+		width: calc($piece-size);
+		height: calc($piece-size);
 	}
 
 	&__weight {
@@ -96,14 +96,14 @@ body {
 		right: 4px;
 	}
 
-	&_stored {
-		border: none;
-		margin: 4px;
+	&_landed {
+		margin: 0px;
+		border: $border-width solid #000;
 	}
 
-	&_stored &__image {
-		width: calc($piece-size);
-		height: calc($piece-size);
+	&_landed &__image {
+		width: calc($piece-size - ($border-width * 2));
+		height: calc($piece-size - ($border-width * 2));
 	}
 
 	&_dragged {
