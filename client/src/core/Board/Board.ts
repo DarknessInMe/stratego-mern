@@ -58,13 +58,17 @@ export class Board {
         this.updateCoreState();
     }
 
+    dragPiece(piece: BasePiece, x: number, y: number) {
+        this.nullifyPiece(piece.x, piece.y);
+        this.movePieceTo(piece, x, y);
+        this.updateCoreState();
+    }
+
     movePiece(piece: BasePiece, x: number, y: number) {
         if (!piece.isCorrectPath(x, y)) {
             return;
         }
 
-        this.nullifyPiece(piece.x, piece.y);
-        this.movePieceTo(piece, x, y);
-        this.updateCoreState();
+        this.dragPiece(piece, x, y);
     }
 }

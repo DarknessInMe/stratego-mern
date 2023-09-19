@@ -16,7 +16,7 @@ interface IDrop {
 export const PieceBankSection: React.FC = () => {
     const { bank, setBank, gameCoreRef } = useRootContext();
     const [_, dropRef] = useDrop(() => ({
-        accept: DragTypesEnum.BOARD_TO_BANK,
+        accept: DragTypesEnum.PIECE_FROM_BOARD,
         drop: ({ rankName, coordinates }: IDrop) => {
             setBank((prevBank) => ({
                 ...prevBank,

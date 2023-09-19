@@ -9,7 +9,7 @@ export const BankPiece: React.FC<IPieceBase> = memo(({
     className = '',
 }) => {
     const [{ isDragging }, dragRef] = useDrag(() => ({
-        type: DragTypesEnum.BANK_TO_BOARD,
+        type: DragTypesEnum.PIECE_FROM_BANK,
         item: {
             rankName
         },

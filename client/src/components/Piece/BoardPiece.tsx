@@ -10,7 +10,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
     className = '',
 }) => {
     const [{ isDragging }, dragRef] = useDrag(() => ({
-        type: DragTypesEnum.BOARD_TO_BANK,
+        type: DragTypesEnum.PIECE_FROM_BOARD,
         item: {
             rankName, coordinates,
         },
@@ -18,7 +18,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
             isDragging: !!monitor.isDragging(),
         }),
     }));
-    
+
     return (
         <Piece
             dragRef={dragRef}

@@ -34,6 +34,6 @@ export enum PieceWeightEnum {
 }
 
 export enum DragTypesEnum {
-    BANK_TO_BOARD = 'BANK_TO_BOARD',
-    BOARD_TO_BANK = 'BOARD_TO_BANK',
+    PIECE_FROM_BANK = 'PIECE_FROM_BANK',
+    PIECE_FROM_BOARD = 'PIECE_FROM_BOARD'
 }
