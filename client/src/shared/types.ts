@@ -6,3 +6,5 @@ export type ReactSetStateType<T> = React.Dispatch<React.SetStateAction<T>>;
 export type BoardFieldType = ICell[][]
 
 export type SetBankType = ReactSetStateType<typeof PIECES_SETUP>;
+
+export type CoordinatesType = { x: number, y: number };

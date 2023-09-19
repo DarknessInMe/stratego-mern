@@ -1,17 +1,23 @@
 import React, { useMemo } from 'react';
-import { Piece } from 'components/Piece';
+import { BankPiece } from 'components/Piece';
 import { useRootContext } from 'context/RootContext';
 import { generateInitSetup } from 'shared/utils';
 import { useDrop } from 'react-dnd';
-import { DragTypesEnum } from 'shared/enums';
+import { DragTypesEnum, PieceNameEnum } from 'shared/enums';
+import { CoordinatesType } from 'shared/types';
 
 //! TODO: make different wrappers for Piece.tsx, which are responsive for DnD from bank and from board
+
+interface IDrop {
+    rankName: PieceNameEnum,
+    coordinates: CoordinatesType | null,
+}
 
 export const PieceBankSection: React.FC = () => {
     const { bank, setBank, gameCoreRef } = useRootContext();
     const [_, dropRef] = useDrop(() => ({
         accept: DragTypesEnum.BOARD_TO_BANK,
-        drop: ({ rankName, coordinates }) => {
+        drop: ({ rankName, coordinates }: IDrop) => {
             setBank((prevBank) => ({
                 ...prevBank,
                 [rankName]: prevBank[rankName] + 1,
@@ -36,7 +42,7 @@ export const PieceBankSection: React.FC = () => {
             <div className='bank'>
                 {bankArray.map((item, index) => {
                     return (
-                        <Piece 
+                        <BankPiece 
                             key={`${item}-${index}`}
                             rankName={item}
                         />
