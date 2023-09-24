@@ -1,6 +1,6 @@
 import React from 'react';
-import { Land } from 'ui/Land';
-import { Water } from 'ui/Water';
+import { Land } from 'components/Land';
+import { Water } from 'components/Water';
 import { ICellComponentProps } from 'shared/interfaces';
 import { EnvironmentEnum } from 'shared/enums';
 import { BoardPiece } from 'components/Piece';

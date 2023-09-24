@@ -14,7 +14,7 @@ const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     const [bank, setBank] = useState<typeof PIECES_SETUP>(PIECES_SETUP);
     const [rootState, setRootState] = useState<IRootState>({
-        board: [],
+        field: [],
         version: 0,
     });
 	const gameCoreRef = useRef(new GameCore(setRootState));
@@ -25,7 +25,7 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
 
     return (
         <RootContext.Provider value={{
-            board: rootState.board,
+            field: rootState.field,
             bank,
             setBank,
             gameCoreRef,

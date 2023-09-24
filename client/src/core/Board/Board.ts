@@ -34,41 +34,30 @@ export class Board {
         return this.field[y][x];
     }
 
-    private movePieceTo(piece: BasePiece, x: number, y: number) {
+    addPieceTo(piece: BasePiece, x: number, y: number, triggerUpdate: boolean = true) {
         const cell = this.getCell(x, y);
 
         cell.piece = piece;
-        
         piece.moveTo(x, y);
+
+        triggerUpdate && this.updateCoreState();
     }
 
-    private nullifyPiece(x: number, y: number) {
+    removePieceFrom(x: number, y: number, triggerUpdate: boolean = true) {
         const cell = this.getCell(x, y);
 
         cell.piece = null;
+
+        triggerUpdate && this.updateCoreState();
     }
 
-    addPieceTo(piece: BasePiece, x: number, y: number) {
-        this.movePieceTo(piece, x, y);
-        this.updateCoreState();
-    }
-
-    removePieceFrom(x: number, y: number) {
-        this.nullifyPiece(x, y);
-        this.updateCoreState();
-    }
-
-    dragPiece(piece: BasePiece, x: number, y: number) {
-        this.nullifyPiece(piece.x, piece.y);
-        this.movePieceTo(piece, x, y);
-        this.updateCoreState();
-    }
-
-    movePiece(piece: BasePiece, x: number, y: number) {
-        if (!piece.isCorrectPath(x, y)) {
+    movePiece(piece: BasePiece, x: number, y: number, checkPath: boolean = true) {
+        if (checkPath && !piece.isCorrectPath(x, y)) {
             return;
         }
 
-        this.dragPiece(piece, x, y);
+        this.removePieceFrom(piece.x, piece.y, false);
+        this.addPieceTo(piece, x, y, false);
+        this.updateCoreState();
     }
 }

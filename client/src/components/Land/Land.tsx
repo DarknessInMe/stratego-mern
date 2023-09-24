@@ -39,7 +39,7 @@ export const Land: React.FC<ICellComponentProps> = ({ cell }) => {
             const prevCell = board.getCell(coordinates.x, coordinates.y);
 
             if (prevCell.piece) {
-                board.dragPiece(prevCell.piece, cell.x, cell.y);
+                board.movePiece(prevCell.piece, cell.x, cell.y, false);
             }
         },
     };

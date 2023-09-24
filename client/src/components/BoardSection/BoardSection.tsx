@@ -3,12 +3,12 @@ import { CellFactory } from 'components/CellFactory';
 import { useRootContext } from 'context/RootContext';
 
 export const BoardSection: React.FC = () => {
-    const { board } = useRootContext();
+    const { field } = useRootContext();
 
     return (
         <div className='screen__section screen__section_main'>
             <div className='board'>
-                {board.map((row, lineIndex) => row.map((cell, cellIndex) => (
+                {field.map((row, lineIndex) => row.map((cell, cellIndex) => (
                     <CellFactory
                         key={`key-${lineIndex}-${cellIndex}`}
                         cell={cell}

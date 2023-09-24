@@ -5,7 +5,7 @@ import { GameCore } from 'core/GameCore';
 import { PIECES_SETUP } from 'shared/constants';
 
 export interface IRootState {
-    board: BoardFieldType,
+    field: BoardFieldType,
     version: number,
 }
 export interface IPieceRank {
@@ -29,7 +29,7 @@ export interface IContextProps {
 }
 
 export interface IRootContextValue {
-    board: BoardFieldType,
+    field: BoardFieldType,
     bank: typeof PIECES_SETUP,
     setBank: SetBankType,
     gameCoreRef: React.MutableRefObject<GameCore>

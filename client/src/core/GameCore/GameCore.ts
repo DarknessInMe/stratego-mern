@@ -25,7 +25,7 @@ export class GameCore {
     update() {
         this.version += 1;
         this.updateExternalState({
-            board: this.board.field,
+            field: this.board.field,
             version: this.version,
         });
     }
