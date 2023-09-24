@@ -8,6 +8,7 @@ import React, {
 import { GameCore } from 'core/GameCore';
 import { IContextProps, IRootContextValue, IRootState } from 'shared/interfaces';
 import { PIECES_SETUP } from 'shared/constants';
+import { GameStages } from 'shared/enums';
 
 const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 
@@ -16,6 +17,7 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     const [rootState, setRootState] = useState<IRootState>({
         field: [],
         version: 0,
+        mode: GameStages.SET_PIECES,
     });
 	const gameCoreRef = useRef(new GameCore(setRootState));
 
@@ -26,6 +28,7 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     return (
         <RootContext.Provider value={{
             field: rootState.field,
+            mode: rootState.mode,
             bank,
             setBank,
             gameCoreRef,

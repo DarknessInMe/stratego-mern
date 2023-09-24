@@ -37,3 +37,8 @@ export enum DragTypesEnum {
     PIECE_FROM_BANK = 'PIECE_FROM_BANK',
     PIECE_FROM_BOARD = 'PIECE_FROM_BOARD'
 }
+
+export enum GameStages {
+    SET_PIECES = 'SET_PIECES',
+    GAME_IN_PROCESS = 'GAME_IN_PROCESS',
+};

@@ -1,5 +1,6 @@
 import { Board } from 'core/Board';
 import { UpdateExternalStateType } from './types';
+import { GameStages } from 'shared/enums';
 
 /**
  * GameCore class - responsive for initializing/destroying all core entities 
@@ -9,6 +10,7 @@ import { UpdateExternalStateType } from './types';
 
 export class GameCore {
     board: Board | null = null;
+    mode: GameStages = GameStages.SET_PIECES;
     private version: number = 0;
     private readonly updateExternalState: UpdateExternalStateType;
     
@@ -27,6 +29,17 @@ export class GameCore {
         this.updateExternalState({
             field: this.board.field,
             version: this.version,
+            mode: this.mode,
+        });
+    }
+
+    toggleMode() {
+        this.mode = this.mode === GameStages.SET_PIECES ? GameStages.GAME_IN_PROCESS : GameStages.SET_PIECES;
+
+        this.updateExternalState({
+            field: this.board.field,
+            version: this.version,
+            mode: this.mode,
         });
     }
 }
