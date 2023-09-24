@@ -4,6 +4,7 @@ import { BoardFieldType, SetBankType } from './types';
 import { GameCore } from 'core/GameCore';
 import { PIECES_SETUP } from 'shared/constants';
 import { GameStages } from 'shared/enums';
+import { ConnectableElement } from 'react-dnd';
 
 export interface IRootState {
     field: BoardFieldType,
@@ -25,6 +26,11 @@ export interface ICell {
 
 export interface ICellComponentProps {
     cell: ICell;
+}
+
+export interface IDraggableCellProps extends ICellComponentProps {
+    dropRef: (node: ConnectableElement) => void,
+    isOver?: boolean
 }
 
 export interface IContextProps {
