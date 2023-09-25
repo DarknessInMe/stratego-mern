@@ -1,5 +1,5 @@
+import { Board } from 'core/Board';
 import { ICell, IPieceRank } from 'shared/interfaces';
-import { BoardFieldType } from 'shared/types';
 
 export abstract class BasePiece {
     x: number;
@@ -13,7 +13,7 @@ export abstract class BasePiece {
         this.rank = rank;
     }
 
-    abstract getAvailablePath(board: BoardFieldType): ICell[]
+    abstract initAvailablePath(board: Board): ICell[]
 
     abstract canBeat(enemyRank: IPieceRank): boolean
 

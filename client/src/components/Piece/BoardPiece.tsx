@@ -1,14 +1,16 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Piece } from './Piece';
 import { IBoardPieceProps } from './interfaces';
 import { useDrag } from 'react-dnd';
-import { DragTypesEnum } from 'shared/enums';
+import { DragTypesEnum, GameStages } from 'shared/enums';
+import { useRootContext } from 'context/RootContext';
 
 export const BoardPiece: React.FC<IBoardPieceProps> = memo(({ 
     rankName, 
     coordinates,
     className = '',
 }) => {
+    const { gameCoreRef, mode } = useRootContext();
     const [{ isDragging }, dragRef] = useDrag(() => ({
         type: DragTypesEnum.PIECE_FROM_BOARD,
         item: {
@@ -19,8 +21,22 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         }),
     }));
 
+    const onPieceClick = useCallback(() => {
+        if (mode !== GameStages.GAME_IN_PROCESS) {
+            return;
+        }
+
+        const { board } = gameCoreRef.current;
+        const currentPiece = board.getCell(coordinates.x, coordinates.y);
+
+        if (currentPiece.piece) {
+            currentPiece.piece.initAvailablePath(board);
+        }
+    }, [mode, coordinates]);
+
     return (
         <Piece
+            onMouseDown={onPieceClick}
             dragRef={dragRef}
             rankName={rankName}
             className={className}

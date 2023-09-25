@@ -9,6 +9,7 @@ export interface IPieceBase {
 export interface IPieceProps extends IPieceBase {
     isDragging: boolean,
     dragRef?: (node: ConnectableElement) => void,
+    onMouseDown?: () => void,
 }
 
 export interface IBoardPieceProps extends IPieceBase {

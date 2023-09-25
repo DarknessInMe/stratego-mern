@@ -8,6 +8,7 @@ export const Piece: React.FC<IPieceProps> = memo(({
     dragRef,
     isDragging = false,
     className = '',
+    onMouseDown,
 }) => {
     const icon = PieceIconPicker[rankName];
     const weight = PIECES[rankName];
@@ -16,6 +17,7 @@ export const Piece: React.FC<IPieceProps> = memo(({
         <div
             ref={dragRef}
             className={`piece ${isDragging ? 'piece_dragged' : ''} ${className}`}
+            onMouseDown={onMouseDown}
         >
             <img src={icon} className='piece__image'/>
             {weight !== 0 && (

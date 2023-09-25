@@ -30,8 +30,12 @@ export class Board {
         });
     }
 
-    getCell(x: number, y: number) {
-        return this.field[y][x];
+    getCell(x: number, y: number): ICell | null {
+        try {
+            return this.field[y][x];
+        } catch {
+            return null;
+        }
     }
 
     addPieceTo(piece: BasePiece, x: number, y: number, triggerUpdate: boolean = true) {

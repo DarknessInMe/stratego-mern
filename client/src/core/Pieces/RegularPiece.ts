@@ -1,7 +1,7 @@
 import { EnvironmentEnum } from 'shared/enums';
 import { BasePiece } from './BasePiece';
 import { ICell, IPieceRank } from 'shared/interfaces';
-import { BoardFieldType } from 'shared/types';
+import { Board } from 'core/Board';
 
 export class RegularPiece extends BasePiece {
     constructor(x: number, y: number, rank: IPieceRank) {
@@ -16,11 +16,11 @@ export class RegularPiece extends BasePiece {
         return this.rank.weight >= enemyRank.weight;
     }
 
-    getAvailablePath(board: BoardFieldType): ICell[] {
-        const xPositive = board[this.x + 1][this.y];
-        const xNegative = board[this.x - 1][this.y];
-        const yPositive = board[this.x][this.y + 1];
-        const yNegative = board[this.x][this.y - 1];
+    initAvailablePath(board: Board): ICell[] {
+        const xPositive = board.getCell(this.x + 1, this.y);
+        const xNegative = board.getCell(this.x - 1, this.y);
+        const yPositive = board.getCell(this.x, this.y + 1);
+        const yNegative = board.getCell(this.x, this.y - 1);
 
         if (xPositive && this.canMove(xPositive)) {
             this.currentAvailablePath.push(xPositive);
