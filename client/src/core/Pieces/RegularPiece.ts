@@ -1,4 +1,3 @@
-import { EnvironmentEnum } from 'shared/enums';
 import { BasePiece } from './BasePiece';
 import { ICell, IPieceRank } from 'shared/interfaces';
 import { Board } from 'core/Board';
@@ -8,15 +7,9 @@ export class RegularPiece extends BasePiece {
         super(x, y, rank);
     }
 
-    canMove(target: ICell) {
-        return target.environment !== EnvironmentEnum.WATER;
-    }
-
-    canBeat(enemyRank: IPieceRank) {
-        return this.rank.weight >= enemyRank.weight;
-    }
-
     initAvailablePath(board: Board): ICell[] {
+        this.currentAvailablePath = [];
+        
         const xPositive = board.getCell(this.x + 1, this.y);
         const xNegative = board.getCell(this.x - 1, this.y);
         const yPositive = board.getCell(this.x, this.y + 1);

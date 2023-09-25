@@ -1,4 +1,5 @@
 import { Board } from 'core/Board';
+import { EnvironmentEnum } from 'shared/enums';
 import { ICell, IPieceRank } from 'shared/interfaces';
 
 export abstract class BasePiece {
@@ -15,9 +16,13 @@ export abstract class BasePiece {
 
     abstract initAvailablePath(board: Board): ICell[]
 
-    abstract canBeat(enemyRank: IPieceRank): boolean
+    canMove(target: ICell) {
+        return target.environment !== EnvironmentEnum.WATER;
+    }
 
-    abstract canMove(target: ICell): boolean
+    canBeat(enemyRank: IPieceRank) {
+        return this.rank.weight >= enemyRank.weight;
+    }
 
     isCorrectPath(x: number, y: number): boolean {
         return this.currentAvailablePath.some((cell) => cell.x === x && cell.y === y);

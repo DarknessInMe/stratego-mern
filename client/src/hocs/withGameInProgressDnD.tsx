@@ -32,7 +32,9 @@ export const withGameInProgressDnD = (WrappedComponent: React.FC<IDraggableCellP
                 const { board } = gameCoreRef.current;
                 const draggedItem = board.getCell(coordinates.x, coordinates.y);
 
-                board.movePiece(draggedItem.piece, cell.x, cell.y, false);
+                if (draggedItem.piece) {
+                    board.movePiece(draggedItem.piece, cell.x, cell.y, false);
+                }
             },
         }), [cell.x, cell.y, field]);
 

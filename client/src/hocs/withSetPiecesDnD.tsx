@@ -4,8 +4,8 @@ import { ICellComponentProps, IDraggableCellProps } from 'shared/interfaces';
 import { DragTypesEnum, PieceNameEnum } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
 import { PIECES } from 'shared/constants';
-import { RegularPiece } from 'core/Pieces/RegularPiece';
 import { CoordinatesType } from 'shared/types';
+import { piecePicker } from 'shared/utils';
 
 interface IBankToBoardItem {
     rankName: PieceNameEnum,
@@ -25,8 +25,8 @@ export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>
 
         const dropStrategy: IDropStrategy = {
             [DragTypesEnum.PIECE_FROM_BANK]: ({ rankName }: IBankToBoardItem) => {
-                const weight = PIECES[rankName];
-                const piece = new RegularPiece(cell.x, cell.y, { name: rankName, weight });
+                const pieceConstructor = piecePicker(rankName);
+                const piece = new pieceConstructor(cell.x, cell.y, { name: rankName, weight: PIECES[rankName] });
                 const { board } = gameCoreRef.current;
     
                 board.addPieceTo(piece, cell.x, cell.y);
