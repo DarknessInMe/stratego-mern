@@ -6,7 +6,8 @@ import { DragTypesEnum, GameStages } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
 
 export const BoardPiece: React.FC<IBoardPieceProps> = memo(({ 
-    rankName, 
+    rankName,
+    team,
     coordinates,
     className = '',
 }) => {
@@ -39,6 +40,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
             onMouseDown={onPieceClick}
             dragRef={dragRef}
             rankName={rankName}
+            team={team}
             className={className}
             isDragging={isDragging}
         />

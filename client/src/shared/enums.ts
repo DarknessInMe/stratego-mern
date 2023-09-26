@@ -42,3 +42,8 @@ export enum GameStages {
     SET_PIECES = 'SET_PIECES',
     GAME_IN_PROCESS = 'GAME_IN_PROCESS',
 };
+
+export enum TeamsEnum {
+    RED_TEAM = 'RED_TEAM',
+    BLUE_TEAM = 'BLUE_TEAM',
+}

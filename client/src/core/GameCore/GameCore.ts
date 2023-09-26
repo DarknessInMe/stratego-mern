@@ -1,6 +1,7 @@
 import { Board } from 'core/Board';
 import { UpdateExternalStateType } from './types';
-import { GameStages } from 'shared/enums';
+import { GameStages, TeamsEnum } from 'shared/enums';
+import { Player } from 'core/Player';
 
 /**
  * GameCore class - responsive for initializing/destroying all core entities 
@@ -11,6 +12,9 @@ import { GameStages } from 'shared/enums';
 export class GameCore {
     board: Board | null = null;
     mode: GameStages = GameStages.SET_PIECES;
+    currentPlayer: Player = new Player(TeamsEnum.RED_TEAM);
+    opponentPlayer: Player = new Player(TeamsEnum.BLUE_TEAM);
+    
     private version: number = 0;
     private readonly updateExternalState: UpdateExternalStateType;
     

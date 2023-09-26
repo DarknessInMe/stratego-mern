@@ -14,6 +14,7 @@ export const CellFactory: React.FC<ICellComponentProps> = ({ cell }) => {
             return cell.piece ? (
                 <BoardPiece 
                     rankName={cell.piece.rank.name}
+                    team={cell.piece.team}
                     className='piece_landed'
                     coordinates={{
                         x: cell.piece.x,

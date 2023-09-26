@@ -1,4 +1,4 @@
-import { EnvironmentEnum, PieceNameEnum, PieceWeightEnum } from './enums';
+import { EnvironmentEnum, PieceNameEnum, PieceWeightEnum, TeamsEnum } from './enums';
 import { BasePiece } from 'core/Pieces';
 import { BoardFieldType, SetBankType } from './types';
 import { GameCore } from 'core/GameCore';
@@ -29,7 +29,7 @@ export interface ICellComponentProps {
 }
 
 export interface IDraggableCellProps extends ICellComponentProps {
-    dropRef: (node: ConnectableElement) => void,
+    dropRef?: (node: ConnectableElement) => void,
     isOver?: boolean
 }
 
@@ -47,4 +47,10 @@ export interface IRootContextValue extends RootStateOmitted {
 
 export interface IBankToBoardDragObject {
     rankName: PieceNameEnum,
+}
+
+export interface IPlayer {
+    team: TeamsEnum,
+    defeatedPieces: Record<PieceNameEnum, number>,
+    countDefeatedPieces: (rank: PieceNameEnum) => void,
 }

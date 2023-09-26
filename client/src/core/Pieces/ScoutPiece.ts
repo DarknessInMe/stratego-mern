@@ -1,10 +1,11 @@
 import { ICell, IPieceRank } from 'shared/interfaces';
 import { BasePiece } from './BasePiece';
 import { Board } from 'core/Board';
+import { TeamsEnum } from 'shared/enums';
 
 export class ScoutPiece extends BasePiece {
-    constructor(x: number, y: number, rank: IPieceRank) {
-        super(x, y, rank);
+    constructor(x: number, y: number, rank: IPieceRank, team: TeamsEnum) {
+        super(x, y, rank, team);
     }
 
     private traverseX(board: Board, start: number, modifier: number) {

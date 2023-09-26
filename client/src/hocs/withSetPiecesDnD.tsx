@@ -25,10 +25,15 @@ export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>
 
         const dropStrategy: IDropStrategy = {
             [DragTypesEnum.PIECE_FROM_BANK]: ({ rankName }: IBankToBoardItem) => {
+                const { board, currentPlayer } = gameCoreRef.current;
                 const pieceConstructor = piecePicker(rankName);
-                const piece = new pieceConstructor(cell.x, cell.y, { name: rankName, weight: PIECES[rankName] });
-                const { board } = gameCoreRef.current;
-    
+                const piece = new pieceConstructor(
+                    cell.x, 
+                    cell.y, 
+                    { name: rankName, weight: PIECES[rankName] },
+                    currentPlayer.team,
+                );
+                
                 board.addPieceTo(piece, cell.x, cell.y);
                 setBank((prevBank) => ({
                     ...prevBank,

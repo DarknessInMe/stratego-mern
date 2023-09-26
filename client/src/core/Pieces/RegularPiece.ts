@@ -1,10 +1,11 @@
 import { BasePiece } from './BasePiece';
 import { ICell, IPieceRank } from 'shared/interfaces';
 import { Board } from 'core/Board';
+import { TeamsEnum } from 'shared/enums';
 
 export class RegularPiece extends BasePiece {
-    constructor(x: number, y: number, rank: IPieceRank) {
-        super(x, y, rank);
+    constructor(x: number, y: number, rank: IPieceRank, team: TeamsEnum) {
+        super(x, y, rank, team);
     }
 
     initAvailablePath(board: Board): ICell[] {

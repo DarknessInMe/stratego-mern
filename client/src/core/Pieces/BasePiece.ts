@@ -1,5 +1,5 @@
 import { Board } from 'core/Board';
-import { EnvironmentEnum } from 'shared/enums';
+import { EnvironmentEnum, TeamsEnum } from 'shared/enums';
 import { ICell, IPieceRank } from 'shared/interfaces';
 
 export abstract class BasePiece {
@@ -7,11 +7,13 @@ export abstract class BasePiece {
     y: number;
     rank: IPieceRank;
     currentAvailablePath: ICell[] = [];
+    team: TeamsEnum;
 
-    constructor(x: number, y: number, rank: IPieceRank) {
+    constructor(x: number, y: number, rank: IPieceRank, team: TeamsEnum) {
         this.x = x;
         this.y = y;
         this.rank = rank;
+        this.team = team;
     }
 
     abstract initAvailablePath(board: Board): ICell[]

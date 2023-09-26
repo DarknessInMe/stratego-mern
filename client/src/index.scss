@@ -95,7 +95,6 @@ body {
 .piece {
 	display: inline-flex;
 	position: relative;
-	background-color: red;
 	margin: 4px;
 
 	&__image {
@@ -125,5 +124,13 @@ body {
 
 	&_dragged {
 		opacity: 0.6;
+	}
+
+	&_red {
+		background-color: red;
+	}
+
+	&_blue {
+		background-color: blue;
 	}
 }

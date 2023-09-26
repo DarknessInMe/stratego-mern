@@ -1,15 +1,15 @@
 import React, { memo } from 'react';
 import { Piece } from './Piece';
-import { IPieceBase } from './interfaces';
+import { BankPieceTypes } from './types';
 import { useDrag } from 'react-dnd';
 import { DragTypesEnum, GameStages } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
 
-export const BankPiece: React.FC<IPieceBase> = memo(({ 
+export const BankPiece: React.FC<BankPieceTypes> = memo(({ 
     rankName, 
     className = '',
 }) => {
-    const { mode } = useRootContext();
+    const { mode, gameCoreRef } = useRootContext();
     const [{ isDragging }, dragRef] = useDrag(() => ({
         type: DragTypesEnum.PIECE_FROM_BANK,
         item: {
@@ -24,6 +24,7 @@ export const BankPiece: React.FC<IPieceBase> = memo(({
     return (
         <Piece
             dragRef={dragRef}
+            team={gameCoreRef.current.currentPlayer.team}
             rankName={rankName}
             className={className}
             isDragging={isDragging}
