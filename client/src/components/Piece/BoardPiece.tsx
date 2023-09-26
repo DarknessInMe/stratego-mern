@@ -12,6 +12,8 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
     className = '',
 }) => {
     const { gameCoreRef, mode } = useRootContext();
+    const { board, currentPlayer } = gameCoreRef.current;
+
     const [{ isDragging }, dragRef] = useDrag(() => ({
         type: DragTypesEnum.PIECE_FROM_BOARD,
         item: {
@@ -20,6 +22,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
         }),
+        canDrag: () => team === currentPlayer.team,
     }));
 
     const onPieceClick = useCallback(() => {
@@ -27,7 +30,6 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
             return;
         }
 
-        const { board } = gameCoreRef.current;
         const currentPiece = board.getCell(coordinates.x, coordinates.y);
 
         if (currentPiece.piece) {
@@ -39,6 +41,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         <Piece
             onMouseDown={onPieceClick}
             dragRef={dragRef}
+            isHidden={team !== currentPlayer.team}
             rankName={rankName}
             team={team}
             className={className}

@@ -1,7 +1,8 @@
 import { Board } from 'core/Board';
 import { UpdateExternalStateType } from './types';
-import { GameStages, TeamsEnum } from 'shared/enums';
+import { GameStages, PieceNameEnum, PieceWeightEnum, TeamsEnum } from 'shared/enums';
 import { Player } from 'core/Player';
+import { RegularPiece } from 'core/Pieces';
 
 /**
  * GameCore class - responsive for initializing/destroying all core entities 
@@ -14,7 +15,7 @@ export class GameCore {
     mode: GameStages = GameStages.SET_PIECES;
     currentPlayer: Player = new Player(TeamsEnum.RED_TEAM);
     opponentPlayer: Player = new Player(TeamsEnum.BLUE_TEAM);
-    
+
     private version: number = 0;
     private readonly updateExternalState: UpdateExternalStateType;
     
@@ -22,9 +23,27 @@ export class GameCore {
         this.updateExternalState = updateExternalState;
     }
 
+    private _setOpponent() {
+        for (let y = 0; y < 4; y++) {
+            for (let x = 0; x < 10; x++) {
+                const piece = new RegularPiece(
+                    x, y, 
+                    {
+                        name: PieceNameEnum.MINER,
+                        weight: PieceWeightEnum.MINER,
+                    },
+                    TeamsEnum.BLUE_TEAM,
+                );
+
+                this.board.addPieceTo(piece, x, y, false);
+            }
+        }
+    }
+
     init() {
         this.board = new Board(this.update.bind(this));
         this.board.initField();
+        this._setOpponent();
         this.update();
     }
 

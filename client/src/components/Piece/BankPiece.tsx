@@ -24,6 +24,7 @@ export const BankPiece: React.FC<BankPieceTypes> = memo(({
     return (
         <Piece
             dragRef={dragRef}
+            isHidden={false}
             team={gameCoreRef.current.currentPlayer.team}
             rankName={rankName}
             className={className}

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { PieceIconPicker } from './constants';
 import { IPieceProps } from './interfaces';
 import { PIECES } from 'shared/constants';
@@ -8,6 +8,7 @@ import { TeamsEnum } from 'shared/enums';
 export const Piece: React.FC<IPieceProps> = memo(({ 
     rankName,
     dragRef,
+    isHidden,
     isDragging = false,
     className = '',
     team,
@@ -15,6 +16,19 @@ export const Piece: React.FC<IPieceProps> = memo(({
 }) => {
     const icon = PieceIconPicker[rankName];
     const weight = PIECES[rankName];
+
+    const renderPiece = useCallback(() => {
+        if (isHidden) return null;
+
+        return (
+            <>
+                <img src={icon} className='piece__image'/>
+                {weight !== 0 && (
+                    <span className='piece__weight'>{weight}</span>
+                )}
+            </>
+        );
+    }, [isHidden, rankName]);
 
     return (
         <div
@@ -27,10 +41,7 @@ export const Piece: React.FC<IPieceProps> = memo(({
             )}
             onMouseDown={onMouseDown}
         >
-            <img src={icon} className='piece__image'/>
-            {weight !== 0 && (
-                <span className='piece__weight'>{weight}</span>
-            )}
+            {renderPiece()}
         </div>
     );
 });

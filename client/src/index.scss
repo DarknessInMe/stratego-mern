@@ -97,7 +97,7 @@ body {
 	position: relative;
 	margin: 4px;
 
-	&__image {
+	&, &__image {
 		width: calc($piece-size);
 		height: calc($piece-size);
 	}
