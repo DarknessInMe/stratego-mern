@@ -1,12 +1,13 @@
 import { Board } from 'core/Board';
 import { EnvironmentEnum, TeamsEnum } from 'shared/enums';
 import { ICell, IPieceRank } from 'shared/interfaces';
+import { CoordinatesType } from 'shared/types';
 
 export abstract class BasePiece {
     x: number;
     y: number;
     rank: IPieceRank;
-    currentAvailablePath: ICell[] = [];
+    currentAvailablePath: CoordinatesType[] = [];
     team: TeamsEnum;
 
     constructor(x: number, y: number, rank: IPieceRank, team: TeamsEnum) {
@@ -16,10 +17,20 @@ export abstract class BasePiece {
         this.team = team;
     }
 
-    abstract initAvailablePath(board: Board): ICell[]
+    abstract initAvailablePath(board: Board): CoordinatesType[]
 
     canMove(target: ICell) {
-        return target.environment !== EnvironmentEnum.WATER;
+        switch(true) {
+            case target.environment === EnvironmentEnum.WATER: {
+                return false;
+            }
+            case target.piece?.team === this.team: {
+                return false;
+            }
+            default: {
+                return true;
+            }
+        }
     }
 
     canBeat(enemyRank: IPieceRank) {
@@ -27,7 +38,7 @@ export abstract class BasePiece {
     }
 
     isCorrectPath(x: number, y: number): boolean {
-        return this.currentAvailablePath.some((cell) => cell.x === x && cell.y === y);
+        return this.currentAvailablePath.some((path) => path.x === x && path.y === y);
     }
 
     moveTo(x: number, y: number) {

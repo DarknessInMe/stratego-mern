@@ -1,9 +1,10 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import { Piece } from './Piece';
 import { IBoardPieceProps } from './interfaces';
 import { useDrag } from 'react-dnd';
 import { DragTypesEnum, GameStages } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
+import { useCellCoordinates } from 'hooks/useCellCoordinates';
 
 export const BoardPiece: React.FC<IBoardPieceProps> = memo(({ 
     rankName,
@@ -11,7 +12,9 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
     coordinates,
     className = '',
 }) => {
-    const { gameCoreRef, mode } = useRootContext();
+    const { gameCoreRef, mode, setSelection } = useRootContext();
+    const pieceRef = useCellCoordinates(coordinates);
+
     const { board, currentPlayer } = gameCoreRef.current;
 
     const [{ isDragging }, dragRef] = useDrag(() => ({
@@ -33,14 +36,26 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         const currentPiece = board.getCell(coordinates.x, coordinates.y);
 
         if (currentPiece.piece) {
-            currentPiece.piece.initAvailablePath(board);
+            const possiblePath = currentPiece.piece.initAvailablePath(board);
+            setSelection({
+                possiblePath,
+                pieceAt: coordinates
+            });
         }
     }, [mode, coordinates]);
 
+    useEffect(() => {
+        if (!pieceRef.current) {
+            return;
+        }
+
+        dragRef(pieceRef.current);
+    }, []);
+    
     return (
         <Piece
+            ref={pieceRef}
             onMouseDown={onPieceClick}
-            dragRef={dragRef}
             isHidden={team !== currentPlayer.team}
             rankName={rankName}
             team={team}

@@ -8,7 +8,14 @@ import { BoardPiece } from 'components/Piece';
 export const CellFactory: React.FC<ICellComponentProps> = ({ cell }) => {
     switch(cell.environment) {
         case EnvironmentEnum.WATER: {
-            return <Water />;
+            return (
+                <Water 
+                    coordinates={{
+                        x: cell.x,
+                        y: cell.y
+                    }}
+                />
+            );
         }
         case EnvironmentEnum.LAND: {
             return cell.piece ? (

@@ -1,6 +1,6 @@
 import { EnvironmentEnum, PieceNameEnum, PieceWeightEnum, TeamsEnum } from './enums';
 import { BasePiece } from 'core/Pieces';
-import { BoardFieldType, SetBankType } from './types';
+import { BoardFieldType, CoordinatesType, ReactSetStateType, SetBankType } from './types';
 import { GameCore } from 'core/GameCore';
 import { PIECES_SETUP } from 'shared/constants';
 import { GameStages } from 'shared/enums';
@@ -39,9 +39,16 @@ export interface IContextProps {
 
 type RootStateOmitted = Omit<IRootState, 'version'>
 
+export interface ISelectionState {
+    pieceAt: CoordinatesType,
+    possiblePath: CoordinatesType[],
+}
+
 export interface IRootContextValue extends RootStateOmitted {
     bank: typeof PIECES_SETUP,
+    selection: ISelectionState,
     setBank: SetBankType,
+    setSelection: ReactSetStateType<ISelectionState>,
     gameCoreRef: React.MutableRefObject<GameCore>
 }
 
@@ -51,6 +58,4 @@ export interface IBankToBoardDragObject {
 
 export interface IPlayer {
     team: TeamsEnum,
-    defeatedPieces: Record<PieceNameEnum, number>,
-    countDefeatedPieces: (rank: PieceNameEnum) => void,
 }

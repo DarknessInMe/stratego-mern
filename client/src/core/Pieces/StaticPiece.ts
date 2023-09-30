@@ -1,6 +1,7 @@
-import { ICell, IPieceRank } from 'shared/interfaces';
+import { IPieceRank } from 'shared/interfaces';
 import { BasePiece } from './BasePiece';
 import { TeamsEnum } from 'shared/enums';
+import { CoordinatesType } from 'shared/types';
 
 export class StaticPiece extends BasePiece {
     constructor(x: number, y: number, rank: IPieceRank, team: TeamsEnum) {
@@ -15,7 +16,7 @@ export class StaticPiece extends BasePiece {
         return false;
     }
 
-    initAvailablePath(): ICell[] {
+    initAvailablePath(): CoordinatesType[] {
         return [];
     }
 }

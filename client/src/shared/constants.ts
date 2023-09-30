@@ -29,3 +29,8 @@ export const PIECES_SETUP: Record<PieceNameEnum, number> = {
     [PieceNameEnum.BOMB]: 6,
     [PieceNameEnum.FLAG]: 1,
 };
+
+export const CELL_ATTRIBUTES = {
+    X: 'data-x',
+    Y: 'data-y',
+} as const;

@@ -17,6 +17,15 @@ body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
+
+	.possible-path {
+		border: 1px solid yellow;
+		opacity: 0.6;
+		
+		&.piece {
+			border: 1px solid red;
+		}
+	}
 }
 
 .screen {

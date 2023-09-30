@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useRef, useEffect } from 'react';
 import { Piece } from './Piece';
 import { BankPieceTypes } from './types';
 import { useDrag } from 'react-dnd';
@@ -10,6 +10,8 @@ export const BankPiece: React.FC<BankPieceTypes> = memo(({
     className = '',
 }) => {
     const { mode, gameCoreRef } = useRootContext();
+    const pieceRef = useRef<HTMLDivElement | null>(null);
+
     const [{ isDragging }, dragRef] = useDrag(() => ({
         type: DragTypesEnum.PIECE_FROM_BANK,
         item: {
@@ -21,9 +23,17 @@ export const BankPiece: React.FC<BankPieceTypes> = memo(({
         canDrag: () => mode !== GameStages.GAME_IN_PROCESS,
     }), [mode]);
     
+    useEffect(() => {
+        if (!pieceRef.current) {
+            return;
+        }
+
+        dragRef(pieceRef.current);
+    }, []);
+
     return (
         <Piece
-            dragRef={dragRef}
+            ref={pieceRef}
             isHidden={false}
             team={gameCoreRef.current.currentPlayer.team}
             rankName={rankName}

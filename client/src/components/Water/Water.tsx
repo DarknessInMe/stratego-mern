@@ -1,7 +1,18 @@
 import React from 'react';
+import { CoordinatesType } from 'shared/types';
+import { useCellCoordinates } from 'hooks/useCellCoordinates';
 
-export const Water: React.FC = () => {
+interface IWaterProps {
+    coordinates: CoordinatesType
+}
+
+export const Water: React.FC<IWaterProps> = ({ coordinates }) => {
+    const waterCellRef = useCellCoordinates(coordinates);
+
     return (
-        <div className='board__cell board__cell_water' />
+        <div
+            ref={waterCellRef}
+            className='board__cell board__cell_water' 
+        />
     );
 };

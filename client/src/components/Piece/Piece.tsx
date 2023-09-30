@@ -1,19 +1,18 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, forwardRef } from 'react';
 import { PieceIconPicker } from './constants';
 import { IPieceProps } from './interfaces';
 import { PIECES } from 'shared/constants';
 import clsx from 'clsx';
 import { TeamsEnum } from 'shared/enums';
 
-export const Piece: React.FC<IPieceProps> = memo(({ 
+const BasePiece = forwardRef<HTMLDivElement,IPieceProps>(({ 
     rankName,
-    dragRef,
     isHidden,
     isDragging = false,
     className = '',
     team,
     onMouseDown,
-}) => {
+}, ref) => {
     const icon = PieceIconPicker[rankName];
     const weight = PIECES[rankName];
 
@@ -32,7 +31,7 @@ export const Piece: React.FC<IPieceProps> = memo(({
 
     return (
         <div
-            ref={dragRef}
+            ref={ref}
             className={clsx(
                 'piece', 
                 isDragging && 'piece_dragged', 
@@ -45,3 +44,5 @@ export const Piece: React.FC<IPieceProps> = memo(({
         </div>
     );
 });
+
+export const Piece = memo(BasePiece);
