@@ -39,7 +39,6 @@ export abstract class BasePiece {
 
         if (target.environment === EnvironmentEnum.WATER) {
             return false;
-
         }
 
         return true;

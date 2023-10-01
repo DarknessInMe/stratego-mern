@@ -8,6 +8,7 @@ export const Land: React.FC<IDraggableCellProps> = withStagedDnD(memo(({
     dropRef, 
     isOver, 
     cell,
+    onClick,
     className = '',
 }) => {
     const landRef = useCellCoordinates({ x: cell.x, y: cell.y });
@@ -23,6 +24,7 @@ export const Land: React.FC<IDraggableCellProps> = withStagedDnD(memo(({
     return (
         <div
             ref={landRef}
+            onClick={onClick}
             className={clsx(
                 'board__cell', 
                 'board__cell_land', 

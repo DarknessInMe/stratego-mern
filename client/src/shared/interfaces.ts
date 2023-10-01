@@ -1,5 +1,5 @@
 import { EnvironmentEnum, PieceNameEnum, TeamsEnum } from './enums';
-import { BoardFieldType, CoordinatesType, ReactSetStateType, SetBankType } from './types';
+import { BoardFieldType, CoordinatesType, ReactSetStateType, SetBankType, HandlePieceMovingType } from './types';
 import { GameCore } from 'core/GameCore';
 import { PIECES_SETUP } from 'shared/constants';
 import { GameStages } from 'shared/enums';
@@ -20,6 +20,7 @@ export interface ICell {
 export interface ICellComponentProps {
     cell: ICell;
     className?: string,
+    onClick?: () => void;
 }
 
 export interface IDraggableCellProps extends ICellComponentProps {
@@ -41,7 +42,8 @@ export interface IRootContextValue extends IRootState {
     selection: ISelectionState,
     setBank: SetBankType,
     setSelection: ReactSetStateType<ISelectionState>,
-    gameCoreRef: React.MutableRefObject<GameCore>
+    gameCoreRef: React.MutableRefObject<GameCore>,
+    handlePieceMoving: HandlePieceMovingType,
 }
 
 export interface IBankToBoardDragObject {

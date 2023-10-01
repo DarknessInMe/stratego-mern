@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { Land } from 'components/Land';
 import { Water } from 'components/Water';
 import { ICellComponentProps } from 'shared/interfaces';
@@ -8,7 +8,7 @@ import { useRootContext } from 'context/RootContext';
 import clsx from 'clsx';
 
 export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
-    const { gameCoreRef, selection } = useRootContext();
+    const { gameCoreRef, selection, handlePieceMoving } = useRootContext();
 
     const isSelected = useMemo(() => {
         if (!selection) {
@@ -18,13 +18,27 @@ export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
         return selection.possiblePath.some(({ x, y }) => cell.x === x && cell.y === y);
     }, [cell.x, cell.y, selection?.possiblePath]);
 
+    const onMoveByClick = useCallback(() => {
+        if (!isSelected || !selection) {
+            return;
+        }
+
+        handlePieceMoving(selection.pieceAt, { x: cell.x, y: cell.y });
+    }, [isSelected, selection, handlePieceMoving]);
+
     switch(cell.environment) {
         case EnvironmentEnum.WATER: {
             return <Water coordinates={{ x: cell.x, y: cell.y }}/>;
         }
         case EnvironmentEnum.LAND: {
             if (!cell.pieceId) {
-                return <Land cell={cell} className={isSelected && 'possible-path'}/>;
+                return (
+                    <Land 
+                        cell={cell} 
+                        className={isSelected && 'possible-path'}
+                        onClick={onMoveByClick}
+                    />
+                );
             }
 
             const { board } = gameCoreRef.current;

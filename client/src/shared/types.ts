@@ -8,3 +8,5 @@ export type BoardFieldType = ICell[][]
 export type SetBankType = ReactSetStateType<typeof PIECES_SETUP>;
 
 export type CoordinatesType = { x: number, y: number };
+
+export type HandlePieceMovingType = (pieceQuery: string | CoordinatesType, newPosition: CoordinatesType) => void;

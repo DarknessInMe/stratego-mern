@@ -12,7 +12,7 @@ interface IDraggedItem {
 
 export const withGameInProgressDnD = (WrappedComponent: React.FC<IDraggableCellProps>) => {
     const Component: React.FC<ICellComponentProps> = memo(({ cell, ...rest }) => {
-        const { gameCoreRef, field, setSelection } = useRootContext();
+        const { gameCoreRef, handlePieceMoving } = useRootContext();
         const [{ isOver }, dropRef] = useDrop(() => ({
             accept: DragTypesEnum.PIECE_FROM_BOARD,
             collect: monitor => ({
@@ -29,15 +29,9 @@ export const withGameInProgressDnD = (WrappedComponent: React.FC<IDraggableCellP
                 return false;
             },
             drop: ({ coordinates }: IDraggedItem) => {
-                const { board } = gameCoreRef.current;
-                const draggedPiece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
-
-                if (draggedPiece) {
-                    board.movePiece(draggedPiece, cell.x, cell.y);
-                    setSelection(null);
-                }
+                handlePieceMoving(coordinates, { x: cell.x, y: cell.y });
             },
-        }), [cell.x, cell.y, field]);
+        }), [cell.x, cell.y]);
 
         return (
             <WrappedComponent
