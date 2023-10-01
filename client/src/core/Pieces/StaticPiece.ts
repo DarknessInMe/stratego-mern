@@ -1,5 +1,5 @@
 import { BasePiece } from './BasePiece';
-import { PieceNameEnum, TeamsEnum } from 'shared/enums';
+import { FightResultEnum, PieceNameEnum, TeamsEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
 
 export class StaticPiece extends BasePiece {
@@ -11,8 +11,8 @@ export class StaticPiece extends BasePiece {
         return false;
     }
 
-    canBeat(): boolean {
-        return false;
+    canBeat() {
+        return FightResultEnum.DEFEAT;
     }
 
     initAvailablePath(): CoordinatesType[] {

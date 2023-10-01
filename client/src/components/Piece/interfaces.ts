@@ -4,6 +4,7 @@ import { CoordinatesType } from 'shared/types';
 export interface IPieceBase {
     rankName: PieceNameEnum,
     team: TeamsEnum,
+    isSelected?: boolean,
     className?: string,
 }
 
@@ -15,4 +16,5 @@ export interface IPieceProps extends IPieceBase {
 
 export interface IBoardPieceProps extends IPieceBase {
     coordinates?: CoordinatesType | null,
+    onClick?: () => void;
 }

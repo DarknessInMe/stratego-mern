@@ -2,13 +2,7 @@ import { Board } from 'core/Board';
 import { UpdateExternalStateType } from './types';
 import { GameStages, PieceNameEnum, TeamsEnum } from 'shared/enums';
 import { Player } from 'core/Player';
-import { RegularPiece } from 'core/Pieces';
-
-/**
- * GameCore class - responsive for initializing/destroying all core entities 
- * Board class - responsive for board render and applying pieces on new positions
- * Piece class - responsive for defining can one piece beat another
- */
+import { piecePicker } from 'shared/utils';
 
 export class GameCore {
     board: Board | null = null;
@@ -22,27 +16,14 @@ export class GameCore {
         this.updateExternalState = updateExternalState;
     }
 
-    private _setOpponent() {
-        for (let y = 0; y < 4; y++) {
-            for (let x = 0; x < 10; x++) {
-                const piece = new RegularPiece(
-                    x, y, 
-                    PieceNameEnum.MINER,
-                    TeamsEnum.BLUE_TEAM,
-                );
-
-                this.board.registerPiece(piece, x, y);
-            }
-        }
-
-        this.board.updateCoreState();
-    }
-
     init() {
         this.board = new Board(this.update.bind(this));
         this.board.initField();
-        this._setOpponent();
         this.update();
+
+        if (process.env.NODE_ENV === 'development') {
+            window.spawnOpponent = this.__spawnOpponent__.bind(this);
+        }
     }
 
     update() {
@@ -55,5 +36,11 @@ export class GameCore {
     toggleMode() {
         this.mode = this.mode === GameStages.SET_PIECES ? GameStages.GAME_IN_PROCESS : GameStages.SET_PIECES;
         this.update();
+    }
+
+    __spawnOpponent__(rankName: PieceNameEnum, x: number, y: number) {
+        const Piece = piecePicker(rankName); 
+
+        this.board.registerPiece(new Piece(x, y, rankName, this.opponentPlayer.team), x, y);
     }
 }

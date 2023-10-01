@@ -10,3 +10,7 @@ export type SetBankType = ReactSetStateType<typeof PIECES_SETUP>;
 export type CoordinatesType = { x: number, y: number };
 
 export type HandlePieceMovingType = (pieceQuery: string | CoordinatesType, newPosition: CoordinatesType) => void;
+
+export type CanMoveBoardPieceTo = (movedFrom: CoordinatesType, moveTo: CoordinatesType) => boolean;
+
+export type OnMoveByClick = (isSelectedCell: boolean, cellPosition: CoordinatesType) => void;

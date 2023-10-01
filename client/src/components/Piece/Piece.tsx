@@ -8,10 +8,11 @@ import { TeamsEnum } from 'shared/enums';
 const BasePiece = forwardRef<HTMLDivElement,IPieceProps>(({ 
     rankName,
     isHidden,
-    isDragging = false,
-    className = '',
     team,
     onMouseDown,
+    className = '',
+    isDragging = false,
+    isSelected = false,
 }, ref) => {
     const icon = PieceIconPicker[rankName];
     const weight = PIECES[rankName];
@@ -34,9 +35,10 @@ const BasePiece = forwardRef<HTMLDivElement,IPieceProps>(({
             ref={ref}
             className={clsx(
                 'piece', 
-                isDragging && 'piece_dragged', 
-                className,
+                isDragging && 'piece_dragged',
+                isSelected && 'possible-path',
                 team === TeamsEnum.RED_TEAM ? 'piece_red' : 'piece_blue',
+                className,
             )}
             onMouseDown={onMouseDown}
         >

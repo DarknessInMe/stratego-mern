@@ -1,30 +1,22 @@
-import React, { memo, useCallback, useMemo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { Land } from 'components/Land';
 import { Water } from 'components/Water';
 import { ICellComponentProps } from 'shared/interfaces';
 import { EnvironmentEnum } from 'shared/enums';
 import { BoardPiece } from 'components/Piece';
 import { useRootContext } from 'context/RootContext';
-import clsx from 'clsx';
+import { isSelectedByPossiblePath } from 'shared/utils';
 
 export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
-    const { gameCoreRef, selection, handlePieceMoving } = useRootContext();
+    const { gameCoreRef, selection } = useRootContext();
 
     const isSelected = useMemo(() => {
         if (!selection) {
             return false;
         }
 
-        return selection.possiblePath.some(({ x, y }) => cell.x === x && cell.y === y);
+        return isSelectedByPossiblePath(selection.possiblePath, cell);
     }, [cell.x, cell.y, selection?.possiblePath]);
-
-    const onMoveByClick = useCallback(() => {
-        if (!isSelected || !selection) {
-            return;
-        }
-
-        handlePieceMoving(selection.pieceAt, { x: cell.x, y: cell.y });
-    }, [isSelected, selection, handlePieceMoving]);
 
     switch(cell.environment) {
         case EnvironmentEnum.WATER: {
@@ -35,8 +27,7 @@ export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
                 return (
                     <Land 
                         cell={cell} 
-                        className={isSelected && 'possible-path'}
-                        onClick={onMoveByClick}
+                        isSelected={isSelected}
                     />
                 );
             }
@@ -48,7 +39,8 @@ export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
                 <BoardPiece
                     rankName={piece.rankName}
                     team={piece.team}
-                    className={clsx('piece_landed', isSelected && 'possible-path')}
+                    className={'piece_landed'}
+                    isSelected={isSelected}
                     coordinates={{
                         x: piece.x,
                         y: piece.y

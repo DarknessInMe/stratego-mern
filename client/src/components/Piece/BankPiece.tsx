@@ -5,10 +5,7 @@ import { useDrag } from 'react-dnd';
 import { DragTypesEnum, GameStages } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
 
-export const BankPiece: React.FC<BankPieceTypes> = memo(({ 
-    rankName, 
-    className = '',
-}) => {
+export const BankPiece: React.FC<BankPieceTypes> = memo(({ rankName }) => {
     const { mode, gameCoreRef } = useRootContext();
     const pieceRef = useRef<HTMLDivElement | null>(null);
 
@@ -37,7 +34,6 @@ export const BankPiece: React.FC<BankPieceTypes> = memo(({
             isHidden={false}
             team={gameCoreRef.current.currentPlayer.team}
             rankName={rankName}
-            className={className}
             isDragging={isDragging}
         />
     );

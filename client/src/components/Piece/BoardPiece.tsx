@@ -1,18 +1,30 @@
 import React, { memo, useCallback, useEffect } from 'react';
 import { Piece } from './Piece';
 import { IBoardPieceProps } from './interfaces';
-import { useDrag } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import { DragTypesEnum, GameStages } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
 import { useCellCoordinates } from 'hooks/useCellCoordinates';
+import { IDraggedItem } from 'shared/interfaces';
+import { BasePiece } from 'core/Pieces';
+import { isSelectedByPossiblePath } from 'shared/utils';
 
 export const BoardPiece: React.FC<IBoardPieceProps> = memo(({ 
     rankName,
     team,
     coordinates,
-    className = '',
+    isSelected,
+    className,
 }) => {
-    const { gameCoreRef, mode, setSelection } = useRootContext();
+    const { 
+        gameCoreRef, 
+        mode,
+        selection,
+        setSelection, 
+        handlePieceMoving, 
+        canMoveBoardPieceTo,
+        onMoveByClick,
+    } = useRootContext();
     const pieceRef = useCellCoordinates(coordinates);
 
     const { board, currentPlayer } = gameCoreRef.current;
@@ -28,6 +40,23 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         canDrag: () => team === currentPlayer.team,
     }));
 
+    const [, dropRef] = useDrop(() => ({
+        accept: DragTypesEnum.PIECE_FROM_BOARD,
+        canDrop: (source: IDraggedItem) => {
+            return canMoveBoardPieceTo(source.coordinates, coordinates);
+        },
+        drop: (source: IDraggedItem) => {
+            handlePieceMoving(source.coordinates, coordinates);
+        },
+    }), [coordinates]);
+
+    const handleSelectionByClick = (piece: BasePiece) => {
+        setSelection({
+            possiblePath: piece.initAvailablePath(board),
+            pieceAt: coordinates
+        });
+    };
+
     const onPieceClick = useCallback(() => {
         if (mode !== GameStages.GAME_IN_PROCESS) {
             return;
@@ -35,21 +64,23 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
 
         const currentPiece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
 
-        if (currentPiece) {
-            const possiblePath = currentPiece.initAvailablePath(board);
-            setSelection({
-                possiblePath,
-                pieceAt: coordinates
-            });
+        if (!currentPiece) {
+            return;
         }
-    }, [mode, coordinates]);
+
+        if (currentPiece.team !== currentPlayer.team) {
+            onMoveByClick(isSelectedByPossiblePath(selection?.possiblePath, coordinates), coordinates);
+        } else {
+            handleSelectionByClick(currentPiece);
+        }
+    }, [mode, coordinates, selection?.possiblePath]);
 
     useEffect(() => {
         if (!pieceRef.current) {
             return;
         }
 
-        dragRef(pieceRef.current);
+        dropRef(dragRef(pieceRef.current));
     }, []);
     
     return (
@@ -59,8 +90,9 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
             isHidden={team !== currentPlayer.team}
             rankName={rankName}
             team={team}
-            className={className}
+            isSelected={isSelected}
             isDragging={isDragging}
+            className={className}
         />
     );
 });

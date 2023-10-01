@@ -1,11 +1,23 @@
 import { BasePiece } from './BasePiece';
 import { Board } from 'core/Board';
-import { PieceNameEnum, TeamsEnum } from 'shared/enums';
+import { PieceNameEnum, TeamsEnum, FightResultEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
 
 export class RegularPiece extends BasePiece {
     constructor(x: number, y: number, rankName: PieceNameEnum, team: TeamsEnum) {
         super(x, y, rankName, team);
+    }
+
+    canBeat(enemyRank: PieceNameEnum) {
+        if (this.rankName === PieceNameEnum.MINER && enemyRank === PieceNameEnum.BOMB) {
+            return FightResultEnum.VICTORY;
+        }
+
+        if (this.rankName === PieceNameEnum.SPY && enemyRank === PieceNameEnum.MARSHAL) {
+            return FightResultEnum.VICTORY;
+        }
+
+        return super.canBeat(enemyRank);
     }
 
     initAvailablePath(board: Board): CoordinatesType[] {

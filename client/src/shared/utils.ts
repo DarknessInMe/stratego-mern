@@ -1,6 +1,7 @@
 import { PieceNameEnum } from 'shared/enums';
 import { PIECES_SETUP } from 'shared/constants';
 import { RegularPiece, StaticPiece, ScoutPiece } from 'core/Pieces';
+import { CoordinatesType } from './types';
 
 export const generateInitSetup = (setup: typeof PIECES_SETUP): PieceNameEnum[] => {
     const result: PieceNameEnum[] = [];
@@ -26,4 +27,8 @@ export const piecePicker = (rankName: PieceNameEnum): typeof StaticPiece | typeo
         default:
             return RegularPiece;
     }
+};
+
+export const isSelectedByPossiblePath = (possiblePath: CoordinatesType[], checkedCoordinates: CoordinatesType) => {
+    return possiblePath.some(({ x, y }) => checkedCoordinates.x === x && checkedCoordinates.y === y);
 };

@@ -47,3 +47,9 @@ export enum TeamsEnum {
     RED_TEAM = 'RED_TEAM',
     BLUE_TEAM = 'BLUE_TEAM',
 }
+
+export enum FightResultEnum {
+    STALEMATE = 'STALEMATE',
+    VICTORY = 'VICTORY',
+    DEFEAT = 'DEFEAT',
+}

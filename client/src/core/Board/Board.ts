@@ -58,7 +58,9 @@ export class Board {
         this.pieces.set(piece.id, piece);
 
         const cell = this.getCell(x, y);
+
         cell.pieceId = piece.id;
+        this.updateCoreState();
     }
 
     removeAndUnregisterPiece(x: number, y: number) {

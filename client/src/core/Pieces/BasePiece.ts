@@ -1,5 +1,11 @@
 import { Board } from 'core/Board';
-import { EnvironmentEnum, PieceNameEnum, TeamsEnum, PieceWeightEnum } from 'shared/enums';
+import { 
+    EnvironmentEnum, 
+    PieceNameEnum, 
+    TeamsEnum, 
+    PieceWeightEnum,
+    FightResultEnum,
+} from 'shared/enums';
 import { ICell } from 'shared/interfaces';
 import { CoordinatesType } from 'shared/types';
 import { PIECES } from 'shared/constants';
@@ -45,9 +51,17 @@ export abstract class BasePiece {
     }
 
     canBeat(enemyRank: PieceNameEnum) {
+        if (enemyRank === PieceNameEnum.BOMB) {
+            return FightResultEnum.DEFEAT; 
+        }
+
         const enemyWeight = this.getPieceWeightByRank(enemyRank);
 
-        return this.weight >= enemyWeight;
+        if (this.weight === enemyWeight) {
+            return FightResultEnum.STALEMATE;
+        }
+
+        return this.weight > enemyWeight ? FightResultEnum.VICTORY : FightResultEnum.DEFEAT;
     }
 
     isCorrectPath(x: number, y: number): boolean {
