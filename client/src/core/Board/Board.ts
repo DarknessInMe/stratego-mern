@@ -6,7 +6,9 @@ import { BasePiece } from 'core/Pieces';
 
 export class Board {
     field: BoardFieldType | null = null;
-    private readonly updateCoreState: () => void;
+    pieces = new Map<string, BasePiece>();
+
+    readonly updateCoreState: () => void;
     
     constructor(updateCoreState: () => void) {
         this.updateCoreState = updateCoreState;
@@ -19,7 +21,7 @@ export class Board {
             const row: ICell[] = [];
 
             for (let x = 0; x < 10; x++) {
-                row.push({ x, y, environment: EnvironmentEnum.LAND, piece: null, });
+                row.push({ x, y, environment: EnvironmentEnum.LAND, pieceId: null, });
             }
 
             this.field.push(row);
@@ -38,30 +40,51 @@ export class Board {
         }
     }
 
-    addPieceTo(piece: BasePiece, x: number, y: number, triggerUpdate: boolean = true) {
-        const cell = this.getCell(x, y);
-
-        cell.piece = piece;
-        piece.moveTo(x, y);
-
-        triggerUpdate && this.updateCoreState();
+    getPieceById(id: string) {
+        return this.pieces.get(id);
     }
 
-    removePieceFrom(x: number, y: number, triggerUpdate: boolean = true) {
-        const cell = this.getCell(x, y);
+    getPieceByCoordinates(x: number, y: number) {
+        try {
+            const cell = this.getCell(x, y);
 
-        cell.piece = null;
-
-        triggerUpdate && this.updateCoreState();
-    }
-
-    movePiece(piece: BasePiece, x: number, y: number, checkPath: boolean = true) {
-        if (checkPath && !piece.isCorrectPath(x, y)) {
-            return;
+            return this.getPieceById(cell.pieceId);
+        } catch {
+            return null;
         }
+    }
 
-        this.removePieceFrom(piece.x, piece.y, false);
-        this.addPieceTo(piece, x, y, false);
+    registerPiece(piece: BasePiece, x: number, y: number) {
+        this.pieces.set(piece.id, piece);
+
+        const cell = this.getCell(x, y);
+        cell.pieceId = piece.id;
+    }
+
+    removeAndUnregisterPiece(x: number, y: number) {
+        const piece = this.getPieceByCoordinates(x, y);
+
+        this.pieces.delete(piece.id);
+        this.removePieceFrom(x, y);
+        this.updateCoreState();
+    }
+
+    addPieceTo(piece: BasePiece, x: number, y: number) {
+        const cell = this.getCell(x, y);
+
+        cell.pieceId = piece.id;
+        piece.moveTo(x, y);
+    }
+
+    removePieceFrom(x: number, y: number) {
+        const cell = this.getCell(x, y);
+
+        cell.pieceId = null;
+    }
+
+    movePiece(piece: BasePiece, newX: number, newY: number) {
+        this.removePieceFrom(piece.x, piece.y);
+        this.addPieceTo(piece, newX, newY);
         this.updateCoreState();
     }
 }

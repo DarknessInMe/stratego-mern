@@ -1,29 +1,28 @@
-import { IPieceRank } from 'shared/interfaces';
 import { BasePiece } from './BasePiece';
 import { Board } from 'core/Board';
-import { TeamsEnum } from 'shared/enums';
+import { PieceNameEnum, TeamsEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
 
 export class ScoutPiece extends BasePiece {
-    constructor(x: number, y: number, rank: IPieceRank, team: TeamsEnum) {
-        super(x, y, rank, team);
+    constructor(x: number, y: number, rankName: PieceNameEnum, team: TeamsEnum) {
+        super(x, y, rankName, team);
     }
 
     private traverseX(board: Board, start: number, modifier: number) {
         const cellX = board.getCell(start + modifier, this.y);
 
-        if (cellX && this.canMove(cellX)) {
+        if (cellX && this.canMove(cellX, board)) {
             this.currentAvailablePath.push({ x: cellX.x, y: cellX.y });
-            !cellX.piece && this.traverseX(board, start + modifier, modifier);
+            !cellX.pieceId && this.traverseX(board, start + modifier, modifier);
         }
     }
 
     private traverseY(board: Board, start: number, modifier: number) {
         const cellY = board.getCell(this.x, start + modifier);
 
-        if (cellY && this.canMove(cellY)) {
+        if (cellY && this.canMove(cellY, board)) {
             this.currentAvailablePath.push({ x: cellY.x, y: cellY.y });
-            !cellY.piece && this.traverseY(board, start + modifier, modifier);
+            !cellY.pieceId && this.traverseY(board, start + modifier, modifier);
         }
     }
 

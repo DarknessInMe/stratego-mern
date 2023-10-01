@@ -17,7 +17,6 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     const [selection, setSelection] = useState<ISelectionState | null>(null);
     const [rootState, setRootState] = useState<IRootState>({
         field: [],
-        version: 0,
         mode: GameStages.SET_PIECES,
     });
 	const gameCoreRef = useRef(new GameCore(setRootState));
@@ -53,8 +52,7 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
 
     return (
         <RootContext.Provider value={{
-            field: rootState.field,
-            mode: rootState.mode,
+            ...rootState,
             bank,
             selection,
             setSelection,

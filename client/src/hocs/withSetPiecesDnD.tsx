@@ -3,7 +3,6 @@ import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { ICellComponentProps, IDraggableCellProps } from 'shared/interfaces';
 import { DragTypesEnum, PieceNameEnum } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
-import { PIECES } from 'shared/constants';
 import { CoordinatesType } from 'shared/types';
 import { piecePicker } from 'shared/utils';
 
@@ -30,11 +29,11 @@ export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>
                 const piece = new pieceConstructor(
                     cell.x, 
                     cell.y, 
-                    { name: rankName, weight: PIECES[rankName] },
+                    rankName,
                     currentPlayer.team,
                 );
                 
-                board.addPieceTo(piece, cell.x, cell.y);
+                board.registerPiece(piece, cell.x, cell.y);
                 setBank((prevBank) => ({
                     ...prevBank,
                     [rankName]: prevBank[rankName] - 1,
@@ -42,10 +41,10 @@ export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>
             },
             [DragTypesEnum.PIECE_FROM_BOARD]: ({ coordinates }: IBoardToBoardItem) => {
                 const { board } = gameCoreRef.current;
-                const prevCell = board.getCell(coordinates.x, coordinates.y);
+                const piece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
     
-                if (prevCell.piece) {
-                    board.movePiece(prevCell.piece, cell.x, cell.y, false);
+                if (piece) {
+                    board.movePiece(piece, cell.x, cell.y);
                 }
             },
         };
@@ -66,7 +65,7 @@ export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>
                 const { board } = gameCoreRef.current;
                 const targetCell = board.getCell(cell.x, cell.y);
     
-                return !targetCell.piece;
+                return !targetCell.pieceId;
             },
             collect: monitor => ({
                 isOver: !!monitor.isOver(),

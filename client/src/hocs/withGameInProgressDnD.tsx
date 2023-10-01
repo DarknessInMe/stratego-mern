@@ -20,20 +20,20 @@ export const withGameInProgressDnD = (WrappedComponent: React.FC<IDraggableCellP
             }),
             canDrop: ({ coordinates }: IDraggedItem) => {
                 const { board } = gameCoreRef.current;
-                const draggedItem = board.getCell(coordinates.x, coordinates.y);
+                const draggedPiece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
 
-                if (draggedItem.piece) {
-                    return draggedItem.piece.isCorrectPath(cell.x, cell.y);
+                if (draggedPiece) {
+                    return draggedPiece.isCorrectPath(cell.x, cell.y);
                 }
 
                 return false;
             },
             drop: ({ coordinates }: IDraggedItem) => {
                 const { board } = gameCoreRef.current;
-                const draggedItem = board.getCell(coordinates.x, coordinates.y);
+                const draggedPiece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
 
-                if (draggedItem.piece) {
-                    board.movePiece(draggedItem.piece, cell.x, cell.y, false);
+                if (draggedPiece) {
+                    board.movePiece(draggedPiece, cell.x, cell.y);
                 }
             },
         }), [cell.x, cell.y, field]);

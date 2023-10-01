@@ -1,6 +1,6 @@
 import { Board } from 'core/Board';
 import { UpdateExternalStateType } from './types';
-import { GameStages, PieceNameEnum, PieceWeightEnum, TeamsEnum } from 'shared/enums';
+import { GameStages, PieceNameEnum, TeamsEnum } from 'shared/enums';
 import { Player } from 'core/Player';
 import { RegularPiece } from 'core/Pieces';
 
@@ -16,7 +16,6 @@ export class GameCore {
     currentPlayer: Player = new Player(TeamsEnum.RED_TEAM);
     opponentPlayer: Player = new Player(TeamsEnum.BLUE_TEAM);
 
-    private version: number = 0;
     private readonly updateExternalState: UpdateExternalStateType;
     
     constructor(updateExternalState: UpdateExternalStateType) {
@@ -28,16 +27,15 @@ export class GameCore {
             for (let x = 0; x < 10; x++) {
                 const piece = new RegularPiece(
                     x, y, 
-                    {
-                        name: PieceNameEnum.MINER,
-                        weight: PieceWeightEnum.MINER,
-                    },
+                    PieceNameEnum.MINER,
                     TeamsEnum.BLUE_TEAM,
                 );
 
-                this.board.addPieceTo(piece, x, y, false);
+                this.board.registerPiece(piece, x, y);
             }
         }
+
+        this.board.updateCoreState();
     }
 
     init() {
@@ -48,21 +46,14 @@ export class GameCore {
     }
 
     update() {
-        this.version += 1;
         this.updateExternalState({
             field: this.board.field,
-            version: this.version,
             mode: this.mode,
         });
     }
 
     toggleMode() {
         this.mode = this.mode === GameStages.SET_PIECES ? GameStages.GAME_IN_PROCESS : GameStages.SET_PIECES;
-
-        this.updateExternalState({
-            field: this.board.field,
-            version: this.version,
-            mode: this.mode,
-        });
+        this.update();
     }
 }

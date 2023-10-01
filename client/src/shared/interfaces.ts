@@ -1,5 +1,4 @@
-import { EnvironmentEnum, PieceNameEnum, PieceWeightEnum, TeamsEnum } from './enums';
-import { BasePiece } from 'core/Pieces';
+import { EnvironmentEnum, PieceNameEnum, TeamsEnum } from './enums';
 import { BoardFieldType, CoordinatesType, ReactSetStateType, SetBankType } from './types';
 import { GameCore } from 'core/GameCore';
 import { PIECES_SETUP } from 'shared/constants';
@@ -8,20 +7,14 @@ import { ConnectableElement } from 'react-dnd';
 
 export interface IRootState {
     field: BoardFieldType,
-    version: number,
     mode: GameStages,
-}
-
-export interface IPieceRank {
-    name: PieceNameEnum,
-    weight: PieceWeightEnum,
 }
 
 export interface ICell {
     x: number,
     y: number,
     environment: EnvironmentEnum,
-    piece: BasePiece | null,
+    pieceId: string | null,
 }
 
 export interface ICellComponentProps {
@@ -37,14 +30,12 @@ export interface IContextProps {
     children: React.ReactNode,
 }
 
-type RootStateOmitted = Omit<IRootState, 'version'>
-
 export interface ISelectionState {
     pieceAt: CoordinatesType,
     possiblePath: CoordinatesType[],
 }
 
-export interface IRootContextValue extends RootStateOmitted {
+export interface IRootContextValue extends IRootState {
     bank: typeof PIECES_SETUP,
     selection: ISelectionState,
     setBank: SetBankType,

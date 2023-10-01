@@ -1,12 +1,11 @@
 import { BasePiece } from './BasePiece';
-import { IPieceRank } from 'shared/interfaces';
 import { Board } from 'core/Board';
-import { TeamsEnum } from 'shared/enums';
+import { PieceNameEnum, TeamsEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
 
 export class RegularPiece extends BasePiece {
-    constructor(x: number, y: number, rank: IPieceRank, team: TeamsEnum) {
-        super(x, y, rank, team);
+    constructor(x: number, y: number, rankName: PieceNameEnum, team: TeamsEnum) {
+        super(x, y, rankName, team);
     }
 
     initAvailablePath(board: Board): CoordinatesType[] {
@@ -17,19 +16,19 @@ export class RegularPiece extends BasePiece {
         const yPositive = board.getCell(this.x, this.y + 1);
         const yNegative = board.getCell(this.x, this.y - 1);
 
-        if (xPositive && this.canMove(xPositive)) {
+        if (xPositive && this.canMove(xPositive, board)) {
             this.currentAvailablePath.push({ x: xPositive.x, y: xPositive.y });
         }
 
-        if (xNegative && this.canMove(xNegative)) {
+        if (xNegative && this.canMove(xNegative, board)) {
             this.currentAvailablePath.push({ x: xNegative.x, y: xNegative.y });
         }
 
-        if (yPositive && this.canMove(yPositive)) {
+        if (yPositive && this.canMove(yPositive, board)) {
             this.currentAvailablePath.push({ x: yPositive.x, y: yPositive.y });
         }
 
-        if (yNegative && this.canMove(yNegative)) {
+        if (yNegative && this.canMove(yNegative, board)) {
             this.currentAvailablePath.push({ x: yNegative.x, y: yNegative.y });
         }
 

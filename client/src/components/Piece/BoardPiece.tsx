@@ -33,10 +33,10 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
             return;
         }
 
-        const currentPiece = board.getCell(coordinates.x, coordinates.y);
+        const currentPiece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
 
-        if (currentPiece.piece) {
-            const possiblePath = currentPiece.piece.initAvailablePath(board);
+        if (currentPiece) {
+            const possiblePath = currentPiece.initAvailablePath(board);
             setSelection({
                 possiblePath,
                 pieceAt: coordinates

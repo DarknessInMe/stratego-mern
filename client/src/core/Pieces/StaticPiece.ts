@@ -1,11 +1,10 @@
-import { IPieceRank } from 'shared/interfaces';
 import { BasePiece } from './BasePiece';
-import { TeamsEnum } from 'shared/enums';
+import { PieceNameEnum, TeamsEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
 
 export class StaticPiece extends BasePiece {
-    constructor(x: number, y: number, rank: IPieceRank, team: TeamsEnum) {
-        super(x, y, rank, team);
+    constructor(x: number, y: number, rankName: PieceNameEnum, team: TeamsEnum) {
+        super(x, y, rankName, team);
     }
 
     canMove(): boolean {

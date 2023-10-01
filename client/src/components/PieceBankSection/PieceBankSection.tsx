@@ -6,8 +6,6 @@ import { useDrop } from 'react-dnd';
 import { DragTypesEnum, GameStages, PieceNameEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
 
-//! TODO: make different wrappers for Piece.tsx, which are responsive for DnD from bank and from board
-
 interface IDrop {
     rankName: PieceNameEnum,
     coordinates: CoordinatesType | null,
@@ -27,7 +25,8 @@ export const PieceBankSection: React.FC = () => {
 
             if (coordinates) {
                 const { board } = gameCoreRef.current;
-                board.removePieceFrom(coordinates.x, coordinates.y);
+
+                board.removeAndUnregisterPiece(coordinates.x, coordinates.y);
             }
         },
         canDrop: () => !isGameInProcess,

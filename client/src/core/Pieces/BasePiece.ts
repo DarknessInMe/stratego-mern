@@ -1,40 +1,54 @@
 import { Board } from 'core/Board';
-import { EnvironmentEnum, TeamsEnum } from 'shared/enums';
-import { ICell, IPieceRank } from 'shared/interfaces';
+import { EnvironmentEnum, PieceNameEnum, TeamsEnum, PieceWeightEnum } from 'shared/enums';
+import { ICell } from 'shared/interfaces';
 import { CoordinatesType } from 'shared/types';
+import { PIECES } from 'shared/constants';
+import { v4 as uuidv4 } from 'uuid';
 
 export abstract class BasePiece {
     x: number;
     y: number;
-    rank: IPieceRank;
     currentAvailablePath: CoordinatesType[] = [];
-    team: TeamsEnum;
 
-    constructor(x: number, y: number, rank: IPieceRank, team: TeamsEnum) {
+    readonly id: string;
+    readonly rankName: PieceNameEnum;
+    readonly weight: PieceWeightEnum;
+    readonly team: TeamsEnum;
+
+    constructor(x: number, y: number, rankName: PieceNameEnum, team: TeamsEnum) {
         this.x = x;
         this.y = y;
-        this.rank = rank;
+        this.rankName = rankName;
+        this.weight = this.getPieceWeightByRank(rankName);
         this.team = team;
+        this.id = uuidv4();
     }
 
     abstract initAvailablePath(board: Board): CoordinatesType[]
 
-    canMove(target: ICell) {
-        switch(true) {
-            case target.environment === EnvironmentEnum.WATER: {
-                return false;
-            }
-            case target.piece?.team === this.team: {
-                return false;
-            }
-            default: {
-                return true;
-            }
-        }
+    protected getPieceWeightByRank(rank: PieceNameEnum): PieceWeightEnum {
+        return PIECES[rank];
     }
 
-    canBeat(enemyRank: IPieceRank) {
-        return this.rank.weight >= enemyRank.weight;
+    canMove(target: ICell, board: Board) {
+        const targetPiece = board.getPieceById(target.pieceId);
+
+        if (targetPiece?.team === this.team) {
+            return false;
+        }
+
+        if (target.environment === EnvironmentEnum.WATER) {
+            return false;
+
+        }
+
+        return true;
+    }
+
+    canBeat(enemyRank: PieceNameEnum) {
+        const enemyWeight = this.getPieceWeightByRank(enemyRank);
+
+        return this.weight >= enemyWeight;
     }
 
     isCorrectPath(x: number, y: number): boolean {
