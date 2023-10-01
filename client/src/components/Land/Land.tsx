@@ -1,9 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { IDraggableCellProps } from 'shared/interfaces';
 import { withStagedDnD } from 'hocs/withStagedDnD';
 import { useCellCoordinates } from 'hooks/useCellCoordinates';
+import clsx from 'clsx';
 
-export const Land: React.FC<IDraggableCellProps> = withStagedDnD(({ dropRef, isOver, cell }) => {
+export const Land: React.FC<IDraggableCellProps> = withStagedDnD(memo(({ 
+    dropRef, 
+    isOver, 
+    cell,
+    className = '',
+}) => {
     const landRef = useCellCoordinates({ x: cell.x, y: cell.y });
 
     useEffect(() => {
@@ -17,7 +23,12 @@ export const Land: React.FC<IDraggableCellProps> = withStagedDnD(({ dropRef, isO
     return (
         <div
             ref={landRef}
-            className={`board__cell board__cell_land ${isOver ? 'board__cell_hovered' : ''}`} 
+            className={clsx(
+                'board__cell', 
+                'board__cell_land', 
+                isOver && 'board__cell_hovered',
+                className,
+            )} 
         />
     );
-});
+}));

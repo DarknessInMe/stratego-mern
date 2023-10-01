@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useDrop } from 'react-dnd';
 import { ICellComponentProps, IDraggableCellProps } from 'shared/interfaces';
 import { DragTypesEnum, PieceNameEnum } from 'shared/enums';
@@ -11,8 +11,8 @@ interface IDraggedItem {
 }
 
 export const withGameInProgressDnD = (WrappedComponent: React.FC<IDraggableCellProps>) => {
-    const Component: React.FC<ICellComponentProps> = ({ cell }) => {
-        const { gameCoreRef, field } = useRootContext();
+    const Component: React.FC<ICellComponentProps> = memo(({ cell, ...rest }) => {
+        const { gameCoreRef, field, setSelection } = useRootContext();
         const [{ isOver }, dropRef] = useDrop(() => ({
             accept: DragTypesEnum.PIECE_FROM_BOARD,
             collect: monitor => ({
@@ -34,18 +34,20 @@ export const withGameInProgressDnD = (WrappedComponent: React.FC<IDraggableCellP
 
                 if (draggedPiece) {
                     board.movePiece(draggedPiece, cell.x, cell.y);
+                    setSelection(null);
                 }
             },
         }), [cell.x, cell.y, field]);
 
         return (
-            <WrappedComponent 
+            <WrappedComponent
+                {...rest} 
                 cell={cell}
                 dropRef={dropRef}
                 isOver={isOver}
             />
         );
-    };
+    });
 
     return Component;
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { ICellComponentProps, IDraggableCellProps } from 'shared/interfaces';
 import { DragTypesEnum, PieceNameEnum } from 'shared/enums';
@@ -19,7 +19,7 @@ interface IDropStrategy {
 }
 
 export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>) => {
-    const Component: React.FC<ICellComponentProps> = ({ cell }) => {
+    const Component: React.FC<ICellComponentProps> = memo(({ cell, ...rest }) => {
         const { gameCoreRef, setBank } = useRootContext();
 
         const dropStrategy: IDropStrategy = {
@@ -42,7 +42,7 @@ export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>
             [DragTypesEnum.PIECE_FROM_BOARD]: ({ coordinates }: IBoardToBoardItem) => {
                 const { board } = gameCoreRef.current;
                 const piece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
-    
+
                 if (piece) {
                     board.movePiece(piece, cell.x, cell.y);
                 }
@@ -73,13 +73,14 @@ export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>
         }), [cell.x, cell.y]);
 
         return (
-            <WrappedComponent 
+            <WrappedComponent
+                {...rest}
                 cell={cell}
                 dropRef={dropRef}
                 isOver={isOver}
             />
         );
-    };
+    });
 
     return Component;
 };

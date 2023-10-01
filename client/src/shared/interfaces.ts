@@ -19,11 +19,12 @@ export interface ICell {
 
 export interface ICellComponentProps {
     cell: ICell;
+    className?: string,
 }
 
 export interface IDraggableCellProps extends ICellComponentProps {
     dropRef?: (node: ConnectableElement) => void,
-    isOver?: boolean
+    isOver?: boolean,
 }
 
 export interface IContextProps {

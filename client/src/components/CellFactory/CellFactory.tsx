@@ -1,34 +1,30 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { Land } from 'components/Land';
 import { Water } from 'components/Water';
 import { ICellComponentProps } from 'shared/interfaces';
 import { EnvironmentEnum } from 'shared/enums';
 import { BoardPiece } from 'components/Piece';
 import { useRootContext } from 'context/RootContext';
+import clsx from 'clsx';
 
-export const CellFactory: React.FC<ICellComponentProps> = ({ cell }) => {
-    const { gameCoreRef } = useRootContext();
+export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
+    const { gameCoreRef, selection } = useRootContext();
+
+    const isSelected = useMemo(() => {
+        if (!selection) {
+            return false;
+        }
+
+        return selection.possiblePath.some(({ x, y }) => cell.x === x && cell.y === y);
+    }, [cell.x, cell.y, selection?.possiblePath]);
 
     switch(cell.environment) {
         case EnvironmentEnum.WATER: {
-            return (
-                <Water
-                    // key={`water-cell-${cell.x}-${cell.y}`}
-                    coordinates={{
-                        x: cell.x,
-                        y: cell.y
-                    }}
-                />
-            );
+            return <Water coordinates={{ x: cell.x, y: cell.y }}/>;
         }
         case EnvironmentEnum.LAND: {
             if (!cell.pieceId) {
-                return (
-                    <Land
-                        // key={`land-cell-${cell.x}-${cell.y}`}
-                        cell={cell} 
-                    />
-                );
+                return <Land cell={cell} className={isSelected && 'possible-path'}/>;
             }
 
             const { board } = gameCoreRef.current;
@@ -36,10 +32,9 @@ export const CellFactory: React.FC<ICellComponentProps> = ({ cell }) => {
             
             return (
                 <BoardPiece
-                    // key={`piece-cell-${piece.id}`} 
                     rankName={piece.rankName}
                     team={piece.team}
-                    className='piece_landed'
+                    className={clsx('piece_landed', isSelected && 'possible-path')}
                     coordinates={{
                         x: piece.x,
                         y: piece.y
@@ -51,4 +46,4 @@ export const CellFactory: React.FC<ICellComponentProps> = ({ cell }) => {
             return null;
         }
     }
-};
+});
