@@ -3,15 +3,33 @@ import { ICell } from 'shared/interfaces';
 import { EnvironmentEnum } from 'shared/enums';
 import { WATER_POSITION } from './constants';
 import { BasePiece } from 'core/Pieces';
+import { IRootState } from 'shared/interfaces';
+import { ReactSetStateType } from 'shared/types';
+import clone from 'lodash/clone';
 
 export class Board {
     field: BoardFieldType | null = null;
     pieces = new Map<string, BasePiece>();
 
-    readonly updateCoreState: () => void;
+    readonly updateCoreState: ReactSetStateType<IRootState>;
     
-    constructor(updateCoreState: () => void) {
+    constructor(updateCoreState: ReactSetStateType<IRootState>) {
         this.updateCoreState = updateCoreState;
+    }
+
+    private updateCells(cells: ICell[]) {
+        this.updateCoreState((prevState) => {
+            const fieldCopy = clone(prevState.field);
+
+            cells.forEach(cell => {
+                fieldCopy[cell.y][cell.x] = cell;
+            });
+
+            return {
+                ...prevState,
+                field: fieldCopy
+            };
+        });
     }
 
     initField() {
@@ -60,15 +78,15 @@ export class Board {
         const cell = this.getCell(x, y);
 
         cell.pieceId = piece.id;
-        this.updateCoreState();
+        this.updateCells([cell]);
     }
 
     removeAndUnregisterPiece(x: number, y: number) {
         const piece = this.getPieceByCoordinates(x, y);
+        const cell = this.removePieceFrom(x, y);
 
         this.pieces.delete(piece.id);
-        this.removePieceFrom(x, y);
-        this.updateCoreState();
+        this.updateCells([cell]);
     }
 
     addPieceTo(piece: BasePiece, x: number, y: number) {
@@ -76,17 +94,22 @@ export class Board {
 
         cell.pieceId = piece.id;
         piece.moveTo(x, y);
+
+        return cell;
     }
 
     removePieceFrom(x: number, y: number) {
         const cell = this.getCell(x, y);
 
         cell.pieceId = null;
+
+        return cell;
     }
 
     movePiece(piece: BasePiece, newX: number, newY: number) {
-        this.removePieceFrom(piece.x, piece.y);
-        this.addPieceTo(piece, newX, newY);
-        this.updateCoreState();
+        const removedFromCell = this.removePieceFrom(piece.x, piece.y);
+        const addedToCell = this.addPieceTo(piece, newX, newY);
+
+        this.updateCells([removedFromCell, addedToCell]);
     }
 }
