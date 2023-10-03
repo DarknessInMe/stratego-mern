@@ -1,13 +1,14 @@
 import React, { memo, useCallback, useEffect } from 'react';
 import { Piece } from './Piece';
 import { IBoardPieceProps } from './interfaces';
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrag } from 'react-dnd';
 import { DragTypesEnum, GameStages } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
 import { useCellCoordinates } from 'hooks/useCellCoordinates';
-import { IDraggedItem } from 'shared/interfaces';
 import { BasePiece } from 'core/Pieces';
 import { useSelection } from 'hooks/useSelection';
+import { usePieceFromBoardDnD } from 'hooks/usePieceFromBoardDnD';
+import { useMovePiece } from 'hooks/useMovePiece';
 
 export const BoardPiece: React.FC<IBoardPieceProps> = memo(({ 
     rankName,
@@ -19,12 +20,10 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         gameCoreRef, 
         mode,
         setSelection, 
-        handlePieceMoving, 
-        canMoveBoardPieceTo,
-        onMoveByClick,
     } = useRootContext();
     const pieceRef = useCellCoordinates(coordinates);
     const isSelected = useSelection(coordinates);
+    const { onMoveByClick } = useMovePiece();
 
     const { board, currentPlayer } = gameCoreRef.current;
 
@@ -39,15 +38,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         canDrag: () => team === currentPlayer.team,
     }));
 
-    const [, dropRef] = useDrop(() => ({
-        accept: DragTypesEnum.PIECE_FROM_BOARD,
-        canDrop: (source: IDraggedItem) => {
-            return canMoveBoardPieceTo(source.coordinates, coordinates);
-        },
-        drop: (source: IDraggedItem) => {
-            handlePieceMoving(source.coordinates, coordinates);
-        },
-    }), [coordinates]);
+    const [, dropRef] = usePieceFromBoardDnD(board.getCell(coordinates.x, coordinates.y));
 
     const handleSelectionByClick = (piece: BasePiece) => {
         setSelection({

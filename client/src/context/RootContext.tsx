@@ -4,14 +4,11 @@ import React, {
     useRef, 
     useEffect,
     useContext,
-    useCallback,
 } from 'react';
 import { GameCore } from 'core/GameCore';
 import { IContextProps, IRootContextValue, IRootState, ISelectionState } from 'shared/interfaces';
 import { PIECES_SETUP } from 'shared/constants';
 import { GameStages } from 'shared/enums';
-import { HandlePieceMovingType, CanMoveBoardPieceTo, OnMoveByClick } from 'shared/types';
-import { isSelectedByPossiblePath } from 'shared/utils';
 
 const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 
@@ -28,51 +25,6 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
 		gameCoreRef.current.init();
 	}, []);
 
-    // TODO: move into hooks
-    const handlePieceMoving = useCallback<HandlePieceMovingType>((pieceQuery, newPosition) => {
-        const { board } = gameCoreRef.current;
-        const targetCell = board.getCell(newPosition.x, newPosition.y);
-        const draggedPiece = typeof pieceQuery === 'string' ? 
-            board.getPieceById(pieceQuery) :
-            board.getPieceByCoordinates(pieceQuery.x, pieceQuery.y);
-
-        if (!draggedPiece) {
-            return;
-        }
-
-        if (targetCell.pieceId) {
-            const targetPiece = board.getPieceById(targetCell.pieceId);
-            const fightResult = draggedPiece.canBeat(targetPiece.rankName);
-
-            console.log(fightResult);
-        } else {
-            board.movePiece(draggedPiece, newPosition.x, newPosition.y);
-        }
-
-        setSelection(null);
-    }, []);
-
-    const canMoveBoardPieceTo = useCallback<CanMoveBoardPieceTo>((movedFrom, moveTo) => {
-        const { board } = gameCoreRef.current;
-        const draggedPiece = board.getPieceByCoordinates(movedFrom.x, movedFrom.y);
-
-        if (draggedPiece) {
-            return draggedPiece.isCorrectPath(moveTo.x, moveTo.y);
-        }
-
-        return false;
-    }, []);
-
-    const onMoveByClick = useCallback<OnMoveByClick>((cellPosition) => {
-        const isSelectedCell = isSelectedByPossiblePath(selection?.possiblePath, cellPosition);
-
-        if (!isSelectedCell || !selection) {
-            return;
-        }
-
-        handlePieceMoving(selection.pieceAt, cellPosition);
-    }, [selection, handlePieceMoving]);
-
     return (
         <RootContext.Provider value={{
             ...rootState,
@@ -81,9 +33,6 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
             setSelection,
             setBank,
             gameCoreRef,
-            handlePieceMoving,
-            canMoveBoardPieceTo,
-            onMoveByClick,
         }}>
             {children}
         </RootContext.Provider>

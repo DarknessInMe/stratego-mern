@@ -3,15 +3,15 @@ import { IDraggableCellProps } from 'shared/interfaces';
 import { withStagedDnD } from 'hocs/withStagedDnD';
 import { useCellCoordinates } from 'hooks/useCellCoordinates';
 import clsx from 'clsx';
-import { useRootContext } from 'context/RootContext';
 import { useSelection } from 'hooks/useSelection';
+import { useMovePiece } from 'hooks/useMovePiece';
 
 export const Land: React.FC<IDraggableCellProps> = withStagedDnD(memo(({ 
     dropRef, 
     isOver, 
     cell,
 }) => {
-    const { onMoveByClick } = useRootContext();
+    const { onMoveByClick } = useMovePiece();
     const isSelected = useSelection(cell);
     const landRef = useCellCoordinates(cell);
 

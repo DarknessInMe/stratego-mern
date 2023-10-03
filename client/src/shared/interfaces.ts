@@ -4,9 +4,6 @@ import {
     CoordinatesType, 
     ReactSetStateType, 
     SetBankType, 
-    HandlePieceMovingType,
-    CanMoveBoardPieceTo,
-    OnMoveByClick,
 } from './types';
 import { GameCore } from 'core/GameCore';
 import { PIECES_SETUP } from 'shared/constants';
@@ -49,9 +46,6 @@ export interface IRootContextValue extends IRootState {
     setBank: SetBankType,
     setSelection: ReactSetStateType<ISelectionState>,
     gameCoreRef: React.MutableRefObject<GameCore>,
-    handlePieceMoving: HandlePieceMovingType,
-    canMoveBoardPieceTo: CanMoveBoardPieceTo,
-    onMoveByClick: OnMoveByClick,
 }
 
 export interface IBankToBoardDragObject {
