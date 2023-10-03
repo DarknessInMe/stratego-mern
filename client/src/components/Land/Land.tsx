@@ -4,15 +4,16 @@ import { withStagedDnD } from 'hocs/withStagedDnD';
 import { useCellCoordinates } from 'hooks/useCellCoordinates';
 import clsx from 'clsx';
 import { useRootContext } from 'context/RootContext';
+import { useSelection } from 'hooks/useSelection';
 
 export const Land: React.FC<IDraggableCellProps> = withStagedDnD(memo(({ 
     dropRef, 
     isOver, 
     cell,
-    isSelected = false,
 }) => {
     const { onMoveByClick } = useRootContext();
-    const landRef = useCellCoordinates({ x: cell.x, y: cell.y });
+    const isSelected = useSelection(cell);
+    const landRef = useCellCoordinates(cell);
 
     useEffect(() => {
         if (!landRef.current) {
@@ -23,7 +24,7 @@ export const Land: React.FC<IDraggableCellProps> = withStagedDnD(memo(({
     }, []);
 
     const onMove = () => {
-        onMoveByClick(isSelected, cell);
+        onMoveByClick(cell);
     };
 
     return (

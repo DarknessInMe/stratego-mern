@@ -7,25 +7,24 @@ import { useRootContext } from 'context/RootContext';
 import { useCellCoordinates } from 'hooks/useCellCoordinates';
 import { IDraggedItem } from 'shared/interfaces';
 import { BasePiece } from 'core/Pieces';
-import { isSelectedByPossiblePath } from 'shared/utils';
+import { useSelection } from 'hooks/useSelection';
 
 export const BoardPiece: React.FC<IBoardPieceProps> = memo(({ 
     rankName,
     team,
     coordinates,
-    isSelected,
     className,
 }) => {
     const { 
         gameCoreRef, 
         mode,
-        selection,
         setSelection, 
         handlePieceMoving, 
         canMoveBoardPieceTo,
         onMoveByClick,
     } = useRootContext();
     const pieceRef = useCellCoordinates(coordinates);
+    const isSelected = useSelection(coordinates);
 
     const { board, currentPlayer } = gameCoreRef.current;
 
@@ -69,11 +68,11 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         }
 
         if (currentPiece.team !== currentPlayer.team) {
-            onMoveByClick(isSelectedByPossiblePath(selection?.possiblePath, coordinates), coordinates);
+            onMoveByClick(coordinates);
         } else {
             handleSelectionByClick(currentPiece);
         }
-    }, [mode, coordinates, selection?.possiblePath]);
+    }, [mode, coordinates, onMoveByClick]);
 
     useEffect(() => {
         if (!pieceRef.current) {
@@ -90,9 +89,9 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
             isHidden={team !== currentPlayer.team}
             rankName={rankName}
             team={team}
-            isSelected={isSelected}
             isDragging={isDragging}
             className={className}
+            isSelected={isSelected}
         />
     );
 });

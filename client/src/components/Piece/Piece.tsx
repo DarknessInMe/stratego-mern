@@ -5,7 +5,7 @@ import { PIECES } from 'shared/constants';
 import clsx from 'clsx';
 import { TeamsEnum } from 'shared/enums';
 
-const BasePiece = forwardRef<HTMLDivElement,IPieceProps>(({ 
+const BasePiece = forwardRef<HTMLDivElement, IPieceProps>(({ 
     rankName,
     isHidden,
     team,

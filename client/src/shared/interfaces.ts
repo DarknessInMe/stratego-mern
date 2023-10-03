@@ -27,7 +27,6 @@ export interface ICell {
 
 export interface ICellComponentProps {
     cell: ICell;
-    isSelected?: boolean,
 }
 
 export interface IDraggableCellProps extends ICellComponentProps {

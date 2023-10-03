@@ -13,4 +13,4 @@ export type HandlePieceMovingType = (pieceQuery: string | CoordinatesType, newPo
 
 export type CanMoveBoardPieceTo = (movedFrom: CoordinatesType, moveTo: CoordinatesType) => boolean;
 
-export type OnMoveByClick = (isSelectedCell: boolean, cellPosition: CoordinatesType) => void;
+export type OnMoveByClick = (cellPosition: CoordinatesType) => void;

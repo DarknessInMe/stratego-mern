@@ -11,6 +11,7 @@ import { IContextProps, IRootContextValue, IRootState, ISelectionState } from 's
 import { PIECES_SETUP } from 'shared/constants';
 import { GameStages } from 'shared/enums';
 import { HandlePieceMovingType, CanMoveBoardPieceTo, OnMoveByClick } from 'shared/types';
+import { isSelectedByPossiblePath } from 'shared/utils';
 
 const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 
@@ -62,7 +63,9 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
         return false;
     }, []);
 
-    const onMoveByClick = useCallback<OnMoveByClick>((isSelectedCell, cellPosition) => {
+    const onMoveByClick = useCallback<OnMoveByClick>((cellPosition) => {
+        const isSelectedCell = isSelectedByPossiblePath(selection?.possiblePath, cellPosition);
+
         if (!isSelectedCell || !selection) {
             return;
         }

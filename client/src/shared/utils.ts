@@ -29,6 +29,6 @@ export const piecePicker = (rankName: PieceNameEnum): typeof StaticPiece | typeo
     }
 };
 
-export const isSelectedByPossiblePath = (possiblePath: CoordinatesType[], checkedCoordinates: CoordinatesType) => {
+export const isSelectedByPossiblePath = (possiblePath: CoordinatesType[] = [], checkedCoordinates: CoordinatesType) => {
     return possiblePath.some(({ x, y }) => checkedCoordinates.x === x && checkedCoordinates.y === y);
 };
