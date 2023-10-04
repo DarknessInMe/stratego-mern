@@ -26,7 +26,7 @@ export const PieceBankSection: React.FC = () => {
             if (coordinates) {
                 const { board } = gameCoreRef.current;
 
-                board.removeAndUnregisterPiece(coordinates.x, coordinates.y);
+                board.destroyPieces([coordinates]);
             }
         },
         canDrop: () => !isGameInProcess,

@@ -1,6 +1,6 @@
-import { BoardFieldType } from 'shared/types';
+import { BoardFieldType, CoordinatesType } from 'shared/types';
 import { ICell } from 'shared/interfaces';
-import { EnvironmentEnum } from 'shared/enums';
+import { EnvironmentEnum, FightResultEnum } from 'shared/enums';
 import { WATER_POSITION } from './constants';
 import { BasePiece } from 'core/Pieces';
 import { IRootState } from 'shared/interfaces';
@@ -81,12 +81,18 @@ export class Board {
         this.updateCells([cell]);
     }
 
-    removeAndUnregisterPiece(x: number, y: number) {
-        const piece = this.getPieceByCoordinates(x, y);
-        const cell = this.removePieceFrom(x, y);
+    destroyPieces(cellsCoordinates: CoordinatesType[]) {
+        const cellsToUpdate: ICell[] = [];
 
-        this.pieces.delete(piece.id);
-        this.updateCells([cell]);
+        cellsCoordinates.forEach(({ x, y }) => {
+            const piece = this.getPieceByCoordinates(x, y);
+            const cell = this.removePieceFrom(x, y);
+    
+            this.pieces.delete(piece.id);
+            cellsToUpdate.push(cell);
+        });
+
+        this.updateCells(cellsToUpdate);
     }
 
     addPieceTo(piece: BasePiece, x: number, y: number) {
@@ -107,9 +113,57 @@ export class Board {
     }
 
     movePiece(piece: BasePiece, newX: number, newY: number) {
+        if (piece.x === newX && piece.y === newY) {
+            return;
+        }
+
         const removedFromCell = this.removePieceFrom(piece.x, piece.y);
         const addedToCell = this.addPieceTo(piece, newX, newY);
 
         this.updateCells([removedFromCell, addedToCell]);
+    }
+
+    private getClosestPosition(attackerPosition: number, targetPosition: number) {
+        const diff = Math.abs(attackerPosition - targetPosition) - 1;
+        const directionMultiplier = attackerPosition > targetPosition ? -1 : 1;
+
+        return attackerPosition + (diff * directionMultiplier);
+    }
+
+    initAttack(attackerPieceId: string, targetPieceId: string) {
+        const targetPiece = this.getPieceById(targetPieceId);
+        const attackerPiece = this.getPieceById(attackerPieceId);
+
+        if (targetPiece.x === attackerPiece.x) {
+            return this.movePiece(attackerPiece, attackerPiece.x, this.getClosestPosition(attackerPiece.y, targetPiece.y));
+        }
+
+        if (targetPiece.y === attackerPiece.y) {
+            return this.movePiece(attackerPiece, this.getClosestPosition(attackerPiece.x, targetPiece.x), attackerPiece.y);
+        }
+    }
+
+    applyAttackResult(attackerPieceId: string, targetPieceId: string) {
+        const targetPiece = this.getPieceById(targetPieceId);
+        const attackerPiece = this.getPieceById(attackerPieceId);
+        const fightResult = attackerPiece.canBeat(targetPiece.rankName);
+
+        switch(fightResult) {
+            case FightResultEnum.DEFEAT: {
+                this.destroyPieces([attackerPiece]);
+                break;
+            }
+            case FightResultEnum.STALEMATE: {
+                this.destroyPieces([attackerPiece, targetPiece]);
+                break;
+            }
+            case FightResultEnum.VICTORY: {
+                this.destroyPieces([targetPiece]);
+                this.movePiece(attackerPiece, targetPiece.x, targetPiece.y);
+                break;
+            };
+        }
+
+        return fightResult;
     }
 }

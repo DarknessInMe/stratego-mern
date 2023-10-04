@@ -4,7 +4,7 @@ import { withStagedDnD } from 'hocs/withStagedDnD';
 import { useCellCoordinates } from 'hooks/useCellCoordinates';
 import clsx from 'clsx';
 import { useSelection } from 'hooks/useSelection';
-import { useMovePiece } from 'hooks/useMovePiece';
+import { useMovePiece } from 'hooks/useMovePiece.1';
 
 export const Land: React.FC<IDraggableCellProps> = withStagedDnD(memo(({ 
     dropRef, 
@@ -12,8 +12,9 @@ export const Land: React.FC<IDraggableCellProps> = withStagedDnD(memo(({
     cell,
 }) => {
     const { onMoveByClick } = useMovePiece();
-    const isSelected = useSelection(cell);
+    const { isCellHighlighted } = useSelection();
     const landRef = useCellCoordinates(cell);
+    const isSelected = isCellHighlighted(cell);
 
     useEffect(() => {
         if (!landRef.current) {

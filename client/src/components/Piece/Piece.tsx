@@ -1,4 +1,4 @@
-import React, { memo, useCallback, forwardRef } from 'react';
+import React, { memo, forwardRef } from 'react';
 import { PieceIconPicker } from './constants';
 import { IPieceProps } from './interfaces';
 import { PIECES } from 'shared/constants';
@@ -17,7 +17,7 @@ const BasePiece = forwardRef<HTMLDivElement, IPieceProps>(({
     const icon = PieceIconPicker[rankName];
     const weight = PIECES[rankName];
 
-    const renderPiece = useCallback(() => {
+    const renderPiece = () => {
         if (isHidden) return null;
 
         return (
@@ -28,7 +28,7 @@ const BasePiece = forwardRef<HTMLDivElement, IPieceProps>(({
                 )}
             </>
         );
-    }, [isHidden, rankName]);
+    };
 
     return (
         <div

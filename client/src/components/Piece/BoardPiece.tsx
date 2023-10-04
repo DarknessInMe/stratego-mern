@@ -5,10 +5,9 @@ import { useDrag } from 'react-dnd';
 import { DragTypesEnum, GameStages } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
 import { useCellCoordinates } from 'hooks/useCellCoordinates';
-import { BasePiece } from 'core/Pieces';
 import { useSelection } from 'hooks/useSelection';
 import { usePieceFromBoardDnD } from 'hooks/usePieceFromBoardDnD';
-import { useMovePiece } from 'hooks/useMovePiece';
+import { useMovePiece } from 'hooks/useMovePiece.1';
 
 export const BoardPiece: React.FC<IBoardPieceProps> = memo(({ 
     rankName,
@@ -16,16 +15,13 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
     coordinates,
     className,
 }) => {
-    const { 
-        gameCoreRef, 
-        mode,
-        setSelection, 
-    } = useRootContext();
+    const { gameCoreRef, mode, selection } = useRootContext();
     const pieceRef = useCellCoordinates(coordinates);
-    const isSelected = useSelection(coordinates);
+    const { isCellHighlighted, selectPiece } = useSelection();
     const { onMoveByClick } = useMovePiece();
 
     const { board, currentPlayer } = gameCoreRef.current;
+    const isSelected = isCellHighlighted(coordinates);
 
     const [{ isDragging }, dragRef] = useDrag(() => ({
         type: DragTypesEnum.PIECE_FROM_BOARD,
@@ -38,14 +34,25 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         canDrag: () => team === currentPlayer.team,
     }));
 
-    const [, dropRef] = usePieceFromBoardDnD(board.getCell(coordinates.x, coordinates.y));
+    const definePieceHidden = () => {
+        if (team === currentPlayer.team) {
+            return false;
+        }
+        const currentPiece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
 
-    const handleSelectionByClick = (piece: BasePiece) => {
-        setSelection({
-            possiblePath: piece.initAvailablePath(board),
-            pieceAt: coordinates
-        });
+        return selection.attackedPieceId !== currentPiece?.id;
     };
+
+    const [, dropRef] = usePieceFromBoardDnD(board.getCell(coordinates.x, coordinates.y));
+    const isHidden = definePieceHidden();
+
+    useEffect(() => {
+        if (!pieceRef.current) {
+            return;
+        }
+
+        dropRef(dragRef(pieceRef.current));
+    }, []);
 
     const onPieceClick = useCallback(() => {
         if (mode !== GameStages.GAME_IN_PROCESS) {
@@ -61,23 +68,16 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         if (currentPiece.team !== currentPlayer.team) {
             onMoveByClick(coordinates);
         } else {
-            handleSelectionByClick(currentPiece);
+            selectPiece(currentPiece);
         }
     }, [mode, coordinates, onMoveByClick]);
 
-    useEffect(() => {
-        if (!pieceRef.current) {
-            return;
-        }
-
-        dropRef(dragRef(pieceRef.current));
-    }, []);
     
     return (
         <Piece
             ref={pieceRef}
             onMouseDown={onPieceClick}
-            isHidden={team !== currentPlayer.team}
+            isHidden={isHidden}
             rankName={rankName}
             team={team}
             isDragging={isDragging}

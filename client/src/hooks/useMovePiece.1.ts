@@ -1,15 +1,14 @@
 import { useCallback } from 'react';
 import { useRootContext } from 'context/RootContext';
 import { CanMoveBoardPieceTo, HandlePieceMovingType, OnMoveByClick } from 'shared/types';
-import { isSelectedByPossiblePath } from 'shared/utils';
 
 export const useMovePiece = () => {
     const { gameCoreRef, selection, setSelection } = useRootContext();
+    const { board } = gameCoreRef.current;
 
     const handlePieceMoving = useCallback<HandlePieceMovingType>((pieceQuery, newPosition) => {
-        const { board } = gameCoreRef.current;
         const targetCell = board.getCell(newPosition.x, newPosition.y);
-        const draggedPiece = typeof pieceQuery === 'string' ? 
+        const draggedPiece = typeof pieceQuery === 'string' ?
             board.getPieceById(pieceQuery) :
             board.getPieceByCoordinates(pieceQuery.x, pieceQuery.y);
 
@@ -18,19 +17,20 @@ export const useMovePiece = () => {
         }
 
         if (targetCell.pieceId) {
-            const targetPiece = board.getPieceById(targetCell.pieceId);
-            const fightResult = draggedPiece.canBeat(targetPiece.rankName);
-
-            console.log(fightResult);
+            setSelection(prevSelection => ({
+                ...prevSelection,
+                attackedPieceId: targetCell.pieceId,
+            }));
         } else {
             board.movePiece(draggedPiece, newPosition.x, newPosition.y);
+            setSelection({
+                selectedPieceId: null,
+                attackedPieceId: null,
+            });
         }
-
-        setSelection(null);
     }, []);
 
     const canMoveBoardPieceTo = useCallback<CanMoveBoardPieceTo>((movedFrom, moveTo) => {
-        const { board } = gameCoreRef.current;
         const draggedPiece = board.getPieceByCoordinates(movedFrom.x, movedFrom.y);
 
         if (draggedPiece) {
@@ -41,14 +41,17 @@ export const useMovePiece = () => {
     }, []);
 
     const onMoveByClick = useCallback<OnMoveByClick>((cellPosition) => {
-        const isSelectedCell = isSelectedByPossiblePath(selection?.possiblePath, cellPosition);
-
-        if (!isSelectedCell || !selection) {
+        if (!selection.selectedPieceId) {
             return;
         }
 
-        handlePieceMoving(selection.pieceAt, cellPosition);
-    }, [selection, handlePieceMoving]);
+        const selectedPiece = board.getPieceById(selection.selectedPieceId);
+        const isSelectedCell = selectedPiece.currentAvailablePath.some(({ x, y }) => cellPosition.x === x && cellPosition.y === y);
+
+        if (isSelectedCell) {
+            handlePieceMoving({ x: selectedPiece.x, y: selectedPiece.y }, cellPosition);
+        }
+    }, [selection.selectedPieceId, handlePieceMoving]);
 
     return {
         handlePieceMoving,

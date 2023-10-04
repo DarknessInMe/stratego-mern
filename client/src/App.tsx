@@ -5,7 +5,7 @@ import { RootProvider } from 'context/RootContext';
 
 const App: React.FC = () => {
 	return (
-		<RootProvider>	
+		<RootProvider>
 			<div className='screen'>
 				<BoardSection />
 				<PieceBankSection />

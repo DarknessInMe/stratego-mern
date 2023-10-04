@@ -36,8 +36,8 @@ export interface IContextProps {
 }
 
 export interface ISelectionState {
-    pieceAt: CoordinatesType,
-    possiblePath: CoordinatesType[],
+    selectedPieceId: string | null,
+    attackedPieceId: string | null,
 }
 
 export interface IRootContextValue extends IRootState {

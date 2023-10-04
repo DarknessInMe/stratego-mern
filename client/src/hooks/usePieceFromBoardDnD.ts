@@ -1,7 +1,7 @@
 import { useDrop } from 'react-dnd';
 import { ICell, IDraggedItem } from 'shared/interfaces';
 import { DragTypesEnum } from 'shared/enums';
-import { useMovePiece } from 'hooks/useMovePiece';
+import { useMovePiece } from './useMovePiece.1';
 
 export const usePieceFromBoardDnD = (cell: ICell) => {
     const { canMoveBoardPieceTo, handlePieceMoving } = useMovePiece();
