@@ -3,7 +3,7 @@ import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { ICellComponentProps, IDraggableCellProps } from 'shared/interfaces';
 import { DragTypesEnum, PieceNameEnum } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
-import { CoordinatesType } from 'shared/types';
+import { CoordinatesType, ReactComponentWithRefType } from 'shared/types';
 import { piecePicker } from 'shared/utils';
 
 interface IBankToBoardItem {
@@ -18,13 +18,13 @@ interface IDropStrategy {
     [key: string]: (item: IBankToBoardItem | IBoardToBoardItem, monitor: DropTargetMonitor) => void;
 }
 
-export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>) => {
-    const Component: React.FC<ICellComponentProps> = memo(({ cell, ...rest }) => {
+export const withSetPiecesDnD = (WrappedComponent: ReactComponentWithRefType<IDraggableCellProps>) => {
+    const Component: React.FC<ICellComponentProps> = memo(({ cell }) => {
         const { gameCoreRef, setBank } = useRootContext();
+        const { board, currentPlayer } = gameCoreRef.current;
 
         const dropStrategy: IDropStrategy = {
             [DragTypesEnum.PIECE_FROM_BANK]: ({ rankName }: IBankToBoardItem) => {
-                const { board, currentPlayer } = gameCoreRef.current;
                 const pieceConstructor = piecePicker(rankName);
                 const piece = new pieceConstructor(
                     cell.x, 
@@ -40,7 +40,6 @@ export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>
                 }));
             },
             [DragTypesEnum.PIECE_FROM_BOARD]: ({ coordinates }: IBoardToBoardItem) => {
-                const { board } = gameCoreRef.current;
                 const piece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
 
                 if (piece) {
@@ -64,7 +63,12 @@ export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>
             canDrop: () => {
                 const { board } = gameCoreRef.current;
                 const targetCell = board.getCell(cell.x, cell.y);
-    
+                const [top, bottom] = currentPlayer.allowedRange;
+
+                if (!(cell.y >= top && cell.y <= bottom)) {
+                    return false;
+                }
+
                 return !targetCell.pieceId;
             },
             collect: monitor => ({
@@ -74,9 +78,7 @@ export const withSetPiecesDnD = (WrappedComponent: React.FC<IDraggableCellProps>
 
         return (
             <WrappedComponent
-                {...rest}
-                cell={cell}
-                dropRef={dropRef}
+                ref={dropRef}
                 isOver={isOver}
             />
         );

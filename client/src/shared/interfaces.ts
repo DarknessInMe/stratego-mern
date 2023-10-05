@@ -22,13 +22,15 @@ export interface ICell {
     pieceId: string | null,
 }
 
-export interface ICellComponentProps {
-    cell: ICell;
-}
-
-export interface IDraggableCellProps extends ICellComponentProps {
+export interface IDraggableCellProps {
     dropRef?: (node: ConnectableElement) => void,
     isOver?: boolean,
+    isHighlighted?: boolean;
+    onMouseDown?: () => void;
+}
+
+export interface ICellComponentProps {
+    cell: ICell;
 }
 
 export interface IContextProps {

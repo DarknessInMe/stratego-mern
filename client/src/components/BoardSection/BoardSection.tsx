@@ -1,12 +1,19 @@
-import React, { Fragment } from 'react';
+import React, { memo, Fragment } from 'react';
 import { CellFactory } from 'components/CellFactory';
 import { useRootContext } from 'context/RootContext';
+import clsx from 'clsx';
+import { GameStages } from 'shared/enums';
 
-export const BoardSection: React.FC = () => {
-    const { field } = useRootContext();
+export const BoardSection: React.FC = memo(() => {
+    const { field, mode } = useRootContext();
+    const isSetPiecesStage = mode === GameStages.SET_PIECES;
 
     return (
-        <div className='screen__section screen__section_main'>
+        <div className={clsx(
+            'screen__section', 
+            'screen__section_main',
+            isSetPiecesStage && 'screen__section_eclipsed'
+        )}>
             <div className='board'>
                 {field.map((row, lineIndex) => (
                     <Fragment
@@ -20,7 +27,8 @@ export const BoardSection: React.FC = () => {
                         ))}
                     </Fragment>
                 ))}
+                {isSetPiecesStage && <div className='board__eclipse'/>}
             </div>
         </div>
     );
-};
+});

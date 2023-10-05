@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { PIECES_SETUP } from './constants';
 import { ICell } from './interfaces';
 
@@ -14,3 +15,5 @@ export type HandlePieceMovingType = (pieceQuery: string | CoordinatesType, newPo
 export type CanMoveBoardPieceTo = (movedFrom: CoordinatesType, moveTo: CoordinatesType) => boolean;
 
 export type OnMoveByClick = (cellPosition: CoordinatesType) => void;
+
+export type ReactComponentWithRefType<Props, Ref extends HTMLElement = HTMLDivElement> = ReturnType<typeof forwardRef<Ref, Props>>;

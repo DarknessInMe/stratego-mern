@@ -7,7 +7,7 @@ import { useRootContext } from 'context/RootContext';
 import { useCellCoordinates } from 'hooks/useCellCoordinates';
 import { useSelection } from 'hooks/useSelection';
 import { usePieceFromBoardDnD } from 'hooks/usePieceFromBoardDnD';
-import { useMovePiece } from 'hooks/useMovePiece.1';
+import { useMovePiece } from 'hooks/useMovePiece';
 
 export const BoardPiece: React.FC<IBoardPieceProps> = memo(({ 
     rankName,
