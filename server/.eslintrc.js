@@ -3,6 +3,7 @@
 module.exports = {
     "env": {
         "browser": true,
+        "commonjs": true,
         "es2021": true
     },
     "overrides": [
@@ -20,16 +21,14 @@ module.exports = {
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": "latest",
-        "sourceType": "module"
+        "ecmaVersion": "latest"
     },
     "plugins": [
-        "@typescript-eslint",
-        "react"
+        "@typescript-eslint"
     ],
     "rules": {
-        "react/no-deprecated": ["off"],
-        "no-debugger": ["error"],
+        "no-invalid-regexp": ["error"],
+        "no-use-before-define": ["error"],
         "camelcase": ["error", {
             "ignoreDestructuring": true,
             "ignoreImports": true,
@@ -50,5 +49,5 @@ module.exports = {
         "@typescript-eslint/no-unused-vars": ["warn", {
             varsIgnorePattern: '^_',
         }],
-    },
-};
+    }
+}
