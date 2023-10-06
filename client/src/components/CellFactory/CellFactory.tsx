@@ -5,9 +5,10 @@ import { ICellComponentProps } from 'shared/interfaces';
 import { EnvironmentEnum } from 'shared/enums';
 import { BoardPiece } from 'components/Piece';
 import { useRootContext } from 'context/RootContext';
+import clsx from 'clsx';
 
 export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
-    const { gameCoreRef } = useRootContext();
+    const { gameCoreRef, isReversedPlayer } = useRootContext();
 
     switch(cell.environment) {
         case EnvironmentEnum.WATER: {
@@ -25,7 +26,7 @@ export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
                 <BoardPiece
                     rankName={piece.rankName}
                     team={piece.team}
-                    className={'piece_landed'}
+                    className={clsx('piece_landed', isReversedPlayer && 'piece_reversed')}
                     coordinates={{
                         x: piece.x,
                         y: piece.y

@@ -8,7 +8,7 @@ import React, {
 import { GameCore } from 'core/GameCore';
 import { IContextProps, IRootContextValue, IRootState, ISelectionState } from 'shared/interfaces';
 import { PIECES_SETUP } from 'shared/constants';
-import { GameStages } from 'shared/enums';
+import { GameStages, TeamsEnum } from 'shared/enums';
 
 const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 
@@ -23,8 +23,9 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
         mode: GameStages.SET_PIECES,
     });
 	const gameCoreRef = useRef(new GameCore(setRootState));
-    const { board } = gameCoreRef.current;
-
+    const { board, currentPlayer } = gameCoreRef.current;
+    const isReversedPlayer = currentPlayer.team === TeamsEnum.BLUE_TEAM;
+    
 	useEffect(() => {
 		gameCoreRef.current.init();
 	}, []);
@@ -56,6 +57,7 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
             setSelection,
             setBank,
             gameCoreRef,
+            isReversedPlayer,
         }}>
             {children}
         </RootContext.Provider>

@@ -167,4 +167,8 @@ body {
 	&_blue {
 		background-color: blue;
 	}
+
+	&_reversed {
+		transform: rotate(180deg);
+	}
 }

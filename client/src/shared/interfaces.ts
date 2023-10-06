@@ -48,6 +48,7 @@ export interface IRootContextValue extends IRootState {
     setBank: SetBankType,
     setSelection: ReactSetStateType<ISelectionState>,
     gameCoreRef: React.MutableRefObject<GameCore>,
+    isReversedPlayer: boolean,
 }
 
 export interface IBankToBoardDragObject {
