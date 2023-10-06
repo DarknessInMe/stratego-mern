@@ -2,11 +2,12 @@ import React, { memo, Fragment } from 'react';
 import { CellFactory } from 'components/CellFactory';
 import { useRootContext } from 'context/RootContext';
 import clsx from 'clsx';
-import { GameStages } from 'shared/enums';
+import { GameStages, TeamsEnum } from 'shared/enums';
 
 export const BoardSection: React.FC = memo(() => {
-    const { field, mode } = useRootContext();
+    const { field, mode, gameCoreRef } = useRootContext();
     const isSetPiecesStage = mode === GameStages.SET_PIECES;
+    const isReversed = gameCoreRef.current.currentPlayer.team === TeamsEnum.BLUE_TEAM;
 
     return (
         <div className={clsx(
@@ -14,7 +15,7 @@ export const BoardSection: React.FC = memo(() => {
             'screen__section_main',
             isSetPiecesStage && 'screen__section_eclipsed'
         )}>
-            <div className='board'>
+            <div className={clsx('board', isReversed && 'board_reversed')}>
                 {field.map((row, lineIndex) => (
                     <Fragment
                         key={`row-${lineIndex}`}

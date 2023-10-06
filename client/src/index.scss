@@ -98,10 +98,19 @@ body {
 		}
 	}
 
+	&_reversed {
+		transform: rotate(180deg);
+
+		& .board__eclipse {
+			bottom: 0;
+			top: unset;
+		}
+	}
+
 	&__eclipse {
 		position: absolute;
 		left: 0;
-		right: 0;
+		top: 0;
 
 		width: 100%;
 		height: calc($piece-size * 6);
