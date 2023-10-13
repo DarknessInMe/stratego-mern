@@ -28,7 +28,6 @@ module.exports = {
     ],
     "rules": {
         "no-invalid-regexp": ["error"],
-        "no-use-before-define": ["error"],
         "camelcase": ["error", {
             "ignoreDestructuring": true,
             "ignoreImports": true,
