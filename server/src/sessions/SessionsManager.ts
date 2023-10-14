@@ -1,4 +1,4 @@
-import { TeamsEnum } from 'shared/enums';
+import { TeamsEnum } from '../shared/enums';
 import { Session } from './Session';
 import { User } from './User';
 
