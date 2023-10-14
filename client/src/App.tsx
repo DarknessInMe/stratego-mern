@@ -1,16 +1,18 @@
 import React from 'react';
-import { BoardSection } from 'components/BoardSection';
-import { PieceBankSection } from 'components/PieceBankSection';
-import { RootProvider } from 'context/RootContext';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Home } from 'pages/Home';
+import { Game } from 'pages/Game';
+import { NotFound } from 'pages/NotFound';
 
 const App: React.FC = () => {
 	return (
-		<RootProvider>
-			<div className='screen'>
-				<BoardSection />
-				<PieceBankSection />
-			</div>
-		</RootProvider>
+		<BrowserRouter>
+			<Routes>
+				<Route path='/' element={<Home />} />
+				<Route path='/game' element={<Game />}/>
+				<Route path='*' element={<NotFound />}/>
+			</Routes>
+		</BrowserRouter>
 	);
 };
 

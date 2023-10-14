@@ -1,42 +1,43 @@
-const { resolve } = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const TerserWebpackPlugin = require("terser-webpack-plugin");
+const { resolve } = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.NODE_ENV === 'production';
 
 const config = {
-	mode: isProd ? "production" : "development",
+	mode: isProd ? 'production' : 'development',
 	entry: {
-		index: "./src/index.tsx",
+		index: './src/index.tsx',
 	},
 	output: {
-		path: resolve(__dirname, "dist"),
-		filename: "bundle.js",
+		path: resolve(__dirname, 'dist'),
+		filename: 'bundle.js',
+		publicPath: '/'
 	},
 	resolve: {
-		extensions: [".js", ".jsx", ".ts", ".tsx"],
+		extensions: ['.js', '.jsx', '.ts', '.tsx'],
 		modules: [resolve(__dirname, './src'), 'node_modules'],
 	},
 	module: {
 		rules: [
 			{
 				test: /\.tsx?$/,
-				use: "babel-loader",
+				use: 'babel-loader',
 				exclude: /node_modules/,
 			},
 			{
 				test: /\.css$/i,
-				use: ["style-loader", "css-loader"],
+				use: ['style-loader', 'css-loader'],
 			},
 			{
 				test: /\.s[ac]ss$/i,
 				use: [
 					// Creates `style` nodes from JS strings
-					"style-loader",
+					'style-loader',
 					// Translates CSS into CommonJS
-					"css-loader",
+					'css-loader',
 					// Compiles Sass to CSS
-					"sass-loader",
+					'sass-loader',
 				],
 			},
 			{
@@ -47,7 +48,7 @@ const config = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: "./src/index.html",
+			template: './src/index.html',
 		}),
 	],
 };
@@ -62,8 +63,9 @@ if (isProd) {
 		open: true,
 		hot: true,
 		compress: true,
-		stats: "errors-only",
+		stats: 'errors-only',
 		overlay: true,
+		historyApiFallback: true,
 	};
 }
 
