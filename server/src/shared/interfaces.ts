@@ -1,14 +1,22 @@
+import { UpdatableUserType } from './types';
+
 export interface IUser {
     id: string,
 }
 
 export interface ICreateRoomRequest {
-    creator: IUser,
+    creatorId: string,
 }
 
 export interface IJoinRoomRequest {
     roomId: string,
-    user: IUser,
+    userId: string,
+}
+
+export interface IPlayerRoomRequest {
+    payload: UpdatableUserType,
+    userId: string,
+    roomId: string,
 }
 
 export interface TypedRequestBody<T> extends Express.Request {

@@ -1,5 +1,6 @@
-import { IUser } from '../shared/interfaces';
+import { TeamsEnum } from 'shared/enums';
 import { Session } from './Session';
+import { User } from './User';
 
 export class SessionsManager {
     private static instance: SessionsManager;
@@ -15,15 +16,15 @@ export class SessionsManager {
 
     constructor() {}
 
-    createSession(id: string, creator: IUser) {
-        if (this.sessions.has(id)) {
-            throw new Error(`Session with ${id} id is already exist`);
-        }
+    createSession(id: string, creatorId: string) {
+        const session = new Session(id, creatorId);
 
-        this.sessions.set(id, new Session(creator));
+        this.sessions.set(id, session);
+
+        return session;
     }
 
-    join(id: string, newUser: IUser) {
+    join(id: string, userId: string) {
         const session = this.sessions.get(id);
 
         if (!session) {
@@ -34,6 +35,11 @@ export class SessionsManager {
             throw new Error(`Session with ${id} id is already full`);
         }
 
+        const opponentTeam = session.users[0].team;
+        const newUser = new User(userId, opponentTeam === TeamsEnum.RED_TEAM ? TeamsEnum.BLUE_TEAM : TeamsEnum.RED_TEAM);
+
         session.users.push(newUser);
+
+        return session;
     }
 }
