@@ -29,13 +29,21 @@ body {
 	}
 }
 
-.screen {
-	min-width: $board-size;
-	min-height: $board-size;
+.page {
 	width: 100%;
 	height: 100%;
 	display: flex;
 	flex: 1;
+}
+
+.home {
+	justify-content: center;
+	align-items: center;
+}
+
+.screen {
+	min-width: $board-size;
+	min-height: $board-size;
 
 	&__section {
 		display: flex;
