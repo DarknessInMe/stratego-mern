@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'index.scss';
 import { render } from 'react-dom';
 import { DndProvider } from 'react-dnd';
@@ -7,8 +7,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Home } from 'pages/Home';
 import { Game } from 'pages/Game';
 import { NotFound } from 'pages/NotFound';
+import { SESSION_STORAGE_KEYS } from 'shared/constants';
+import { v4 as uuidv4 } from 'uuid';
 
 const Root: React.FC = () => {
+    useEffect(() => {
+        sessionStorage.setItem(SESSION_STORAGE_KEYS.USER_ID, uuidv4());
+    }, []);
+
     return (
         <DndProvider backend={HTML5Backend}>
             <BrowserRouter>

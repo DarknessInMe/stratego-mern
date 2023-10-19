@@ -34,3 +34,7 @@ export const CELL_ATTRIBUTES = {
     X: 'data-x',
     Y: 'data-y',
 } as const;
+
+export const SESSION_STORAGE_KEYS = {
+    USER_ID: 'USER_ID',
+} as const;

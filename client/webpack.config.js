@@ -1,4 +1,5 @@
 const { resolve } = require('path');
+const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 
@@ -50,6 +51,7 @@ const config = {
 		new HtmlWebpackPlugin({
 			template: './src/index.html',
 		}),
+		new Dotenv(),
 	],
 };
 
