@@ -1,6 +1,6 @@
 import express from 'express';
-import { SessionsManager } from '../sessions/SessionsManager';
-import { TypedRequestBody } from '../shared/interfaces';
+import { SessionsManager } from '@/sessions/SessionsManager';
+import { TypedRequestBody } from '@/shared/interfaces';
 import { v4 as uuidv4 } from 'uuid';
 import { IRoomCreate, IRoomJoin, IRoomUpdatePlayer } from '@stratego/common';
 

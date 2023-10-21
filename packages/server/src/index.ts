@@ -1,7 +1,8 @@
+import 'module-alias/register';
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import { room } from './routes/room';
+import { room } from '@/routes/room';
 
 dotenv.config();
 
