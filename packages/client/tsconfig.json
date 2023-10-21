@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"jsx": "react",
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"baseUrl": "./src",
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+	},
+	"include": ["src"],
+	"exclude": ["node_modules"],
+	"files": ["globals.d.ts"]
+}

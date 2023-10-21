@@ -1,0 +1,11 @@
+{
+    "name": "stratego",
+    "private": false,
+    "workspaces": [
+        "./packages/*"
+    ],
+    "scripts": {
+		"server": "npm --prefix ./packages/server run dev",
+		"client": "npm --prefix ./packages/client run dev"
+	}
+}
