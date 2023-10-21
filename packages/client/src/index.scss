@@ -180,3 +180,40 @@ body {
 		transform: rotate(180deg);
 	}
 }
+
+.room-page {
+	width: 100%;
+	padding: 16px;
+
+	&__link-input {
+		width: 65%;
+		max-width: 450px;
+		margin-right: 8px;
+	}
+
+	&__users-section {
+		max-width: 65%;
+		border: 1px solid #000;
+		padding: 16px;
+		margin-top: 16px;
+	}
+}
+
+.user-item {
+	padding: 8px;
+	border: 1px dashed #000;
+	display: 'flex';
+	
+	& > span {
+		min-width: 100px;
+		margin: 0px 8px;
+	}
+
+	&__status {
+		color: red;
+	}
+
+	&_ready {
+		color: green;
+	}
+}
