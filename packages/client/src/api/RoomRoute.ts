@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { BaseRoute } from './BaseRoute';
-import { IRoomCreate, IRoomJoin, IRoomUpdatePlayer } from '@stratego/common';
+import { IRoomCreate, IRoomJoin, IRoomUpdatePlayer, ISession } from '@stratego/common';
 
 export class RoomRoute extends BaseRoute {
     constructor(axios: AxiosInstance) {
@@ -8,7 +8,7 @@ export class RoomRoute extends BaseRoute {
     }
 
     async create(body: IRoomCreate) {
-        return await this.axios.post(this.getEndpoint('create'), body);
+        return await this.axios.post<ISession>(this.getEndpoint('create'), body);
     }
 
     async join(body: IRoomJoin) {

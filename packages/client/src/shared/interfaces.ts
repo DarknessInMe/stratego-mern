@@ -1,5 +1,5 @@
 import { EnvironmentEnum, PieceNameEnum } from './enums';
-import { TeamsEnum } from '@stratego/common';
+import { TeamsEnum, ISession } from '@stratego/common';
 import { 
     BoardFieldType, 
     CoordinatesType, 
@@ -50,6 +50,11 @@ export interface IRootContextValue extends IRootState {
     setSelection: ReactSetStateType<ISelectionState>,
     gameCoreRef: React.MutableRefObject<GameCore>,
     isReversedPlayer: boolean,
+}
+
+export interface ISessionContextValue {
+    session: ISession | null,
+    setSession: ReactSetStateType<ISession | null>
 }
 
 export interface IBankToBoardDragObject {

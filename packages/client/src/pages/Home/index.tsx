@@ -1,20 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { Api } from 'api';
 import { SESSION_STORAGE_KEYS } from 'shared/constants';
+import { useSessionContext } from 'context/SessionContext';
+import { generatePath, useNavigate } from 'react-router-dom';
+import { ROUTES } from 'router';
 
 export const Home = () => {
     const api = Api.getInstance();
+    const history = useNavigate();
+    const { session, setSession } = useSessionContext();
 
     const onCreate = async () => {
         try {
-            await api.room.create({
+            const { data } = await api.room.create({
                 creatorId: sessionStorage.getItem(SESSION_STORAGE_KEYS.USER_ID),
             });
+            
+            setSession(data);
         } catch {
             //
         }
     };
+
+    useEffect(() => {
+        if (!session) {
+            return;
+        }
+
+        history(generatePath(ROUTES.ROOM, { id: session.id }));
+    }, [session]);
 
     return (
         <div className={clsx('home', 'page')}>
