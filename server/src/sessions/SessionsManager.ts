@@ -1,6 +1,6 @@
 import { Session } from './Session';
 import { User } from './User';
-import { TeamsEnum } from '../../../common/index';
+import { TeamsEnum } from '../common';
 
 export class SessionsManager {
     private static instance: SessionsManager;

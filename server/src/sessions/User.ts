@@ -1,4 +1,4 @@
-import { IUserEntity, TeamsEnum, IBaseUser } from '../../../common/index';
+import { IUserEntity, TeamsEnum, IBaseUser } from '../common';
 
 export class User implements IUserEntity {
     readonly id: string;

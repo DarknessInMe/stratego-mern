@@ -1,5 +1,5 @@
 import { User } from './User';
-import { ISession, IBaseUser } from '../../../common/index';
+import { ISession, IBaseUser } from '../common';
 
 export class Session implements ISession{
     readonly id: string;
