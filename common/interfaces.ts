@@ -1,6 +1,18 @@
-export interface IUser {
+import { TeamsEnum } from './enums';
+
+export interface IBaseUser {
     isReady: boolean,
-    team: 0 | 1,
+    team: TeamsEnum,
+}
+
+export interface IUserEntity extends IBaseUser {
+    id: string
+}
+
+export interface ISession {
+    id: string,
+    ownerId: string,
+    users: IUserEntity[],
 }
 
 export interface IRoomCreate {
@@ -15,5 +27,5 @@ export interface IRoomJoin {
 export interface IRoomUpdatePlayer {
     roomId: string, 
     userId: string,
-    payload: IUser,
+    payload: IBaseUser,
 }

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/server/src/index.js\""
   },
   "author": "DarknessInMe",
   "license": "ISC",
@@ -26,6 +26,7 @@
     "concurrently": "^8.2.1",
     "eslint": "^8.50.0",
     "nodemon": "^3.0.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "common": "file:../common"
   }
 }

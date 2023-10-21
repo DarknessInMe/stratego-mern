@@ -1,7 +1,6 @@
-import { TeamsEnum } from '../shared/enums';
-import { UpdatableUserType } from '../shared/types';
+import { IUserEntity, TeamsEnum, IBaseUser } from '../../../common/index';
 
-export class User {
+export class User implements IUserEntity {
     readonly id: string;
     team: TeamsEnum;
     isReady: boolean = false;
@@ -11,7 +10,7 @@ export class User {
         this.team = team;
     }
 
-    update(payload: UpdatableUserType) {
+    update(payload: IBaseUser) {
         this.team = payload.team;
         this.isReady = payload.isReady;
     }

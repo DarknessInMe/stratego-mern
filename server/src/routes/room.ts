@@ -1,17 +1,13 @@
 import express from 'express';
 import { SessionsManager } from '../sessions/SessionsManager';
-import { 
-    TypedRequestBody, 
-    ICreateRoomRequest, 
-    IJoinRoomRequest,
-    IPlayerRoomRequest,
-} from '../shared/interfaces';
+import { TypedRequestBody } from '../shared/interfaces';
 import { v4 as uuidv4 } from 'uuid';
+import { IRoomCreate, IRoomJoin, IRoomUpdatePlayer } from '../../../common/index';
 
 const room = express.Router();
 const sessionsManager = SessionsManager.getInstance();
 
-room.post('/create', (req: TypedRequestBody<ICreateRoomRequest>, res) => {
+room.post('/create', (req: TypedRequestBody<IRoomCreate>, res) => {
     try {
         const sessionId = uuidv4();
         const createdSession = sessionsManager.createSession(sessionId, req.body.creatorId);
@@ -22,7 +18,7 @@ room.post('/create', (req: TypedRequestBody<ICreateRoomRequest>, res) => {
     }
 });
 
-room.post('/join', (req: TypedRequestBody<IJoinRoomRequest>, res) => {
+room.post('/join', (req: TypedRequestBody<IRoomJoin>, res) => {
     try {
         const { roomId, userId } = req.body;
         const session = sessionsManager.join(roomId, userId);
@@ -33,7 +29,7 @@ room.post('/join', (req: TypedRequestBody<IJoinRoomRequest>, res) => {
     }
 });
 
-room.put('/player', (req: TypedRequestBody<IPlayerRoomRequest>, res) => {
+room.put('/player', (req: TypedRequestBody<IRoomUpdatePlayer>, res) => {
     try {
         const { roomId, userId, payload } = req.body;
         const session = sessionsManager.sessions.get(roomId);
