@@ -9,6 +9,9 @@
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,
+		"paths": {
+			"common/*": ["../../common/*"]
+		}
 	},
 	"include": ["src"],
 	"exclude": ["node_modules"],

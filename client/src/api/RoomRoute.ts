@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { BaseRoute } from './BaseRoute';
-import { IRoomCreate, IRoomJoin, IRoomUpdatePlayer } from './interfaces';
+import { IRoomCreate, IRoomJoin, IRoomUpdatePlayer } from 'common/index';
 
 export class RoomRoute extends BaseRoute {
     constructor(axios: AxiosInstance) {

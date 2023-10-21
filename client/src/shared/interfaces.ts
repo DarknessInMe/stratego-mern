@@ -1,4 +1,5 @@
-import { EnvironmentEnum, PieceNameEnum, TeamsEnum } from './enums';
+import { EnvironmentEnum, PieceNameEnum } from './enums';
+import { TeamsEnum } from 'common/index';
 import { 
     BoardFieldType, 
     CoordinatesType, 

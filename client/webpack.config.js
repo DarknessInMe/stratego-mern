@@ -23,8 +23,21 @@ const config = {
 		rules: [
 			{
 				test: /\.tsx?$/,
-				use: 'babel-loader',
 				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: [
+							'@babel/env', 
+							'@babel/react',
+							['@babel/typescript', {
+								targets: {
+									node: 'current'
+								}
+							}]
+						],
+					},
+				},
 			},
 			{
 				test: /\.css$/i,

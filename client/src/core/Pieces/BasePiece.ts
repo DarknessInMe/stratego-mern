@@ -2,10 +2,10 @@ import { Board } from 'core/Board';
 import { 
     EnvironmentEnum, 
     PieceNameEnum, 
-    TeamsEnum, 
     PieceWeightEnum,
     FightResultEnum,
 } from 'shared/enums';
+import { TeamsEnum } from 'common/index';
 import { ICell } from 'shared/interfaces';
 import { CoordinatesType } from 'shared/types';
 import { PIECES } from 'shared/constants';

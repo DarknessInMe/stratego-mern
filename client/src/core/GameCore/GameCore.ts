@@ -1,10 +1,11 @@
 import { Board } from 'core/Board';
-import { GameStages, PieceNameEnum, TeamsEnum } from 'shared/enums';
+import { GameStages, PieceNameEnum } from 'shared/enums';
 import { Player } from 'core/Player';
 import { piecePicker } from 'shared/utils';
 import { IRootState } from 'shared/interfaces';
 import { ReactSetStateType } from 'shared/types';
 import { StaticPiece } from 'core/Pieces';
+import { TeamsEnum } from 'common/index';
 
 export class GameCore {
     board: Board | null = null;

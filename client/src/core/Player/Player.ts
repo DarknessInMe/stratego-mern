@@ -1,4 +1,4 @@
-import { TeamsEnum } from 'shared/enums';
+import { TeamsEnum } from 'common/index';
 import { IPlayer } from 'shared/interfaces';
 
 export class Player implements IPlayer {

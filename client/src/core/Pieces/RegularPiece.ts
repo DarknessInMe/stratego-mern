@@ -1,6 +1,7 @@
 import { BasePiece } from './BasePiece';
 import { Board } from 'core/Board';
-import { PieceNameEnum, TeamsEnum, FightResultEnum } from 'shared/enums';
+import { PieceNameEnum, FightResultEnum } from 'shared/enums';
+import { TeamsEnum } from 'common/index';
 import { CoordinatesType } from 'shared/types';
 
 export class RegularPiece extends BasePiece {

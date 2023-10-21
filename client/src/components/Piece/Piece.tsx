@@ -3,7 +3,7 @@ import { PieceIconPicker } from './constants';
 import { IPieceProps } from './interfaces';
 import { PIECES } from 'shared/constants';
 import clsx from 'clsx';
-import { TeamsEnum } from 'shared/enums';
+import { TeamsEnum } from 'common/index';
 
 const BasePiece = forwardRef<HTMLDivElement, IPieceProps>(({ 
     rankName,

@@ -8,7 +8,8 @@ import React, {
 import { GameCore } from 'core/GameCore';
 import { IContextProps, IRootContextValue, IRootState, ISelectionState } from 'shared/interfaces';
 import { PIECES_SETUP } from 'shared/constants';
-import { GameStages, TeamsEnum } from 'shared/enums';
+import { GameStages } from 'shared/enums';
+import { TeamsEnum } from 'common/index';
 
 const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 

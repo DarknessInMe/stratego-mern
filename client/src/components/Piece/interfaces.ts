@@ -1,5 +1,6 @@
-import { PieceNameEnum, TeamsEnum } from 'shared/enums';
+import { PieceNameEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
+import { TeamsEnum } from 'common/index';
 
 export interface IPieceBase {
     rankName: PieceNameEnum,

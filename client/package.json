@@ -11,10 +11,10 @@
 	"author": "DarknessInMe",
 	"license": "ISC",
 	"devDependencies": {
-		"@babel/core": "^7.14.3",
-		"@babel/preset-env": "^7.14.4",
-		"@babel/preset-react": "^7.13.13",
-		"@babel/preset-typescript": "^7.13.0",
+		"@babel/core": "^7.23.2",
+		"@babel/preset-env": "^7.23.2",
+		"@babel/preset-react": "^7.22.15",
+		"@babel/preset-typescript": "^7.23.2",
 		"@svgr/webpack": "^5.5.0",
 		"@types/react": "^17.0.9",
 		"@types/react-dom": "^17.0.6",
@@ -37,7 +37,8 @@
 		"url-loader": "^4.1.1",
 		"webpack": "^5.38.1",
 		"webpack-cli": "^4.7.0",
-		"webpack-dev-server": "^3.11.2"
+		"webpack-dev-server": "^3.11.2",
+		"common": "file:../common"
 	},
 	"dependencies": {
 		"axios": "^1.5.1",
