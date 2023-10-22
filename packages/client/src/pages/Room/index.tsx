@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { useSessionContext } from 'context/SessionContext';
 import React, { memo } from 'react';
+import { Navigate } from 'react-router-dom';
+import { ROUTES } from 'router';
 
 export const Room = memo(() => {
     const { session } = useSessionContext();
@@ -9,6 +11,10 @@ export const Room = memo(() => {
     const onCopy = () => {
         navigator.clipboard.writeText(link);
     };
+
+    if (!session) {
+        return <Navigate to={ROUTES.HOME} replace/>;
+    }
 
     return (
         <div className='page'>
