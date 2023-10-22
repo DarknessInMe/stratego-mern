@@ -6,7 +6,7 @@ import { ROUTES } from 'router';
 
 export const Room = memo(() => {
     const { session } = useSessionContext();
-    const link = `${window.origin}/join/${session.id}`;
+    const link = `${window.origin}/join/${session?.id}`;
 
     const onCopy = () => {
         navigator.clipboard.writeText(link);
