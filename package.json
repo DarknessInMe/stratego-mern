@@ -5,10 +5,14 @@
         "./packages/*"
     ],
     "scripts": {
-		"server": "npm --prefix ./packages/server run dev",
-		"client": "npm --prefix ./packages/client run dev"
-	},
+        "server": "npm --prefix ./packages/server run dev",
+        "client": "npm --prefix ./packages/client run dev"
+    },
     "_moduleAliases": {
         "@": "packages/server/dist"
+    },
+    "dependencies": {
+        "socket.io": "^4.7.2",
+        "socket.io-client": "^4.7.2"
     }
 }

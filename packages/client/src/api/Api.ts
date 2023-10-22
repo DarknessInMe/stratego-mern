@@ -16,7 +16,6 @@ export class Api {
     room: RoomRoute;
 
     constructor() {
-        console.log(process.env.PORT);
         this.axios = axios.create({
             baseURL: process.env.BACKEND_URL,
         });

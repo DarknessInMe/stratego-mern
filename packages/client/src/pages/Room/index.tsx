@@ -1,8 +1,9 @@
+import React, { memo, useEffect } from 'react';
 import clsx from 'clsx';
 import { useSessionContext } from 'context/SessionContext';
-import React, { memo } from 'react';
 import { Navigate } from 'react-router-dom';
 import { ROUTES } from 'router';
+import { socket } from 'socket';
 
 export const Room = memo(() => {
     const { session } = useSessionContext();
@@ -11,6 +12,26 @@ export const Room = memo(() => {
     const onCopy = () => {
         navigator.clipboard.writeText(link);
     };
+
+    useEffect(() => {
+        function onConnect() {
+            console.log('connected');
+        }
+
+        function onDisconnect() {
+            console.log('disconnected');
+        }
+
+        socket.connect();
+        socket.on('connect', onConnect);
+        socket.on('disconnect', onDisconnect);
+
+        return () => {
+            socket.off('connect', onConnect);
+            socket.off('disconnect', onDisconnect);
+            socket.disconnect();
+        };
+    }, []);
 
     if (!session) {
         return <Navigate to={ROUTES.HOME} replace/>;
