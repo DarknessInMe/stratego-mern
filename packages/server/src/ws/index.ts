@@ -4,18 +4,11 @@ import { instrument } from '@socket.io/admin-ui';
 import { User } from '@/sessions/User';
 import { BACKEND_SOCKET_EVENTS, FRONTEND_SOCKET_EVENTS } from '@stratego/common';
 
-interface IContext {
-    roomId: string
-}
-
 export class SocketManager {
-    public io: Server | null = null;
-    private context: IContext = {
-        roomId: '',
-    };
+    io: Server | null = null;
 
-    private getRoomId() {
-        return `room:${this.context.roomId}`;
+    private getRoomId(id: string) {
+        return `room:${id}`;
     }
 
     static instance: SocketManager;
@@ -42,25 +35,17 @@ export class SocketManager {
         });
 
         this.io.on('connection', (socket) => {
-            socket.onAny((eventName) => {
-                console.log(`${eventName} fired!`);
-            });
-
             socket.on(BACKEND_SOCKET_EVENTS.CREATE_ROOM, (sessionId: string) => {
-                this.context.roomId = sessionId;
-
-                socket.join(this.getRoomId());
+                socket.join(this.getRoomId(sessionId));
             });
 
-            socket.on(BACKEND_SOCKET_EVENTS.UPDATE_USER, (updatedUser: User) => {
-                socket.to(this.getRoomId()).emit(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updatedUser);
+            socket.on(BACKEND_SOCKET_EVENTS.UPDATE_USER, (sessionId: string, updatedUser: User) => {
+                socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updatedUser);
             });
 
-            socket.on(BACKEND_SOCKET_EVENTS.JOIN_USER, (newUser: User, sessionId: string) => {
-                this.context.roomId = sessionId;
-
-                socket.join(this.getRoomId());
-                socket.to(this.getRoomId()).emit(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, newUser);
+            socket.on(BACKEND_SOCKET_EVENTS.JOIN_USER, (sessionId: string, newUser: User) => {
+                socket.join(this.getRoomId(sessionId));
+                socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, newUser);
             });
         });
     }

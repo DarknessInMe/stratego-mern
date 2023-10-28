@@ -40,6 +40,6 @@ export class SessionsManager {
 
         session.users.push(newUser);
 
-        return session;
+        return { session, user: newUser };
     }
 }

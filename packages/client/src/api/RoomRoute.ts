@@ -1,6 +1,11 @@
 import { AxiosInstance } from 'axios';
 import { BaseRoute } from './BaseRoute';
-import { IRoomCreate, IRoomJoin, IRoomUpdatePlayer, ISession } from '@stratego/common';
+import { IRoomCreate, IRoomJoin, IRoomUpdatePlayer, ISession, IUserEntity } from '@stratego/common';
+
+interface IJoinRoomResponse {
+    session: ISession;
+    user: IUserEntity;
+}
 
 export class RoomRoute extends BaseRoute {
     constructor(axios: AxiosInstance) {
@@ -12,7 +17,7 @@ export class RoomRoute extends BaseRoute {
     }
 
     async join(body: IRoomJoin) {
-        return await this.axios.post(this.getEndpoint('join'), body);
+        return await this.axios.post<IJoinRoomResponse>(this.getEndpoint('join'), body);
     }
 
     async updatePlayer(body: IRoomUpdatePlayer) {
