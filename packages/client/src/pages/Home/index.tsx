@@ -5,6 +5,7 @@ import { SESSION_STORAGE_KEYS } from 'shared/constants';
 import { useSessionContext } from 'context/SessionContext';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'router';
+import { socket } from 'socket';
 
 export const Home = () => {
     const api = Api.getInstance();
@@ -13,6 +14,7 @@ export const Home = () => {
 
     const onCreate = async () => {
         try {
+            socket.connect();
             const { data } = await api.room.create({
                 creatorId: sessionStorage.getItem(SESSION_STORAGE_KEYS.USER_ID),
             });
