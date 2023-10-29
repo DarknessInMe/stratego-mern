@@ -31,6 +31,23 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
         }));
     };
 
+    const removeUser = (userId: string) => {
+        setSession((prevSession) => {
+            if (!prevSession) {
+                return prevSession;
+            }
+
+            return {
+                ...prevSession,
+                users: prevSession.users.filter(({ id }) => id !== userId)
+            };
+        });
+    };
+
+    const onUserKick = () => {
+        setSession(null);
+    };
+
     const updateUserInSession = (updatedUser: IUser) => {
         setSession((prevSession) => {
             if (!prevSession) {
@@ -65,11 +82,13 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
         socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, handleUserJoining);
         socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updateUserInSession);
         socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, handleUserLeaving);
+        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_KICK, onUserKick);
 
         return () => {
             socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, handleUserJoining);
             socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updateUserInSession);
             socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, handleUserLeaving);
+            socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_KICK, onUserKick);
         };
     }, []);
 
@@ -79,6 +98,7 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
             setSession,
             currentUser,
             updateUserInSession,
+            removeUser,
         }}>
             {children}
         </SessionContext.Provider>

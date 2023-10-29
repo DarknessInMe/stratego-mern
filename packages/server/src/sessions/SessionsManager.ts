@@ -75,8 +75,8 @@ export class SessionsManager {
 
     handleLeave(sessionId: string, userId: string) {
         const session = this.sessions.get(sessionId);
-
         if (!session) {
+            console.log(sessionId, userId);
             throw new Error(`Session with ${sessionId} id doesn't exist`);
         }
 
@@ -86,5 +86,15 @@ export class SessionsManager {
 
         session.users = session.users.filter(({ id }) => id !== userId);
         session.ownerId = session.ownerId === userId ? session.users[0].id : session.ownerId;
+    }
+
+    handleKick(sessionId: string, userId: string) {
+        const session = this.sessions.get(sessionId);
+
+        if (!session) {
+            throw new Error(`Session with ${sessionId} id doesn't exist`);
+        }
+
+        session.users = session.users.filter(({ id }) => id !== userId);
     }
 }

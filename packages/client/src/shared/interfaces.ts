@@ -57,6 +57,7 @@ export interface ISessionContextValue {
     setSession: ReactSetStateType<ISession | null>,
     currentUser: IUser,
     updateUserInSession: (updatedUser: IUser) => void,
+    removeUser: (userId: string) => void,
 }
 
 export interface IBankToBoardDragObject {

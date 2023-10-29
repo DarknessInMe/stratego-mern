@@ -56,6 +56,10 @@ export class SocketManager {
                 socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, newUser);
             });
 
+            socket.on(BACKEND_SOCKET_EVENTS.KICK_USER, (sessionId: string) => {
+                socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_KICK);
+            });
+
             socket.on('disconnect', () => {
                 const socketData = sessionsManager.sockets.get(socket.id);
 
@@ -65,11 +69,15 @@ export class SocketManager {
 
                 const { sessionId, userId } = socketData;
 
-                sessionsManager.sockets.delete(socket.id);
-                sessionsManager.handleLeave(sessionId, userId);
-
-                socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, userId);
-                socket.leave(this.getRoomId(sessionId));
+                try {
+                    sessionsManager.sockets.delete(socket.id);
+                    sessionsManager.handleLeave(sessionId, userId);
+                } catch {
+                    //
+                } finally {
+                    socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, userId);
+                    socket.leave(this.getRoomId(sessionId));
+                }
             });
         });
     }

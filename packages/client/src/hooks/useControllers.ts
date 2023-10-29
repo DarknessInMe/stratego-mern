@@ -13,7 +13,8 @@ export const useControllers = () => {
         session, 
         setSession,
         currentUser,
-        updateUserInSession 
+        updateUserInSession,
+        removeUser,
     } = useSessionContext();
 
     const onCreate = async () => {
@@ -72,10 +73,25 @@ export const useControllers = () => {
         setSession(null);
     };
 
+    const onKickUser = async (userId: string) => {
+        try {
+            await api.room.kickPlayer({
+                userId,
+                roomId: session.id,
+            });
+
+            removeUser(userId);
+            socket.emit(BACKEND_SOCKET_EVENTS.KICK_USER, session.id);
+        } catch {
+            //
+        }
+    };
+
     return {
         onCreate,
         onJoin,
         onToggleStatus,
         onLeaveRoom,
+        onKickUser,
     };
 };
