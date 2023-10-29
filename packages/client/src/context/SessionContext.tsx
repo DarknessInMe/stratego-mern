@@ -24,6 +24,13 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
         return session.users.find(({ id }) => id === getUserId());
     }, [session?.users]);
 
+    const handleUserJoining = (user: IUser) => {
+        setSession((prevSession) => ({
+            ...prevSession,
+            users: [...prevSession.users, user]
+        }));
+    };
+
     const updateUserInSession = (updatedUser: IUser) => {
         setSession((prevSession) => {
             if (!prevSession) {
@@ -36,20 +43,34 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
             };
         });
     };
-    const initSockets = () => {
-        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, (user: IUser) => {
-            setSession((prevSession) => ({
+
+    const handleUserLeaving = (userId: string) => {
+        setSession((prevSession) => {
+            if (!prevSession) {
+                return prevSession;
+            }
+
+            const updatedList = prevSession.users.filter(({ id }) => id !== userId);
+            const sessionOwner = prevSession.ownerId === userId ? updatedList[0].id : prevSession.ownerId;
+
+            return {
                 ...prevSession,
-                users: [...prevSession.users, user]
-            }));
-        });
-        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, (user: IUser) => {
-            updateUserInSession(user);
+                ownerId: sessionOwner,
+                users: updatedList,
+            };
         });
     };
 
     useEffect(() => {
-        initSockets();
+        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, handleUserJoining);
+        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updateUserInSession);
+        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, handleUserLeaving);
+
+        return () => {
+            socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, handleUserJoining);
+            socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updateUserInSession);
+            socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, handleUserLeaving);
+        };
     }, []);
 
     return (

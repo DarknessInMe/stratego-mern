@@ -2,6 +2,9 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { instrument } from '@socket.io/admin-ui';
 import { BACKEND_SOCKET_EVENTS, FRONTEND_SOCKET_EVENTS, IUser } from '@stratego/common';
+import { SessionsManager } from '@/sessions/SessionsManager';
+
+const sessionsManager = SessionsManager.getInstance();
 
 export class SocketManager {
     io: Server | null = null;
@@ -34,8 +37,9 @@ export class SocketManager {
         });
 
         this.io.on('connection', (socket) => {
-            socket.on(BACKEND_SOCKET_EVENTS.CREATE_ROOM, (sessionId: string) => {
+            socket.on(BACKEND_SOCKET_EVENTS.CREATE_ROOM, (sessionId: string, userId: string) => {
                 socket.join(this.getRoomId(sessionId));
+                sessionsManager.sockets.set(socket.id, { sessionId, userId });
             });
 
             socket.on(BACKEND_SOCKET_EVENTS.UPDATE_USER, (sessionId: string, updatedUser: IUser) => {
@@ -44,7 +48,28 @@ export class SocketManager {
 
             socket.on(BACKEND_SOCKET_EVENTS.JOIN_USER, (sessionId: string, newUser: IUser) => {
                 socket.join(this.getRoomId(sessionId));
+                sessionsManager.sockets.set(socket.id, {
+                    sessionId,
+                    userId: newUser.id,
+                });
+
                 socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, newUser);
+            });
+
+            socket.on('disconnect', () => {
+                const socketData = sessionsManager.sockets.get(socket.id);
+
+                if (!socketData) {
+                    return;
+                }
+
+                const { sessionId, userId } = socketData;
+
+                sessionsManager.sockets.delete(socket.id);
+                sessionsManager.handleLeave(sessionId, userId);
+
+                socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, userId);
+                socket.leave(this.getRoomId(sessionId));
             });
         });
     }

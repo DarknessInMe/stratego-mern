@@ -20,12 +20,13 @@ export const useControllers = () => {
         try {
             socket.connect();
 
+            const creatorId = getUserId();
             const { data } = await api.room.create({
-                creatorId: getUserId(),
+                creatorId,
             });
 
             setSession(data);
-            socket.emit(BACKEND_SOCKET_EVENTS.CREATE_ROOM, data.id);
+            socket.emit(BACKEND_SOCKET_EVENTS.CREATE_ROOM, data.id, creatorId);
             history(generatePath(ROUTES.ROOM, { id: data.id }));
         } catch {
             socket.disconnect();

@@ -54,29 +54,34 @@ export const Room = memo(() => {
                     </div>
                 </section>
                 <section className='room-page__users-section'>
-                    {session.users.map((user, index) => (
-                        <div
-                            key={user.id}
-                            className='user-item'
-                        >
-                            <span>
-                                <strong>User {index}</strong>
-                            </span>
-                            <span>{user.id === session.ownerId ? 'Owner' : ''}</span>
-                            <span
-                                className={clsx('user-item__status', user.isReady && 'user-item_ready')}
+                    {session.users.map((user, index) => {
+                        const isCurrentUser = currentUser?.id === user.id;
+
+                        return (
+                            <div
+                                key={user.id}
+                                className='user-item'
                             >
-                                {user.isReady ? 'Ready' : 'Not ready'} 
-                            </span>
-                            {currentUser?.id === user.id && (
-                                <button
-                                    onClick={onToggleStatus}
+                                <span>
+                                    <strong>User {index} </strong>
+                                    {isCurrentUser ? <i>You</i> : null}
+                                </span>
+                                <span>{user.id === session.ownerId ? 'Owner' : ''}</span>
+                                <span
+                                    className={clsx('user-item__status', user.isReady && 'user-item_ready')}
                                 >
-                                    {user.isReady ? 'Cancel' : 'Get ready'}
-                                </button>
-                            )}
-                        </div>
-                    ))}
+                                    {user.isReady ? 'Ready' : 'Not ready'} 
+                                </span>
+                                {isCurrentUser && (
+                                    <button
+                                        onClick={onToggleStatus}
+                                    >
+                                        {user.isReady ? 'Cancel' : 'Get ready'}
+                                    </button>
+                                )}
+                            </div>
+                        )
+                    })}
                 </section>
             </div>
         </div>

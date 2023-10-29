@@ -32,13 +32,8 @@ room.post('/join', (req: TypedRequestBody<IRoomJoin>, res) => {
 room.put('/player', (req: TypedRequestBody<IRoomUpdatePlayer>, res) => {
     try {
         const { roomId, userId, payload } = req.body;
-        const session = sessionsManager.sessions.get(roomId);
-
-        if (!session) {
-            throw new Error(`Session with ${roomId} id doesn't exist`);
-        }
-
-        const updatedUser = session.updateUser(userId, payload);
+        const updatedUser = sessionsManager.updateUser(roomId, userId, payload);
+        
         res.status(200).send(updatedUser);
     } catch(error) {
         res.status(400).send(error);
