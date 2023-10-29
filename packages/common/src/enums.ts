@@ -12,4 +12,5 @@ export enum BACKEND_SOCKET_EVENTS {
 export enum FRONTEND_SOCKET_EVENTS {
     ON_USER_UPDATE = 'on-user-update',
     ON_USER_JOIN = 'on-user-join',
+    ON_USER_LEAVE = 'on-user-leave',
 }
