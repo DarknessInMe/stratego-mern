@@ -4,7 +4,7 @@ import React, {
     useContext,
     useEffect,
 } from 'react';
-import { ISession, IUserEntity } from '@stratego/common';
+import { ISession, IUser } from '@stratego/common';
 import { IContextProps, ISessionContextValue } from 'shared/interfaces';
 import { SESSION_STORAGE_KEYS } from 'shared/constants';
 import { v4 as uuidv4 } from 'uuid';
@@ -21,7 +21,7 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
     };
 
     const initSockets = () => {
-        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, (user: IUserEntity) => {
+        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, (user: IUser) => {
             setSession((prevSession) => ({
                 ...prevSession,
                 users: [...prevSession.users, user]

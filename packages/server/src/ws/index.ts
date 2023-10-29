@@ -1,8 +1,7 @@
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { instrument } from '@socket.io/admin-ui';
-import { User } from '@/sessions/User';
-import { BACKEND_SOCKET_EVENTS, FRONTEND_SOCKET_EVENTS } from '@stratego/common';
+import { BACKEND_SOCKET_EVENTS, FRONTEND_SOCKET_EVENTS, IUser } from '@stratego/common';
 
 export class SocketManager {
     io: Server | null = null;
@@ -39,11 +38,11 @@ export class SocketManager {
                 socket.join(this.getRoomId(sessionId));
             });
 
-            socket.on(BACKEND_SOCKET_EVENTS.UPDATE_USER, (sessionId: string, updatedUser: User) => {
+            socket.on(BACKEND_SOCKET_EVENTS.UPDATE_USER, (sessionId: string, updatedUser: IUser) => {
                 socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updatedUser);
             });
 
-            socket.on(BACKEND_SOCKET_EVENTS.JOIN_USER, (sessionId: string, newUser: User) => {
+            socket.on(BACKEND_SOCKET_EVENTS.JOIN_USER, (sessionId: string, newUser: IUser) => {
                 socket.join(this.getRoomId(sessionId));
                 socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, newUser);
             });

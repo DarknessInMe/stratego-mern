@@ -1,6 +1,6 @@
 import { Session } from './Session';
-import { User } from './User';
 import { TeamsEnum } from '@stratego/common';
+import { createUser } from '@/shared/utils';
 
 export class SessionsManager {
     private static instance: SessionsManager;
@@ -24,7 +24,7 @@ export class SessionsManager {
         return session;
     }
 
-    join(id: string, userId: string) {
+    join(id: string, newUserId: string) {
         const session = this.sessions.get(id);
 
         if (!session) {
@@ -35,8 +35,9 @@ export class SessionsManager {
             throw new Error(`Session with ${id} id is already full`);
         }
 
-        const opponentTeam = session.users[0].team;
-        const newUser = new User(userId, opponentTeam === TeamsEnum.RED_TEAM ? TeamsEnum.BLUE_TEAM : TeamsEnum.RED_TEAM);
+        const [opponentUser] = session.users;
+        const teamToJoin = opponentUser.team === TeamsEnum.RED_TEAM ? TeamsEnum.BLUE_TEAM : TeamsEnum.RED_TEAM;
+        const newUser = createUser(newUserId, teamToJoin)
 
         session.users.push(newUser);
 

@@ -1,25 +1,33 @@
-import { User } from './User';
-import { ISession, IBaseUser } from '@stratego/common';
+import { ISession, UserPayloadType, IUser } from '@stratego/common';
+import { createUser } from '@/shared/utils';
 
-export class Session implements ISession{
+export class Session implements ISession {
     readonly id: string;
     ownerId: string;
-    users: User[];
+    users: IUser[] = [];
 
     constructor(id: string, creatorId: string) {
         this.id = id;
         this.ownerId = creatorId;
-        this.users = [new User(creatorId)];
+        this.users.push(createUser(creatorId));
     }
 
-    updateUser(userId: string, payload: IBaseUser) {
-        const user = this.users.find(({ id }) => id === userId);
+    updateUser(userId: string, payload: UserPayloadType) {
+        const userIndex = this.users.findIndex(({ id }) => id === userId);
 
-        if (!user) {
+        if (userIndex < 0) {
             throw new Error(`Required user wasn't found`);
         }
 
-        user.update(payload);
+        const user = this.users[userIndex];
+        let key: keyof UserPayloadType;
+
+        for (key in payload) {
+            // idk wtf is that, but it works: https://stackoverflow.com/a/77134454
+            user[key] = payload[key] as never;
+        }
+
+        this.users[userIndex] = user;
 
         return user;
     }

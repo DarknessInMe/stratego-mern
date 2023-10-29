@@ -1,11 +1,12 @@
 import { AxiosInstance } from 'axios';
 import { BaseRoute } from './BaseRoute';
-import { IRoomCreate, IRoomJoin, IRoomUpdatePlayer, ISession, IUserEntity } from '@stratego/common';
-
-interface IJoinRoomResponse {
-    session: ISession;
-    user: IUserEntity;
-}
+import { 
+    IRoomCreate, 
+    IRoomJoin, 
+    IRoomUpdatePlayer, 
+    ISession, 
+    IJoinRoomResponse,
+} from '@stratego/common';
 
 export class RoomRoute extends BaseRoute {
     constructor(axios: AxiosInstance) {
