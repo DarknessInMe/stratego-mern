@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Home } from 'pages/Home';
 import { Game } from 'pages/Game';
 import { Room } from 'pages/Room';
+import { Join } from 'pages/Join';
 import { NotFound } from 'pages/NotFound';
 import { SessionProvider } from 'context/SessionContext';
 import { ROUTES } from 'router';
@@ -16,8 +17,9 @@ const Root: React.FC = () => (
         <DndProvider backend={HTML5Backend}>
             <BrowserRouter>
                 <Routes>
-                    <Route path={ROUTES.HOME} element={<Home />} />
+                    <Route path={ROUTES.HOME} index element={<Home />} />
                     <Route path={ROUTES.ROOM} element={<Room />}/>
+                    <Route path={ROUTES.JOIN} element={<Join />}/>
                     <Route path={ROUTES.GAME} element={<Game />}/>
                     <Route path={ROUTES.NOT_FOUND} element={<NotFound />}/>
                 </Routes>

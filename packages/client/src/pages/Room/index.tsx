@@ -8,8 +8,12 @@ export const Room = memo(() => {
     const { session } = useSessionContext();
     const link = `${window.origin}/join/${session?.id}`;
 
-    const onCopy = () => {
+    const copyLink = () => {
         navigator.clipboard.writeText(link);
+    };
+
+    const copySessionId = () => {
+        navigator.clipboard.writeText(session?.id);
     };
 
     if (!session) {
@@ -20,17 +24,32 @@ export const Room = memo(() => {
         <div className='page'>
             <div className='room-page'>
                 <section className='room-page__link-section'>
-                    <p>Invite link</p>
-                    <input 
-                        disabled
-                        value={link}
-                        className='room-page__link-input'
-                    />
-                    <button
-                        onClick={onCopy}
-                    >
-                        Copy
-                    </button>
+                    <div>
+                        <p>Invite link</p>
+                        <input 
+                            disabled
+                            value={link}
+                            className='room-page__link-input'
+                        />
+                        <button
+                            onClick={copyLink}
+                        >
+                            Copy
+                        </button>
+                    </div>
+                    <div>
+                        <p>Session id</p>
+                        <input 
+                            disabled
+                            value={session?.id}
+                            className='room-page__link-input'
+                        />
+                        <button
+                            onClick={copySessionId}
+                        >
+                            Copy
+                        </button>
+                    </div>
                 </section>
                 <section className='room-page__users-section'>
                     {session.users.map((user, index) => (
