@@ -7,6 +7,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 const config = {
 	mode: isProd ? 'production' : 'development',
+	devtool: isProd ? false : 'eval-cheap-module-source-map',
 	entry: {
 		index: './src/index.tsx',
 	},

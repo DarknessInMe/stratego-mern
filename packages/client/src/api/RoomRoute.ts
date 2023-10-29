@@ -6,6 +6,7 @@ import {
     IRoomUpdatePlayer, 
     ISession, 
     IJoinRoomResponse,
+    IUser,
 } from '@stratego/common';
 
 export class RoomRoute extends BaseRoute {
@@ -22,6 +23,6 @@ export class RoomRoute extends BaseRoute {
     }
 
     async updatePlayer(body: IRoomUpdatePlayer) {
-        return await this.axios.put(this.getEndpoint('player'), body);
+        return await this.axios.put<IUser>(this.getEndpoint('player'), body);
     }
 }

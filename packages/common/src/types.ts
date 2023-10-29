@@ -1,3 +1,3 @@
 import { IUser } from "./interfaces";
 
-export type UserPayloadType = Omit<IUser, 'id'>
+export type UserPayloadType = Partial<Omit<IUser, 'id'>>

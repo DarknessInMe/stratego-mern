@@ -3,9 +3,11 @@ import clsx from 'clsx';
 import { useSessionContext } from 'context/SessionContext';
 import { Navigate } from 'react-router-dom';
 import { ROUTES } from 'router';
+import { useControllers } from 'hooks/useControllers';
 
 export const Room = memo(() => {
-    const { session } = useSessionContext();
+    const { session, currentUser } = useSessionContext();
+    const { onToggleStatus } = useControllers();
     const link = `${window.origin}/join/${session?.id}`;
 
     const copyLink = () => {
@@ -66,7 +68,13 @@ export const Room = memo(() => {
                             >
                                 {user.isReady ? 'Ready' : 'Not ready'} 
                             </span>
-                            <button>{user.isReady ? 'Cancel' : 'Get ready'}</button>
+                            {currentUser?.id === user.id && (
+                                <button
+                                    onClick={onToggleStatus}
+                                >
+                                    {user.isReady ? 'Cancel' : 'Get ready'}
+                                </button>
+                            )}
                         </div>
                     ))}
                 </section>

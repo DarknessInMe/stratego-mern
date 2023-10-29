@@ -1,5 +1,5 @@
 import { EnvironmentEnum, PieceNameEnum } from './enums';
-import { TeamsEnum, ISession } from '@stratego/common';
+import { TeamsEnum, ISession, IUser } from '@stratego/common';
 import { 
     BoardFieldType, 
     CoordinatesType, 
@@ -54,7 +54,9 @@ export interface IRootContextValue extends IRootState {
 
 export interface ISessionContextValue {
     session: ISession | null,
-    setSession: ReactSetStateType<ISession | null>
+    setSession: ReactSetStateType<ISession | null>,
+    currentUser: IUser,
+    updateUserInSession: (updatedUser: IUser) => void,
 }
 
 export interface IBankToBoardDragObject {

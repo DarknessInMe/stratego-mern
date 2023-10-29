@@ -19,7 +19,7 @@ export const Home = () => {
                     <h2>Join to existing game room</h2>
                     <div>
                         <input ref={inputRef}/>
-                        <button onClick={() => onJoin(inputRef.current)}>Join</button>
+                        <button onClick={() => onJoin(inputRef.current.value)}>Join</button>
                     </div>
                 </section>
             </div>

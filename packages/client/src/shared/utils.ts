@@ -1,6 +1,7 @@
 import { PieceNameEnum } from 'shared/enums';
-import { PIECES_SETUP } from 'shared/constants';
+import { PIECES_SETUP, SESSION_STORAGE_KEYS } from 'shared/constants';
 import { RegularPiece, StaticPiece, ScoutPiece } from 'core/Pieces';
+import { v4 as uuidv4 } from 'uuid';
 
 export const generateInitSetup = (setup: typeof PIECES_SETUP): PieceNameEnum[] => {
     const result: PieceNameEnum[] = [];
@@ -26,4 +27,18 @@ export const piecePicker = (rankName: PieceNameEnum): typeof StaticPiece | typeo
         default:
             return RegularPiece;
     }
+};
+
+export const getUserId = () => {
+    let userId = sessionStorage.getItem(SESSION_STORAGE_KEYS.USER_ID);
+
+    if (userId) {
+        return userId;
+    }
+
+    userId = uuidv4();
+
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.USER_ID, userId);
+
+    return userId;
 };
