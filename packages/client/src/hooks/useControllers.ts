@@ -67,9 +67,15 @@ export const useControllers = () => {
         }
     };
 
+    const onLeaveRoom = () => {
+        socket.disconnect();
+        setSession(null);
+    };
+
     return {
         onCreate,
         onJoin,
         onToggleStatus,
+        onLeaveRoom,
     };
 };

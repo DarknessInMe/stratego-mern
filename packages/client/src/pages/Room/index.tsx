@@ -7,7 +7,7 @@ import { useControllers } from 'hooks/useControllers';
 
 export const Room = memo(() => {
     const { session, currentUser } = useSessionContext();
-    const { onToggleStatus } = useControllers();
+    const { onToggleStatus, onLeaveRoom } = useControllers();
     const link = `${window.origin}/join/${session?.id}`;
 
     const copyLink = () => {
@@ -53,9 +53,11 @@ export const Room = memo(() => {
                         </button>
                     </div>
                 </section>
+                <button onClick={onLeaveRoom}>Leave room</button>
                 <section className='room-page__users-section'>
                     {session.users.map((user, index) => {
                         const isCurrentUser = currentUser?.id === user.id;
+                        const isOwner = user.id === session.ownerId;
 
                         return (
                             <div
@@ -79,8 +81,11 @@ export const Room = memo(() => {
                                         {user.isReady ? 'Cancel' : 'Get ready'}
                                     </button>
                                 )}
+                                {!isOwner && (
+                                    <button>x</button>
+                                )}
                             </div>
-                        )
+                        );
                     })}
                 </section>
             </div>
