@@ -87,11 +87,17 @@ export const useControllers = () => {
         }
     };
 
+    const onStartGame = () => {
+        socket.emit(BACKEND_SOCKET_EVENTS.START_GAME, session.id);
+        history(ROUTES.GAME);
+    };
+
     return {
         onCreate,
         onJoin,
         onToggleStatus,
         onLeaveRoom,
         onKickUser,
+        onStartGame,
     };
 };

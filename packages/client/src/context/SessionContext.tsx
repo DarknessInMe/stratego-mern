@@ -10,12 +10,15 @@ import { IContextProps, ISessionContextValue } from 'shared/interfaces';
 import { socket } from 'socket';
 import { FRONTEND_SOCKET_EVENTS } from '@stratego/common';
 import { getUserId } from 'shared/utils';
+import { ROUTES } from 'router';
+import { useNavigate } from 'react-router-dom';
 
 const SessionContext = createContext<ISessionContextValue>(null);
 
 export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
     const [session, setSession] = useState<ISession | null>(null);
-
+    const history = useNavigate();
+    
     const currentUser = useMemo(() => {
         if (!session) {
             return null;
@@ -29,6 +32,10 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
             ...prevSession,
             users: [...prevSession.users, user]
         }));
+    };
+
+    const handleGameStarting = () => {
+        history(ROUTES.GAME);  
     };
 
     const removeUser = (userId: string) => {
@@ -83,12 +90,14 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
         socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updateUserInSession);
         socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, handleUserLeaving);
         socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_KICK, onUserKick);
+        socket.on(FRONTEND_SOCKET_EVENTS.ON_GAME_STARTED, handleGameStarting);
 
         return () => {
             socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, handleUserJoining);
             socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updateUserInSession);
             socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, handleUserLeaving);
             socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_KICK, onUserKick);
+            socket.off(FRONTEND_SOCKET_EVENTS.ON_GAME_STARTED, handleGameStarting);
         };
     }, []);
 

@@ -60,6 +60,10 @@ export class SocketManager {
                 socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_KICK);
             });
 
+            socket.on(BACKEND_SOCKET_EVENTS.START_GAME, (sessionId: string) => {
+                socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_GAME_STARTED);
+            });
+
             socket.on('disconnect', () => {
                 const socketData = sessionsManager.sockets.get(socket.id);
 

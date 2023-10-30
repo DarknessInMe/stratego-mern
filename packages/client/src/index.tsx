@@ -13,9 +13,9 @@ import { SessionProvider } from 'context/SessionContext';
 import { ROUTES } from 'router';
 
 const Root: React.FC = () => (
-    <SessionProvider>
-        <DndProvider backend={HTML5Backend}>
-            <BrowserRouter>
+    <DndProvider backend={HTML5Backend}>
+        <BrowserRouter>
+            <SessionProvider>
                 <Routes>
                     <Route path={ROUTES.HOME} index element={<Home />} />
                     <Route path={ROUTES.ROOM} element={<Room />}/>
@@ -23,9 +23,9 @@ const Root: React.FC = () => (
                     <Route path={ROUTES.GAME} element={<Game />}/>
                     <Route path={ROUTES.NOT_FOUND} element={<NotFound />}/>
                 </Routes>
-            </BrowserRouter>
-        </DndProvider>
-    </SessionProvider>
+            </SessionProvider>
+        </BrowserRouter>
+    </DndProvider>
 );
 
 render(<Root />, document.getElementById('root'));

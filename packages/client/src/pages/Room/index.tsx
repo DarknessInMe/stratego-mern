@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import clsx from 'clsx';
 import { useSessionContext } from 'context/SessionContext';
 import { Navigate } from 'react-router-dom';
@@ -7,10 +7,18 @@ import { useControllers } from 'hooks/useControllers';
 
 export const Room = memo(() => {
     const { session, currentUser } = useSessionContext();
-    const { onToggleStatus, onLeaveRoom, onKickUser } = useControllers();
+    const { onToggleStatus, onLeaveRoom, onKickUser, onStartGame } = useControllers();
 
     const link = `${window.origin}/join/${session?.id}`;
     const isOwner = currentUser?.id === session?.ownerId;
+
+    const isReadyToStart = useMemo(() => {
+        if (!session || session?.users?.length !== 2) {
+            return false;
+        }
+
+        return session.users.every(({ isReady }) => isReady);
+    }, [session]);
 
     const copyLink = () => {
         navigator.clipboard.writeText(link);
@@ -55,7 +63,17 @@ export const Room = memo(() => {
                         </button>
                     </div>
                 </section>
-                <button onClick={onLeaveRoom}>Leave room</button>
+                <section>
+                    <button onClick={onLeaveRoom}>Leave room</button>
+                    {isOwner && (
+                        <button 
+                            disabled={!isReadyToStart}
+                            onClick={onStartGame}
+                        >
+                            Start game
+                        </button>
+                    )}
+                </section>
                 <section className='room-page__users-section'>
                     {session.users.map((user, index) => {
                         const isCurrentUser = currentUser?.id === user.id;
