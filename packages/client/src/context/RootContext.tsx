@@ -10,10 +10,19 @@ import { IContextProps, IRootContextValue, IRootState, ISelectionState } from 's
 import { PIECES_SETUP } from 'shared/constants';
 import { GameStages } from 'shared/enums';
 import { TeamsEnum } from '@stratego/common';
+import { useSessionContext } from './SessionContext';
 
 const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 
+/**
+ * TODO:
+ * 1. Get rid of GameCore class, all it's properties (except Board, which must kept in ref) move to React states
+ * 2. Unite all states into single useReducer state
+ * 3. Get rid of piece registering in `setStaticOpponent` method 
+ * 4. Rename RootProvider to GameProvider
+ */
 export const RootProvider: React.FC<IContextProps> = ({ children }) => {
+    const { currentUser } = useSessionContext();
     const [bank, setBank] = useState<typeof PIECES_SETUP>(PIECES_SETUP);
     const [selection, setSelection] = useState<ISelectionState>({
         selectedPieceId: null,
@@ -23,7 +32,7 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
         field: [],
         mode: GameStages.SET_PIECES,
     });
-	const gameCoreRef = useRef(new GameCore(setRootState));
+	const gameCoreRef = useRef(new GameCore(setRootState, currentUser.team));
     const { board, currentPlayer } = gameCoreRef.current;
     const isReversedPlayer = currentPlayer.team === TeamsEnum.BLUE_TEAM;
     

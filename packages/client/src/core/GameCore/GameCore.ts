@@ -10,13 +10,15 @@ import { TeamsEnum } from '@stratego/common';
 export class GameCore {
     board: Board | null = null;
     mode: GameStages = GameStages.SET_PIECES;
-    currentPlayer: Player = new Player(TeamsEnum.RED_TEAM);
-    opponentPlayer: Player = new Player(TeamsEnum.BLUE_TEAM);
+    currentPlayer: Player;
+    opponentPlayer: Player;
 
     private readonly updateExternalState: ReactSetStateType<IRootState>;
     
-    constructor(updateExternalState: ReactSetStateType<IRootState>) {
+    constructor(updateExternalState: ReactSetStateType<IRootState>, currentPlayerTeam: TeamsEnum) {
         this.updateExternalState = updateExternalState;
+        this.currentPlayer = new Player(currentPlayerTeam);
+        this.opponentPlayer = new Player(currentPlayerTeam === TeamsEnum.RED_TEAM ? TeamsEnum.BLUE_TEAM : TeamsEnum.RED_TEAM);
     }
 
     private setStaticOpponent() {
