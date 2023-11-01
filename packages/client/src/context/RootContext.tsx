@@ -7,10 +7,10 @@ import React, {
 } from 'react';
 import { GameCore } from 'core/GameCore';
 import { IContextProps, IRootContextValue, IRootState, ISelectionState } from 'shared/interfaces';
-import { PIECES_SETUP } from 'shared/constants';
 import { GameStages } from 'shared/enums';
 import { TeamsEnum } from '@stratego/common';
 import { useSessionContext } from './SessionContext';
+import { useGameState } from 'store';
 
 const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 
@@ -23,7 +23,7 @@ const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
  */
 export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     const { currentUser } = useSessionContext();
-    const [bank, setBank] = useState<typeof PIECES_SETUP>(PIECES_SETUP);
+    const [gameState, stateControllers] = useGameState();
     const [selection, setSelection] = useState<ISelectionState>({
         selectedPieceId: null,
         attackedPieceId: null,
@@ -62,12 +62,12 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     return (
         <RootContext.Provider value={{
             ...rootState,
-            bank,
             selection,
             setSelection,
-            setBank,
             gameCoreRef,
             isReversedPlayer,
+            gameState,
+            stateControllers,
         }}>
             {children}
         </RootContext.Provider>

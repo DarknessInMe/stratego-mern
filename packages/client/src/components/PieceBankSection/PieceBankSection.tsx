@@ -12,16 +12,14 @@ interface IDrop {
 }
 
 export const PieceBankSection: React.FC = () => {
-    const { bank, setBank, gameCoreRef, mode } = useRootContext();
+    const { gameState, stateControllers, gameCoreRef, mode } = useRootContext();
+    const { addToBank } = stateControllers;
 
     const isGameInProcess = mode === GameStages.GAME_IN_PROCESS;
     const [_, dropRef] = useDrop(() => ({
         accept: DragTypesEnum.PIECE_FROM_BOARD,
         drop: ({ rankName, coordinates }: IDrop) => {
-            setBank((prevBank) => ({
-                ...prevBank,
-                [rankName]: prevBank[rankName] + 1,
-            }));
+            addToBank(rankName);
 
             if (coordinates) {
                 const { board } = gameCoreRef.current;
@@ -33,8 +31,8 @@ export const PieceBankSection: React.FC = () => {
       }), [mode]);
 
     const bankArray = useMemo(() => {
-        return generateInitSetup(bank);
-    }, [bank]);
+        return generateInitSetup(gameState.bank);
+    }, [gameState.bank]);
 
     const toggleMode = () => {
         gameCoreRef.current.toggleMode();

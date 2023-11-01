@@ -10,6 +10,7 @@ import { GameCore } from 'core/GameCore';
 import { PIECES_SETUP } from 'shared/constants';
 import { GameStages } from 'shared/enums';
 import { ConnectableElement } from 'react-dnd';
+import { ControllersType, IGameState } from 'store';
 
 export interface IRootState {
     field: BoardFieldType,
@@ -43,13 +44,18 @@ export interface ISelectionState {
     attackedPieceId: string | null,
 }
 
+export interface IPlayersState {
+    currentPlayer: IPlayer,
+    opponentPlayer: IPlayer,
+}
+
 export interface IRootContextValue extends IRootState {
-    bank: typeof PIECES_SETUP,
     selection: ISelectionState,
-    setBank: SetBankType,
     setSelection: ReactSetStateType<ISelectionState>,
     gameCoreRef: React.MutableRefObject<GameCore>,
     isReversedPlayer: boolean,
+    gameState: IGameState,
+    stateControllers: ControllersType,
 }
 
 export interface ISessionContextValue {
