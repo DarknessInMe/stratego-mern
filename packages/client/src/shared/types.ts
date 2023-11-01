@@ -17,3 +17,5 @@ export type CanMoveBoardPieceTo = (movedFrom: CoordinatesType, moveTo: Coordinat
 export type OnMoveByClick = (cellPosition: CoordinatesType) => void;
 
 export type ReactComponentWithRefType<Props, Ref extends HTMLElement = HTMLDivElement> = ReturnType<typeof forwardRef<Ref, Props>>;
+
+export type NullableType<T> = T | null;

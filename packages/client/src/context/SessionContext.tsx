@@ -8,7 +8,7 @@ import React, {
 import { ISession, IUser } from '@stratego/common';
 import { IContextProps, ISessionContextValue } from 'shared/interfaces';
 import { socket } from 'socket';
-import { FRONTEND_SOCKET_EVENTS } from '@stratego/common';
+import { RESPONSE_EVENTS } from '@stratego/common';
 import { getUserId } from 'shared/utils';
 import { ROUTES } from 'router';
 import { useNavigate } from 'react-router-dom';
@@ -38,24 +38,11 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
         history(ROUTES.GAME);  
     };
 
-    const removeUser = (userId: string) => {
-        setSession((prevSession) => {
-            if (!prevSession) {
-                return prevSession;
-            }
-
-            return {
-                ...prevSession,
-                users: prevSession.users.filter(({ id }) => id !== userId)
-            };
-        });
-    };
-
-    const onUserKick = () => {
+    const handleUserKicking = () => {
         setSession(null);
     };
 
-    const updateUserInSession = (updatedUser: IUser) => {
+    const handleUserUpdating = (updatedUser: IUser) => {
         setSession((prevSession) => {
             if (!prevSession) {
                 return prevSession;
@@ -86,18 +73,18 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
     };
 
     useEffect(() => {
-        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, handleUserJoining);
-        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updateUserInSession);
-        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, handleUserLeaving);
-        socket.on(FRONTEND_SOCKET_EVENTS.ON_USER_KICK, onUserKick);
-        socket.on(FRONTEND_SOCKET_EVENTS.ON_GAME_STARTED, handleGameStarting);
+        socket.root.on(RESPONSE_EVENTS.ON_USER_JOIN, handleUserJoining);
+        socket.root.on(RESPONSE_EVENTS.ON_USER_UPDATE, handleUserUpdating);
+        socket.root.on(RESPONSE_EVENTS.ON_USER_LEAVE, handleUserLeaving);
+        socket.root.on(RESPONSE_EVENTS.ON_USER_KICK, handleUserKicking);
+        socket.root.on(RESPONSE_EVENTS.ON_GAME_STARTED, handleGameStarting);
 
         return () => {
-            socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, handleUserJoining);
-            socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updateUserInSession);
-            socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, handleUserLeaving);
-            socket.off(FRONTEND_SOCKET_EVENTS.ON_USER_KICK, onUserKick);
-            socket.off(FRONTEND_SOCKET_EVENTS.ON_GAME_STARTED, handleGameStarting);
+            socket.root.off(RESPONSE_EVENTS.ON_USER_JOIN, handleUserJoining);
+            socket.root.off(RESPONSE_EVENTS.ON_USER_UPDATE, handleUserUpdating);
+            socket.root.off(RESPONSE_EVENTS.ON_USER_LEAVE, handleUserLeaving);
+            socket.root.off(RESPONSE_EVENTS.ON_USER_KICK, handleUserKicking);
+            socket.root.off(RESPONSE_EVENTS.ON_GAME_STARTED, handleGameStarting);
         };
     }, []);
 
@@ -106,8 +93,7 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
             session,
             setSession,
             currentUser,
-            updateUserInSession,
-            removeUser,
+            handleUserUpdating,
         }}>
             {children}
         </SessionContext.Provider>

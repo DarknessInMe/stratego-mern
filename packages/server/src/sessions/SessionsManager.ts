@@ -1,12 +1,10 @@
 import { Session } from './Session';
-import { IUser, TeamsEnum, UserPayloadType } from '@stratego/common';
+import { TeamsEnum, UserPayloadType } from '@stratego/common';
 import { createUser } from '@/shared/utils';
-import { ISocketStore } from '@/shared/interfaces';
 
 export class SessionsManager {
     private static instance: SessionsManager;
     sessions = new Map<string, Session>();
-    sockets = new Map<string, ISocketStore>();
 
     static getInstance() {
         if (!SessionsManager.instance) {
@@ -39,7 +37,7 @@ export class SessionsManager {
 
         const [opponentUser] = session.users;
         const teamToJoin = opponentUser.team === TeamsEnum.RED_TEAM ? TeamsEnum.BLUE_TEAM : TeamsEnum.RED_TEAM;
-        const newUser = createUser(newUserId, teamToJoin)
+        const newUser = createUser(newUserId, teamToJoin);
 
         session.users.push(newUser);
 
@@ -76,7 +74,6 @@ export class SessionsManager {
     handleLeave(sessionId: string, userId: string) {
         const session = this.sessions.get(sessionId);
         if (!session) {
-            console.log(sessionId, userId);
             throw new Error(`Session with ${sessionId} id doesn't exist`);
         }
 

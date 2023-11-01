@@ -1,17 +1,14 @@
 import { createServer } from 'http';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { instrument } from '@socket.io/admin-ui';
-import { BACKEND_SOCKET_EVENTS, FRONTEND_SOCKET_EVENTS, IUser } from '@stratego/common';
+import { REQUEST_EVENTS, RESPONSE_EVENTS, UserPayloadType } from '@stratego/common';
 import { SessionsManager } from '@/sessions/SessionsManager';
+import { REQ_HEADERS } from '@stratego/common';
 
 const sessionsManager = SessionsManager.getInstance();
 
 export class SocketManager {
     io: Server | null = null;
-
-    private getRoomId(id: string) {
-        return `room:${id}`;
-    }
 
     static instance: SocketManager;
 
@@ -21,6 +18,13 @@ export class SocketManager {
         }
 
         return this.instance;
+    }
+
+    private extractHeaders(socket: Socket) {
+        return {
+            userId: socket.handshake.auth[REQ_HEADERS.USER_ID],
+            sessionId: socket.handshake.auth[REQ_HEADERS.SESSION_ID],
+        };
     }
 
     init(server: ReturnType<typeof createServer>) {
@@ -37,50 +41,85 @@ export class SocketManager {
         });
 
         this.io.on('connection', (socket) => {
-            socket.on(BACKEND_SOCKET_EVENTS.CREATE_ROOM, (sessionId: string, userId: string) => {
-                socket.join(this.getRoomId(sessionId));
-                sessionsManager.sockets.set(socket.id, { sessionId, userId });
+            socket.on(REQUEST_EVENTS.CREATE_ROOM, (respond) => {
+                try {
+                    const { sessionId } = this.extractHeaders(socket);
+                    const createdSession = sessionsManager.createSession(sessionId, socket.handshake.auth.userId);
+    
+                    socket.join(sessionId);
+                    respond(createdSession);
+                } catch {
+                    respond(null);
+                }
             });
 
-            socket.on(BACKEND_SOCKET_EVENTS.UPDATE_USER, (sessionId: string, updatedUser: IUser) => {
-                socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_UPDATE, updatedUser);
+            socket.on(REQUEST_EVENTS.UPDATE_USER, (updatePayload: UserPayloadType, respond) => {
+                try {
+                    const { sessionId, userId } = this.extractHeaders(socket);
+                    const updatedUser = sessionsManager.updateUser(sessionId, userId, updatePayload);
+
+                    socket.broadcast.to(sessionId).emit(RESPONSE_EVENTS.ON_USER_UPDATE, updatedUser);
+                    respond(updatedUser);
+                } catch {
+                    respond(null);
+                }
             });
 
-            socket.on(BACKEND_SOCKET_EVENTS.JOIN_USER, (sessionId: string, newUser: IUser) => {
-                socket.join(this.getRoomId(sessionId));
-                sessionsManager.sockets.set(socket.id, {
-                    sessionId,
-                    userId: newUser.id,
-                });
-
-                socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_JOIN, newUser);
+            socket.on(REQUEST_EVENTS.JOIN_USER, (respond) => {
+                try {
+                    const { sessionId, userId } = this.extractHeaders(socket);
+                    const { session, user } = sessionsManager.join(sessionId, userId);
+                    
+                    socket.join(sessionId);
+                    socket.to(sessionId).emit(RESPONSE_EVENTS.ON_USER_JOIN, user);
+                    respond(session);
+                } catch {
+                    respond(null);
+                }
             });
 
-            socket.on(BACKEND_SOCKET_EVENTS.KICK_USER, (sessionId: string) => {
-                socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_KICK);
+            socket.on(REQUEST_EVENTS.KICK_USER, (respond) => {
+                try {
+                    const { sessionId, userId } = this.extractHeaders(socket);
+                    const session = sessionsManager.sessions.get(sessionId);
+    
+                    if (session?.ownerId !== userId) {
+                        return respond(false);
+                    }
+    
+                    socket.to(sessionId).emit(RESPONSE_EVENTS.ON_USER_KICK);
+                    respond(true);
+                } catch {
+                    respond(null);
+                }
             });
 
-            socket.on(BACKEND_SOCKET_EVENTS.START_GAME, (sessionId: string) => {
-                socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_GAME_STARTED);
+            socket.on(REQUEST_EVENTS.START_GAME, (respond) => {
+                try {
+                    const { sessionId, userId } = this.extractHeaders(socket);
+                    const session = sessionsManager.sessions.get(sessionId);
+    
+                    if (session?.ownerId !== userId) {
+                        return respond(false);
+                    }
+    
+                    socket.to(sessionId).emit(RESPONSE_EVENTS.ON_GAME_STARTED);
+                    respond(true);
+                } catch {
+                    respond(null);
+                }
             });
 
             socket.on('disconnect', () => {
-                const socketData = sessionsManager.sockets.get(socket.id);
-
-                if (!socketData) {
-                    return;
-                }
-
-                const { sessionId, userId } = socketData;
+                const { sessionId, userId } = this.extractHeaders(socket);
 
                 try {
-                    sessionsManager.sockets.delete(socket.id);
                     sessionsManager.handleLeave(sessionId, userId);
                 } catch {
                     //
                 } finally {
-                    socket.to(this.getRoomId(sessionId)).emit(FRONTEND_SOCKET_EVENTS.ON_USER_LEAVE, userId);
-                    socket.leave(this.getRoomId(sessionId));
+                    socket.to(sessionId).emit(RESPONSE_EVENTS.ON_USER_LEAVE, userId);
+                    socket.leave(sessionId);
                 }
             });
         });

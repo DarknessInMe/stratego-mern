@@ -12,25 +12,3 @@ export interface ISession {
     ownerId: string,
     users: IUser[],
 }
-
-export interface IUserOperation {
-    roomId: string, 
-    userId: string,
-}
-
-export interface IRoomCreate {
-    creatorId: string,
-}
-
-export interface IRoomJoin extends IUserOperation {}
-
-export interface IRoomKick extends IUserOperation {}
-
-export interface IJoinRoomResponse {
-    session: ISession;
-    user: IUser;
-}
-
-export interface IRoomUpdatePlayer extends IUserOperation {
-    payload: UserPayloadType,
-}
