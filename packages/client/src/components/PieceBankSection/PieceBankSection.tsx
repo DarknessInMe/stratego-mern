@@ -14,19 +14,19 @@ interface IDrop {
 }
 
 export const PieceBankSection: React.FC = () => {
-    const { gameState, gameDispatch, gameCoreRef } = useRootContext();
+    const { gameState, gameDispatch, boardRef } = useRootContext();
     const { addToBank } = useBankControllers(gameDispatch);
     const { toggleMode } = useGameCoreControllers(gameDispatch);
 
     const isGameInProcess = gameState.mode === GameStages.GAME_IN_PROCESS;
+    const board = boardRef.current;
+
     const [_, dropRef] = useDrop(() => ({
         accept: DragTypesEnum.PIECE_FROM_BOARD,
         drop: ({ rankName, coordinates }: IDrop) => {
             addToBank(rankName);
 
             if (coordinates) {
-                const { board } = gameCoreRef.current;
-
                 board.destroyPieces([coordinates]);
             }
         },

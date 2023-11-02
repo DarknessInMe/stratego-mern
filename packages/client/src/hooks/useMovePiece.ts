@@ -4,9 +4,9 @@ import { CanMoveBoardPieceTo, HandlePieceMovingType, OnMoveByClick } from 'share
 import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 
 export const useMovePiece = () => {
-    const { gameCoreRef, gameDispatch, gameState } = useRootContext();
+    const { boardRef, gameDispatch, gameState } = useRootContext();
     const { dropSelection, attackPiece } = useSelectionControllers(gameDispatch);
-    const { board } = gameCoreRef.current;
+    const board = boardRef.current;
 
     const handlePieceMoving = useCallback<HandlePieceMovingType>((pieceQuery, newPosition) => {
         const targetCell = board.getCell(newPosition.x, newPosition.y);

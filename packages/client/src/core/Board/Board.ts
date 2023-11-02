@@ -3,33 +3,22 @@ import { ICell } from 'shared/interfaces';
 import { EnvironmentEnum, FightResultEnum } from 'shared/enums';
 import { WATER_POSITION } from './constants';
 import { BasePiece } from 'core/Pieces';
-import { IRootState } from 'shared/interfaces';
-import { ReactSetStateType } from 'shared/types';
-import clone from 'lodash/clone';
+
+type UpdateCoreStateType = (cells: ICell[]) => void;
 
 export class Board {
     field: BoardFieldType | null = null;
     pieces = new Map<string, BasePiece>();
 
-    readonly updateCoreState: ReactSetStateType<IRootState>;
+    readonly updateCoreState: UpdateCoreStateType;
     
-    constructor(updateCoreState: ReactSetStateType<IRootState>) {
+    constructor(updateCoreState: UpdateCoreStateType) {
         this.updateCoreState = updateCoreState;
     }
 
-    private updateCells(cells: ICell[]) {
-        this.updateCoreState((prevState) => {
-            const fieldCopy = clone(prevState.field);
-
-            cells.forEach(cell => {
-                fieldCopy[cell.y][cell.x] = cell;
-            });
-
-            return {
-                ...prevState,
-                field: fieldCopy
-            };
-        });
+    init(callback: (field: BoardFieldType) => void) {
+        this.initField();
+        callback(this.field);
     }
 
     initField() {
@@ -78,7 +67,7 @@ export class Board {
         const cell = this.getCell(x, y);
 
         cell.pieceId = piece.id;
-        this.updateCells([cell]);
+        this.updateCoreState([cell]);
     }
 
     destroyPieces(cellsCoordinates: CoordinatesType[]) {
@@ -92,7 +81,7 @@ export class Board {
             cellsToUpdate.push(cell);
         });
 
-        this.updateCells(cellsToUpdate);
+        this.updateCoreState(cellsToUpdate);
     }
 
     addPieceTo(piece: BasePiece, x: number, y: number) {
@@ -120,7 +109,7 @@ export class Board {
         const removedFromCell = this.removePieceFrom(piece.x, piece.y);
         const addedToCell = this.addPieceTo(piece, newX, newY);
 
-        this.updateCells([removedFromCell, addedToCell]);
+        this.updateCoreState([removedFromCell, addedToCell]);
     }
 
     private getClosestPosition(attackerPosition: number, targetPosition: number) {

@@ -15,14 +15,14 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
     coordinates,
     className,
 }) => {
-    const { gameCoreRef, gameState } = useRootContext();
+    const { boardRef, gameState } = useRootContext();
     const pieceRef = useCellCoordinates(coordinates);
     const { isCellHighlighted, selectPiece } = useSelection();
     const { onMoveByClick } = useMovePiece();
 
-    const { board } = gameCoreRef.current;
     const isSelected = isCellHighlighted(coordinates);
-
+    const board = boardRef.current;
+    
     const [{ isDragging }, dragRef] = useDrag(() => ({
         type: DragTypesEnum.PIECE_FROM_BOARD,
         item: {

@@ -1,6 +1,8 @@
 import { PieceNameEnum } from 'shared/enums';
 import { ActionsEnum } from './enums';
 import { IGameState } from './interfaces';
+import { BoardFieldType } from 'shared/types';
+import { ICell } from 'shared/interfaces';
 
 export type ActionPatternTypes<T extends ActionsEnum, Y = void> = {
     type: T,
@@ -13,7 +15,9 @@ export type ActionType =
     ActionPatternTypes<ActionsEnum.DROP_SELECTION> |
     ActionPatternTypes<ActionsEnum.ATTACK_PIECE, string> |
     ActionPatternTypes<ActionsEnum.SELECT_PIECE, string> |
-    ActionPatternTypes<ActionsEnum.TOGGLE_MODE>
+    ActionPatternTypes<ActionsEnum.TOGGLE_MODE> |
+    ActionPatternTypes<ActionsEnum.SET_FIELD, BoardFieldType> |
+    ActionPatternTypes<ActionsEnum.UPDATE_CELLS, ICell[]>
 
 export type StrategyType = {
     [Property in keyof typeof ActionsEnum]: (payload?: any) => IGameState

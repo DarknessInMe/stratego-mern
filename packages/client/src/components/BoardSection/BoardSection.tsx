@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { GameStages } from 'shared/enums';
 
 export const BoardSection: React.FC = memo(() => {
-    const { field, gameState, isReversedPlayer } = useRootContext();
+    const { gameState, isReversedPlayer } = useRootContext();
     const isSetPiecesStage = gameState.mode === GameStages.SET_PIECES;
 
     return (
@@ -15,7 +15,7 @@ export const BoardSection: React.FC = memo(() => {
             isSetPiecesStage && 'screen__section_eclipsed'
         )}>
             <div className={clsx('board', isReversedPlayer && 'board_reversed')}>
-                {field.map((row, lineIndex) => (
+                {gameState.field.map((row, lineIndex) => (
                     <Fragment
                         key={`row-${lineIndex}`}
                     >

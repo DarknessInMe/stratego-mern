@@ -1,17 +1,12 @@
 import { EnvironmentEnum, PieceNameEnum } from './enums';
 import { TeamsEnum, ISession, IUser } from '@stratego/common';
 import { 
-    BoardFieldType, 
     CoordinatesType, 
     ReactSetStateType, 
 } from './types';
-import { GameCore } from 'core/GameCore';
 import { ConnectableElement } from 'react-dnd';
 import { GameStateDispatchType, IGameState } from 'store';
-
-export interface IRootState {
-    field: BoardFieldType,
-}
+import { Board } from 'core/Board';
 
 export interface ICell {
     x: number,
@@ -45,8 +40,8 @@ export interface ITeamsState {
     opponentPlayer: TeamsEnum,
 }
 
-export interface IRootContextValue extends IRootState {
-    gameCoreRef: React.MutableRefObject<GameCore>,
+export interface IRootContextValue {
+    boardRef: React.MutableRefObject<Board>,
     isReversedPlayer: boolean,
     gameState: IGameState,
     gameDispatch: GameStateDispatchType,

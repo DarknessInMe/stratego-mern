@@ -22,9 +22,9 @@ interface IDropStrategy {
 
 export const withSetPiecesDnD = (WrappedComponent: ReactComponentWithRefType<IDraggableCellProps>) => {
     const Component: React.FC<ICellComponentProps> = memo(({ cell }) => {
-        const { gameCoreRef, gameDispatch, gameState } = useRootContext();
+        const { gameDispatch, gameState, boardRef } = useRootContext();
         const { removeFromBank } = useBankControllers(gameDispatch);
-        const { board } = gameCoreRef.current;
+        const board = boardRef.current;
 
         const dropStrategy: IDropStrategy = {
             [DragTypesEnum.PIECE_FROM_BANK]: ({ rankName }: IBankToBoardItem) => {
@@ -61,7 +61,6 @@ export const withSetPiecesDnD = (WrappedComponent: ReactComponentWithRefType<IDr
                 return item;
             },
             canDrop: () => {
-                const { board } = gameCoreRef.current;
                 const targetCell = board.getCell(cell.x, cell.y);
                 const [top, bottom] = ALLOWED_SETUP_RANGES[gameState.teams.currentPlayer];
 

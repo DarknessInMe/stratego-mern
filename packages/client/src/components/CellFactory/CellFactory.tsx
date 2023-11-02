@@ -8,7 +8,7 @@ import { useRootContext } from 'context/RootContext';
 import clsx from 'clsx';
 
 export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
-    const { gameCoreRef, isReversedPlayer } = useRootContext();
+    const { boardRef, isReversedPlayer } = useRootContext();
 
     switch(cell.environment) {
         case EnvironmentEnum.WATER: {
@@ -19,8 +19,7 @@ export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
                 return <Land cell={cell} />;
             }
 
-            const { board } = gameCoreRef.current;
-            const piece = board.getPieceByCoordinates(cell.x, cell.y);
+            const piece = boardRef.current.getPieceByCoordinates(cell.x, cell.y);
             
             return (
                 <BoardPiece

@@ -5,4 +5,6 @@ export enum ActionsEnum {
     ATTACK_PIECE = 'ATTACK_PIECE',
     SELECT_PIECE = 'SELECT_PIECE',
     TOGGLE_MODE = 'TOGGLE_MODE',
+    UPDATE_CELLS = 'UPDATE_CELLS',
+    SET_FIELD = 'SET_FIELD',
 }

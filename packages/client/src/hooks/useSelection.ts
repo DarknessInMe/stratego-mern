@@ -5,9 +5,9 @@ import { BasePiece } from 'core/Pieces';
 import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 
 export const useSelection = () => {
-    const { gameState, gameDispatch, gameCoreRef } = useRootContext();
+    const { gameState, gameDispatch, boardRef } = useRootContext();
     const { selectPiece: markPieceAsSelected } = useSelectionControllers(gameDispatch);
-    const { board } = gameCoreRef.current;
+    const board = boardRef.current;
 
     const selectPiece = useCallback((piece: BasePiece) => {
         piece.initAvailablePath(board);
