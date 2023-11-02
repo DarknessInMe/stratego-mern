@@ -1,9 +1,9 @@
-import { useReducer, useCallback } from 'react';
+import { useReducer } from 'react';
 import { PIECES_SETUP } from 'shared/constants';
 import { GameStages, PieceNameEnum } from 'shared/enums';
-import { IGameState } from './interfaces';
-import { ActionType, StrategyType, ControllersType } from './types';
-import { ActionsEnum } from './enums';
+import { IGameState } from 'store/game/interfaces';
+import { ActionType, StrategyType } from 'store/game/types';
+import { ActionsEnum } from 'store/game/enums';
 
 const initState: IGameState = {
     bank: PIECES_SETUP,
@@ -46,24 +46,6 @@ const reducer = (state: IGameState, action: ActionType): IGameState => {
     return state;
 };
 
-export const useBankControllers = (dispatch: React.Dispatch<ActionType>) => {
-    const addToBank = useCallback((rankName: PieceNameEnum) => {
-        dispatch({ type: ActionsEnum.ADD_TO_BANK, payload: rankName });
-    }, []);
-
-    const removeFromBank = useCallback((rankName: PieceNameEnum) => {
-        dispatch({ type: ActionsEnum.REMOVE_FROM_BANK, payload: rankName });
-    }, []);
-
-    return {
-        addToBank,
-        removeFromBank,
-    };
-};
-
-export const useGameState = (): [IGameState, ControllersType] => {
-    const [state, dispatch] = useReducer(reducer, initState);
-    const bankControllers = useBankControllers(dispatch);
-
-    return [state, bankControllers];
+export const useGameState = () => {
+    return useReducer(reducer, initState);
 };

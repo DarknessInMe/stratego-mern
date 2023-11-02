@@ -23,7 +23,7 @@ const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
  */
 export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     const { currentUser } = useSessionContext();
-    const [gameState, stateControllers] = useGameState();
+    const [gameState, gameDispatch] = useGameState();
     const [selection, setSelection] = useState<ISelectionState>({
         selectedPieceId: null,
         attackedPieceId: null,
@@ -67,7 +67,7 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
             gameCoreRef,
             isReversedPlayer,
             gameState,
-            stateControllers,
+            gameDispatch,
         }}>
             {children}
         </RootContext.Provider>

@@ -5,6 +5,7 @@ import { generateInitSetup } from 'shared/utils';
 import { useDrop } from 'react-dnd';
 import { DragTypesEnum, GameStages, PieceNameEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
+import { useBankControllers } from 'store';
 
 interface IDrop {
     rankName: PieceNameEnum,
@@ -12,8 +13,8 @@ interface IDrop {
 }
 
 export const PieceBankSection: React.FC = () => {
-    const { gameState, stateControllers, gameCoreRef, mode } = useRootContext();
-    const { addToBank } = stateControllers;
+    const { gameState, gameDispatch, gameCoreRef, mode } = useRootContext();
+    const { addToBank } = useBankControllers(gameDispatch);
 
     const isGameInProcess = mode === GameStages.GAME_IN_PROCESS;
     const [_, dropRef] = useDrop(() => ({

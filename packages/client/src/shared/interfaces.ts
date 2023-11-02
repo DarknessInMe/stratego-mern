@@ -4,13 +4,11 @@ import {
     BoardFieldType, 
     CoordinatesType, 
     ReactSetStateType, 
-    SetBankType, 
 } from './types';
 import { GameCore } from 'core/GameCore';
-import { PIECES_SETUP } from 'shared/constants';
 import { GameStages } from 'shared/enums';
 import { ConnectableElement } from 'react-dnd';
-import { ControllersType, IGameState } from 'store';
+import { GameStateDispatchType, IGameState } from 'store';
 
 export interface IRootState {
     field: BoardFieldType,
@@ -55,7 +53,7 @@ export interface IRootContextValue extends IRootState {
     gameCoreRef: React.MutableRefObject<GameCore>,
     isReversedPlayer: boolean,
     gameState: IGameState,
-    stateControllers: ControllersType,
+    gameDispatch: GameStateDispatchType,
 }
 
 export interface ISessionContextValue {

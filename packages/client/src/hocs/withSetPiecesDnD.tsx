@@ -5,6 +5,7 @@ import { DragTypesEnum, PieceNameEnum } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
 import { CoordinatesType, ReactComponentWithRefType } from 'shared/types';
 import { piecePicker } from 'shared/utils';
+import { useBankControllers } from 'store';
 
 interface IBankToBoardItem {
     rankName: PieceNameEnum,
@@ -20,9 +21,9 @@ interface IDropStrategy {
 
 export const withSetPiecesDnD = (WrappedComponent: ReactComponentWithRefType<IDraggableCellProps>) => {
     const Component: React.FC<ICellComponentProps> = memo(({ cell }) => {
-        const { gameCoreRef, stateControllers } = useRootContext();
+        const { gameCoreRef, gameDispatch } = useRootContext();
+        const { removeFromBank } = useBankControllers(gameDispatch);
         const { board, currentPlayer } = gameCoreRef.current;
-        const { removeFromBank } = stateControllers;
 
         const dropStrategy: IDropStrategy = {
             [DragTypesEnum.PIECE_FROM_BANK]: ({ rankName }: IBankToBoardItem) => {

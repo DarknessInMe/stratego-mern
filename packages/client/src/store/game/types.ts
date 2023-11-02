@@ -1,7 +1,6 @@
 import { PieceNameEnum } from 'shared/enums';
 import { ActionsEnum } from './enums';
 import { IGameState } from './interfaces';
-import { useBankControllers } from './reducer';
 
 export type ActionPatternTypes<T extends ActionsEnum, Y = void> = {
     type: T,
@@ -16,4 +15,4 @@ export type StrategyType = {
     [Property in keyof typeof ActionsEnum]: (payload?: any) => IGameState
 }
 
-export type ControllersType = ReturnType<typeof useBankControllers>
+export type GameStateDispatchType = React.Dispatch<ActionType>
