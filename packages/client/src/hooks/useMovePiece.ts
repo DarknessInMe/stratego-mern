@@ -1,9 +1,11 @@
 import { useCallback } from 'react';
 import { useRootContext } from 'context/RootContext';
 import { CanMoveBoardPieceTo, HandlePieceMovingType, OnMoveByClick } from 'shared/types';
+import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 
 export const useMovePiece = () => {
-    const { gameCoreRef, selection, setSelection } = useRootContext();
+    const { gameCoreRef, gameDispatch, gameState } = useRootContext();
+    const { dropSelection, attackPiece } = useSelectionControllers(gameDispatch);
     const { board } = gameCoreRef.current;
 
     const handlePieceMoving = useCallback<HandlePieceMovingType>((pieceQuery, newPosition) => {
@@ -17,17 +19,11 @@ export const useMovePiece = () => {
         }
 
         if (targetCell.pieceId) {
-            setSelection(prevSelection => ({
-                ...prevSelection,
-                attackedPieceId: targetCell.pieceId,
-            }));
-        } else {
-            board.movePiece(draggedPiece, newPosition.x, newPosition.y);
-            setSelection({
-                selectedPieceId: null,
-                attackedPieceId: null,
-            });
+            return attackPiece(targetCell.pieceId);
         }
+        
+        board.movePiece(draggedPiece, newPosition.x, newPosition.y);
+        dropSelection();
     }, []);
 
     const canMoveBoardPieceTo = useCallback<CanMoveBoardPieceTo>((movedFrom, moveTo) => {
@@ -41,17 +37,17 @@ export const useMovePiece = () => {
     }, []);
 
     const onMoveByClick = useCallback<OnMoveByClick>((cellPosition) => {
-        if (!selection.selectedPieceId) {
+        if (!gameState.selection.selectedPieceId) {
             return;
         }
 
-        const selectedPiece = board.getPieceById(selection.selectedPieceId);
+        const selectedPiece = board.getPieceById(gameState.selection.selectedPieceId);
         const isSelectedCell = selectedPiece.currentAvailablePath.some(({ x, y }) => cellPosition.x === x && cellPosition.y === y);
 
         if (isSelectedCell) {
             handlePieceMoving({ x: selectedPiece.x, y: selectedPiece.y }, cellPosition);
         }
-    }, [selection.selectedPieceId, handlePieceMoving]);
+    }, [gameState.selection.selectedPieceId, handlePieceMoving]);
 
     return {
         handlePieceMoving,

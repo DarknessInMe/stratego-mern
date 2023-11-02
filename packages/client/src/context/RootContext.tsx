@@ -11,6 +11,7 @@ import { GameStages } from 'shared/enums';
 import { TeamsEnum } from '@stratego/common';
 import { useSessionContext } from './SessionContext';
 import { useGameState } from 'store';
+import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 
 const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 
@@ -24,15 +25,13 @@ const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
 export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     const { currentUser } = useSessionContext();
     const [gameState, gameDispatch] = useGameState();
-    const [selection, setSelection] = useState<ISelectionState>({
-        selectedPieceId: null,
-        attackedPieceId: null,
-    });
     const [rootState, setRootState] = useState<IRootState>({
         field: [],
         mode: GameStages.SET_PIECES,
     });
 	const gameCoreRef = useRef(new GameCore(setRootState, currentUser.team));
+    const { dropSelection } = useSelectionControllers(gameDispatch);
+
     const { board, currentPlayer } = gameCoreRef.current;
     const isReversedPlayer = currentPlayer.team === TeamsEnum.BLUE_TEAM;
     
@@ -41,7 +40,7 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
 	}, []);
 
     useEffect(() => {
-        const { attackedPieceId, selectedPieceId } = selection;
+        const { attackedPieceId, selectedPieceId } = gameState.selection;
 
         if (!attackedPieceId) {
             return;
@@ -51,19 +50,13 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
 
         setTimeout(() => {
             board.applyAttackResult(selectedPieceId, attackedPieceId);
-
-            setSelection({
-                attackedPieceId: null,
-                selectedPieceId: null
-            });
+            dropSelection();
         }, 2000);
-    }, [selection.attackedPieceId]);
+    }, [gameState.selection.attackedPieceId]);
 
     return (
         <RootContext.Provider value={{
             ...rootState,
-            selection,
-            setSelection,
             gameCoreRef,
             isReversedPlayer,
             gameState,

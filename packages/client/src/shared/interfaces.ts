@@ -48,8 +48,6 @@ export interface IPlayersState {
 }
 
 export interface IRootContextValue extends IRootState {
-    selection: ISelectionState,
-    setSelection: ReactSetStateType<ISelectionState>,
     gameCoreRef: React.MutableRefObject<GameCore>,
     isReversedPlayer: boolean,
     gameState: IGameState,

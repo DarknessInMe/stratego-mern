@@ -2,31 +2,30 @@ import { useCallback } from 'react';
 import { useRootContext } from 'context/RootContext';
 import { CoordinatesType } from 'shared/types';
 import { BasePiece } from 'core/Pieces';
+import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 
 export const useSelection = () => {
-    const { selection, setSelection, gameCoreRef } = useRootContext();
+    const { gameState, gameDispatch, gameCoreRef } = useRootContext();
+    const { selectPiece: markPieceAsSelected } = useSelectionControllers(gameDispatch);
     const { board } = gameCoreRef.current;
 
     const selectPiece = useCallback((piece: BasePiece) => {
         piece.initAvailablePath(board);
-        setSelection((prevSelection) => ({
-            ...prevSelection,
-            selectedPieceId: piece.id,
-        }));
+        markPieceAsSelected(piece.id);
     }, []);
 
     const isCellHighlighted = useCallback((cellCoordinates: CoordinatesType) => {
-        const { selectedPieceId, attackedPieceId } = selection;
+        const { selectedPieceId, attackedPieceId } = gameState.selection;
 
         if (!selectedPieceId || !!attackedPieceId) {
             return false;
         }
 
-        const { currentAvailablePath } = board.getPieceById(selection.selectedPieceId);
+        const { currentAvailablePath } = board.getPieceById(selectedPieceId);
         const isHighlightedCell = currentAvailablePath.some(({ x, y }) => cellCoordinates.x === x && cellCoordinates.y === y);
 
         return isHighlightedCell;
-    }, [selection.selectedPieceId, selection.attackedPieceId]);
+    }, [gameState.selection.selectedPieceId, gameState.selection.attackedPieceId]);
 
     return {
         selectPiece,

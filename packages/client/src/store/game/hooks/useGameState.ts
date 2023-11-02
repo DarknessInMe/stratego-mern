@@ -1,9 +1,10 @@
 import { useReducer } from 'react';
 import { PIECES_SETUP } from 'shared/constants';
-import { GameStages, PieceNameEnum } from 'shared/enums';
+import { GameStages } from 'shared/enums';
 import { IGameState } from 'store/game/interfaces';
 import { ActionType, StrategyType } from 'store/game/types';
-import { ActionsEnum } from 'store/game/enums';
+import { bankSlice } from './useBankControllers';
+import { selectionSlice } from './useSelectionControllers';
 
 const initState: IGameState = {
     bank: PIECES_SETUP,
@@ -23,20 +24,8 @@ const reducer = (state: IGameState, action: ActionType): IGameState => {
     const { type, payload } = action;
 
     const strategy: StrategyType = {
-        [ActionsEnum.ADD_TO_BANK]: (rankName: PieceNameEnum) => ({
-            ...state,
-            bank: {
-                ...state.bank,
-                [rankName]: state.bank[rankName] + 1,
-            }
-        }),
-        [ActionsEnum.REMOVE_FROM_BANK]: (rankName) => ({
-            ...state,
-            bank: {
-                ...state.bank,
-                [rankName]: state.bank[rankName] - 1,
-            }
-        }),
+        ...bankSlice(state),
+        ...selectionSlice(state),
     };
 
     if (type in strategy) {
