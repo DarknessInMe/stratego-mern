@@ -14,10 +14,6 @@ import { useGameCoreControllers } from 'store/game/hooks/useGameCoreControllers'
 
 const GameContext = createContext<IGameContextValue>({} as IGameContextValue);
 
-/**
- * TODO:
- * 1. Get rid of piece registering in `setStaticOpponent` method 
- */
 export const GameProvider: React.FC<IContextProps> = ({ children }) => {
     const { currentUser } = useSessionContext();
     const [gameState, gameDispatch] = useGameState(currentUser);

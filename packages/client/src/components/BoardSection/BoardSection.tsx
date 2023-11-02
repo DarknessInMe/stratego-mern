@@ -3,6 +3,7 @@ import { CellFactory } from 'components/CellFactory';
 import { useGameContext } from 'context/GameContext';
 import clsx from 'clsx';
 import { GameStages } from 'shared/enums';
+import { WarFog } from 'components/WarFog';
 
 export const BoardSection: React.FC = memo(() => {
     const { gameState, isReversedPlayer } = useGameContext();
@@ -27,7 +28,12 @@ export const BoardSection: React.FC = memo(() => {
                         ))}
                     </Fragment>
                 ))}
-                {isSetPiecesStage && <div className='board__eclipse'/>}
+                {isSetPiecesStage && (
+                    <WarFog 
+                        opponentPlayer={gameState.teams.opponentPlayer}
+                        isReversed={isReversedPlayer}
+                    />
+                )}
             </div>
         </div>
     );

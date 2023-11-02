@@ -108,22 +108,43 @@ body {
 
 	&_reversed {
 		transform: rotate(180deg);
-
-		& .board__eclipse {
-			bottom: 0;
-			top: unset;
-		}
 	}
+}
 
-	&__eclipse {
-		position: absolute;
-		left: 0;
-		top: 0;
+.war-fog {
+	position: absolute;
+	left: 0;
+	top: 0;
+
+	&__container {
+		pointer-events: none;
 
 		width: 100%;
 		height: calc($piece-size * 6);
+
+		display: flex;
+		flex-wrap: wrap;
+		align-content: baseline;
+	}
+
+	&__eclipse {
 		background-color: $eclipse;
-		pointer-events: none;
+
+		z-index: 9999;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+
+	&_reversed {
+		bottom: 0;
+		top: unset;
+
+		& .war-fog__container {
+			align-content: end;
+		}
 	}
 }
 
