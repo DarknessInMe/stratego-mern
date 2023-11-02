@@ -43,8 +43,8 @@ export interface ISelectionState {
 }
 
 export interface IPlayersState {
-    currentPlayer: IPlayer,
-    opponentPlayer: IPlayer,
+    currentPlayer: TeamsEnum,
+    opponentPlayer: TeamsEnum,
 }
 
 export interface IRootContextValue extends IRootState {

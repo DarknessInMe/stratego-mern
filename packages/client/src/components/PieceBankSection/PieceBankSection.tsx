@@ -6,6 +6,7 @@ import { useDrop } from 'react-dnd';
 import { DragTypesEnum, GameStages, PieceNameEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
 import { useBankControllers } from 'store';
+import { useGameCoreControllers } from 'store/game/hooks/useGameCoreControllers';
 
 interface IDrop {
     rankName: PieceNameEnum,
@@ -13,10 +14,11 @@ interface IDrop {
 }
 
 export const PieceBankSection: React.FC = () => {
-    const { gameState, gameDispatch, gameCoreRef, mode } = useRootContext();
+    const { gameState, gameDispatch, gameCoreRef } = useRootContext();
     const { addToBank } = useBankControllers(gameDispatch);
+    const { toggleMode } = useGameCoreControllers(gameDispatch);
 
-    const isGameInProcess = mode === GameStages.GAME_IN_PROCESS;
+    const isGameInProcess = gameState.mode === GameStages.GAME_IN_PROCESS;
     const [_, dropRef] = useDrop(() => ({
         accept: DragTypesEnum.PIECE_FROM_BOARD,
         drop: ({ rankName, coordinates }: IDrop) => {
@@ -29,15 +31,11 @@ export const PieceBankSection: React.FC = () => {
             }
         },
         canDrop: () => !isGameInProcess,
-      }), [mode]);
+      }), [gameState.mode]);
 
     const bankArray = useMemo(() => {
         return generateInitSetup(gameState.bank);
     }, [gameState.bank]);
-
-    const toggleMode = () => {
-        gameCoreRef.current.toggleMode();
-    };
 
     return (
         <div 
@@ -46,7 +44,7 @@ export const PieceBankSection: React.FC = () => {
         >
             <div className='dev-kit'>
                 <button onClick={toggleMode}>Toggle mode</button>
-                <span>Current mode: {mode}</span>
+                <span>Current mode: {gameState.mode}</span>
             </div>
             <div className={`bank ${isGameInProcess ? 'bank_in-game' : ''}`}>
                 {bankArray.map((item, index) => {

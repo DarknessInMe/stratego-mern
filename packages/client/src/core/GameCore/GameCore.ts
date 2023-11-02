@@ -49,14 +49,6 @@ export class GameCore {
         }
     }
 
-    toggleMode() {
-        this.mode = this.mode === GameStages.SET_PIECES ? GameStages.GAME_IN_PROCESS : GameStages.SET_PIECES;
-        this.updateExternalState((prevState) => ({
-            ...prevState,
-            mode: this.mode,
-        }));
-    }
-
     __spawnOpponent__(rankName: PieceNameEnum, x: number, y: number) {
         const Piece = piecePicker(rankName); 
 

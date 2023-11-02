@@ -6,7 +6,7 @@ import { DragTypesEnum, GameStages } from 'shared/enums';
 import { useRootContext } from 'context/RootContext';
 
 export const BankPiece: React.FC<BankPieceTypes> = memo(({ rankName }) => {
-    const { mode, gameCoreRef } = useRootContext();
+    const { gameState, gameCoreRef } = useRootContext();
     const pieceRef = useRef<HTMLDivElement | null>(null);
 
     const [{ isDragging }, dragRef] = useDrag(() => ({
@@ -17,8 +17,8 @@ export const BankPiece: React.FC<BankPieceTypes> = memo(({ rankName }) => {
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
         }),
-        canDrag: () => mode !== GameStages.GAME_IN_PROCESS,
-    }), [mode]);
+        canDrag: () => gameState.mode !== GameStages.GAME_IN_PROCESS,
+    }), [gameState.mode]);
     
     useEffect(() => {
         if (!pieceRef.current) {

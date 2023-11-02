@@ -5,8 +5,8 @@ import clsx from 'clsx';
 import { GameStages } from 'shared/enums';
 
 export const BoardSection: React.FC = memo(() => {
-    const { field, mode, isReversedPlayer } = useRootContext();
-    const isSetPiecesStage = mode === GameStages.SET_PIECES;
+    const { field, gameState, isReversedPlayer } = useRootContext();
+    const isSetPiecesStage = gameState.mode === GameStages.SET_PIECES;
 
     return (
         <div className={clsx(

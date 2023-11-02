@@ -5,8 +5,10 @@ import { IGameState } from 'store/game/interfaces';
 import { ActionType, StrategyType } from 'store/game/types';
 import { bankSlice } from './useBankControllers';
 import { selectionSlice } from './useSelectionControllers';
+import { gameCoreSlice } from './useGameCoreControllers';
+import { IUser, TeamsEnum } from '@stratego/common';
 
-const initState: IGameState = {
+const getInitialState = (currentUser: IUser): IGameState => ({
     bank: PIECES_SETUP,
     field: [],
     mode: GameStages.SET_PIECES,
@@ -15,10 +17,10 @@ const initState: IGameState = {
         attackedPieceId: null,
     },
     players: {
-        currentPlayer: null,
-        opponentPlayer: null
+        currentPlayer: currentUser.team,
+        opponentPlayer: currentUser.team === TeamsEnum.RED_TEAM ? TeamsEnum.BLUE_TEAM : TeamsEnum.RED_TEAM,
     }
-};
+});
 
 const reducer = (state: IGameState, action: ActionType): IGameState => {
     const { type, payload } = action;
@@ -26,6 +28,7 @@ const reducer = (state: IGameState, action: ActionType): IGameState => {
     const strategy: StrategyType = {
         ...bankSlice(state),
         ...selectionSlice(state),
+        ...gameCoreSlice(state),
     };
 
     if (type in strategy) {
@@ -35,6 +38,6 @@ const reducer = (state: IGameState, action: ActionType): IGameState => {
     return state;
 };
 
-export const useGameState = () => {
-    return useReducer(reducer, initState);
+export const useGameState = (currentUser: IUser) => {
+    return useReducer(reducer, currentUser, getInitialState);
 };

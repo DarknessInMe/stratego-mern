@@ -6,7 +6,7 @@ import React, {
     useContext,
 } from 'react';
 import { GameCore } from 'core/GameCore';
-import { IContextProps, IRootContextValue, IRootState, ISelectionState } from 'shared/interfaces';
+import { IContextProps, IRootContextValue, IRootState } from 'shared/interfaces';
 import { GameStages } from 'shared/enums';
 import { TeamsEnum } from '@stratego/common';
 import { useSessionContext } from './SessionContext';
@@ -24,7 +24,7 @@ const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
  */
 export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     const { currentUser } = useSessionContext();
-    const [gameState, gameDispatch] = useGameState();
+    const [gameState, gameDispatch] = useGameState(currentUser);
     const [rootState, setRootState] = useState<IRootState>({
         field: [],
         mode: GameStages.SET_PIECES,

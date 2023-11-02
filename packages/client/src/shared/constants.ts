@@ -1,3 +1,4 @@
+import { TeamsEnum } from '@stratego/common';
 import { PieceNameEnum, PieceWeightEnum } from './enums';
 
 export const PIECES = {
@@ -37,4 +38,9 @@ export const CELL_ATTRIBUTES = {
 
 export const SESSION_STORAGE_KEYS = {
     USER_ID: 'USER_ID',
+} as const;
+
+export const ALLOWED_SETUP_RANGES = {
+    [TeamsEnum.RED_TEAM]: [6, 9],
+    [TeamsEnum.BLUE_TEAM]: [0, 3],
 } as const;

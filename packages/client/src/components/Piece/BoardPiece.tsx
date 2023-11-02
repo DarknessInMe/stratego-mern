@@ -15,7 +15,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
     coordinates,
     className,
 }) => {
-    const { gameCoreRef, mode, selection } = useRootContext();
+    const { gameCoreRef, gameState } = useRootContext();
     const pieceRef = useCellCoordinates(coordinates);
     const { isCellHighlighted, selectPiece } = useSelection();
     const { onMoveByClick } = useMovePiece();
@@ -40,7 +40,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         }
         const currentPiece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
 
-        return selection.attackedPieceId !== currentPiece?.id;
+        return gameState.selection.attackedPieceId !== currentPiece?.id;
     };
 
     const [, dropRef] = usePieceFromBoardDnD(board.getCell(coordinates.x, coordinates.y));
@@ -55,7 +55,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
     }, []);
 
     const onPieceClick = useCallback(() => {
-        if (mode !== GameStages.GAME_IN_PROCESS) {
+        if (gameState.mode !== GameStages.GAME_IN_PROCESS) {
             return;
         }
 
@@ -70,7 +70,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         } else {
             selectPiece(currentPiece);
         }
-    }, [mode, coordinates, onMoveByClick]);
+    }, [gameState.mode, coordinates, onMoveByClick]);
 
     
     return (
