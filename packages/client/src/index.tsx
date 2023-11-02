@@ -11,6 +11,7 @@ import { Join } from 'pages/Join';
 import { NotFound } from 'pages/NotFound';
 import { SessionProvider } from 'context/SessionContext';
 import { ROUTES } from 'router';
+import { ProtectedScreen } from 'components/ProtectedScreen';
 
 const Root: React.FC = () => (
     <DndProvider backend={HTML5Backend}>
@@ -18,9 +19,11 @@ const Root: React.FC = () => (
             <SessionProvider>
                 <Routes>
                     <Route path={ROUTES.HOME} index element={<Home />} />
-                    <Route path={ROUTES.ROOM} element={<Room />}/>
                     <Route path={ROUTES.JOIN} element={<Join />}/>
-                    <Route path={ROUTES.GAME} element={<Game />}/>
+                    <Route element={<ProtectedScreen />}>
+                        <Route path={ROUTES.ROOM} element={<Room />}/>
+                        <Route path={ROUTES.GAME} element={<Game />}/>
+                    </Route>
                     <Route path={ROUTES.NOT_FOUND} element={<NotFound />}/>
                 </Routes>
             </SessionProvider>
