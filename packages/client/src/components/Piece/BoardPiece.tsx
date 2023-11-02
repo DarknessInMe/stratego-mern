@@ -20,7 +20,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
     const { isCellHighlighted, selectPiece } = useSelection();
     const { onMoveByClick } = useMovePiece();
 
-    const { board, currentPlayer } = gameCoreRef.current;
+    const { board } = gameCoreRef.current;
     const isSelected = isCellHighlighted(coordinates);
 
     const [{ isDragging }, dragRef] = useDrag(() => ({
@@ -31,11 +31,11 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
         }),
-        canDrag: () => team === currentPlayer.team,
+        canDrag: () => team === gameState.teams.currentPlayer,
     }));
 
     const definePieceHidden = () => {
-        if (team === currentPlayer.team) {
+        if (team === gameState.teams.currentPlayer) {
             return false;
         }
         const currentPiece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
@@ -65,7 +65,7 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
             return;
         }
 
-        if (currentPiece.team !== currentPlayer.team) {
+        if (currentPiece.team !== gameState.teams.currentPlayer) {
             onMoveByClick(coordinates);
         } else {
             selectPiece(currentPiece);

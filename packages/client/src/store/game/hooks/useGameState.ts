@@ -16,7 +16,7 @@ const getInitialState = (currentUser: IUser): IGameState => ({
         selectedPieceId: null,
         attackedPieceId: null,
     },
-    players: {
+    teams: {
         currentPlayer: currentUser.team,
         opponentPlayer: currentUser.team === TeamsEnum.RED_TEAM ? TeamsEnum.BLUE_TEAM : TeamsEnum.RED_TEAM,
     }

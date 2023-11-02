@@ -6,13 +6,11 @@ import {
     ReactSetStateType, 
 } from './types';
 import { GameCore } from 'core/GameCore';
-import { GameStages } from 'shared/enums';
 import { ConnectableElement } from 'react-dnd';
 import { GameStateDispatchType, IGameState } from 'store';
 
 export interface IRootState {
     field: BoardFieldType,
-    mode: GameStages,
 }
 
 export interface ICell {
@@ -42,7 +40,7 @@ export interface ISelectionState {
     attackedPieceId: string | null,
 }
 
-export interface IPlayersState {
+export interface ITeamsState {
     currentPlayer: TeamsEnum,
     opponentPlayer: TeamsEnum,
 }
@@ -63,10 +61,6 @@ export interface ISessionContextValue {
 
 export interface IBankToBoardDragObject {
     rankName: PieceNameEnum,
-}
-
-export interface IPlayer {
-    team: TeamsEnum,
 }
 
 export interface IDraggedItem {

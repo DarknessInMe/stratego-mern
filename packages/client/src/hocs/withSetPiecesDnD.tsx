@@ -6,6 +6,7 @@ import { useRootContext } from 'context/RootContext';
 import { CoordinatesType, ReactComponentWithRefType } from 'shared/types';
 import { piecePicker } from 'shared/utils';
 import { useBankControllers } from 'store';
+import { ALLOWED_SETUP_RANGES } from 'shared/constants';
 
 interface IBankToBoardItem {
     rankName: PieceNameEnum,
@@ -21,9 +22,9 @@ interface IDropStrategy {
 
 export const withSetPiecesDnD = (WrappedComponent: ReactComponentWithRefType<IDraggableCellProps>) => {
     const Component: React.FC<ICellComponentProps> = memo(({ cell }) => {
-        const { gameCoreRef, gameDispatch } = useRootContext();
+        const { gameCoreRef, gameDispatch, gameState } = useRootContext();
         const { removeFromBank } = useBankControllers(gameDispatch);
-        const { board, currentPlayer } = gameCoreRef.current;
+        const { board } = gameCoreRef.current;
 
         const dropStrategy: IDropStrategy = {
             [DragTypesEnum.PIECE_FROM_BANK]: ({ rankName }: IBankToBoardItem) => {
@@ -32,7 +33,7 @@ export const withSetPiecesDnD = (WrappedComponent: ReactComponentWithRefType<IDr
                     cell.x, 
                     cell.y, 
                     rankName,
-                    currentPlayer.team,
+                    gameState.teams.currentPlayer,
                 );
                 
                 board.registerPiece(piece, cell.x, cell.y);
@@ -62,7 +63,7 @@ export const withSetPiecesDnD = (WrappedComponent: ReactComponentWithRefType<IDr
             canDrop: () => {
                 const { board } = gameCoreRef.current;
                 const targetCell = board.getCell(cell.x, cell.y);
-                const [top, bottom] = currentPlayer.allowedRange;
+                const [top, bottom] = ALLOWED_SETUP_RANGES[gameState.teams.currentPlayer];
 
                 if (!(cell.y >= top && cell.y <= bottom)) {
                     return false;

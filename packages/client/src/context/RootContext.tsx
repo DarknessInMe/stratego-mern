@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import { GameCore } from 'core/GameCore';
 import { IContextProps, IRootContextValue, IRootState } from 'shared/interfaces';
-import { GameStages } from 'shared/enums';
 import { TeamsEnum } from '@stratego/common';
 import { useSessionContext } from './SessionContext';
 import { useGameState } from 'store';
@@ -27,13 +26,12 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     const [gameState, gameDispatch] = useGameState(currentUser);
     const [rootState, setRootState] = useState<IRootState>({
         field: [],
-        mode: GameStages.SET_PIECES,
     });
-	const gameCoreRef = useRef(new GameCore(setRootState, currentUser.team));
+	const gameCoreRef = useRef(new GameCore(setRootState));
     const { dropSelection } = useSelectionControllers(gameDispatch);
 
-    const { board, currentPlayer } = gameCoreRef.current;
-    const isReversedPlayer = currentPlayer.team === TeamsEnum.BLUE_TEAM;
+    const { board } = gameCoreRef.current;
+    const isReversedPlayer = gameState.teams.currentPlayer === TeamsEnum.BLUE_TEAM;
     
 	useEffect(() => {
 		gameCoreRef.current.init();
