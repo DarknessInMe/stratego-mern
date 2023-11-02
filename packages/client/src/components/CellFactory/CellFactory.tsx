@@ -4,11 +4,11 @@ import { Water } from 'components/Water';
 import { ICellComponentProps } from 'shared/interfaces';
 import { EnvironmentEnum } from 'shared/enums';
 import { BoardPiece } from 'components/Piece';
-import { useRootContext } from 'context/RootContext';
+import { useGameContext } from 'context/GameContext';
 import clsx from 'clsx';
 
 export const CellFactory: React.FC<ICellComponentProps> = memo(({ cell }) => {
-    const { boardRef, isReversedPlayer } = useRootContext();
+    const { boardRef, isReversedPlayer } = useGameContext();
 
     switch(cell.environment) {
         case EnvironmentEnum.WATER: {

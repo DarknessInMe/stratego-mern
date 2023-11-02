@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
 import { ICellComponentProps, IDraggableCellProps } from 'shared/interfaces';
 import { DragTypesEnum, PieceNameEnum } from 'shared/enums';
-import { useRootContext } from 'context/RootContext';
+import { useGameContext } from 'context/GameContext';
 import { CoordinatesType, ReactComponentWithRefType } from 'shared/types';
 import { piecePicker } from 'shared/utils';
 import { useBankControllers } from 'store';
@@ -22,7 +22,7 @@ interface IDropStrategy {
 
 export const withSetPiecesDnD = (WrappedComponent: ReactComponentWithRefType<IDraggableCellProps>) => {
     const Component: React.FC<ICellComponentProps> = memo(({ cell }) => {
-        const { gameDispatch, gameState, boardRef } = useRootContext();
+        const { gameDispatch, gameState, boardRef } = useGameContext();
         const { removeFromBank } = useBankControllers(gameDispatch);
         const board = boardRef.current;
 

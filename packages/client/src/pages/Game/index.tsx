@@ -1,16 +1,16 @@
 import React from 'react';
 import { BoardSection } from 'components/BoardSection';
 import { PieceBankSection } from 'components/PieceBankSection';
-import { RootProvider } from 'context/RootContext';
+import { GameProvider } from 'context/GameContext';
 import clsx from 'clsx';
 
 export const Game = () => {
     return (
-        <RootProvider>
+        <GameProvider>
             <div className={clsx('screen', 'page')}>
                 <BoardSection />
                 <PieceBankSection />
             </div>
-        </RootProvider>
+        </GameProvider>
     );
 };

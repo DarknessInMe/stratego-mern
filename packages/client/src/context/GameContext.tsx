@@ -5,21 +5,20 @@ import React, {
     useContext,
 } from 'react';
 import { Board } from 'core/Board';
-import { IContextProps, IRootContextValue } from 'shared/interfaces';
+import { IContextProps, IGameContextValue } from 'shared/interfaces';
 import { TeamsEnum } from '@stratego/common';
 import { useSessionContext } from './SessionContext';
 import { useGameState } from 'store';
 import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 import { useGameCoreControllers } from 'store/game/hooks/useGameCoreControllers';
 
-const RootContext = createContext<IRootContextValue>({} as IRootContextValue);
+const GameContext = createContext<IGameContextValue>({} as IGameContextValue);
 
 /**
  * TODO:
  * 1. Get rid of piece registering in `setStaticOpponent` method 
- * 2. Rename RootProvider to GameProvider
  */
-export const RootProvider: React.FC<IContextProps> = ({ children }) => {
+export const GameProvider: React.FC<IContextProps> = ({ children }) => {
     const { currentUser } = useSessionContext();
     const [gameState, gameDispatch] = useGameState(currentUser);
 
@@ -49,17 +48,17 @@ export const RootProvider: React.FC<IContextProps> = ({ children }) => {
     }, [gameState.selection.attackedPieceId]);
 
     return (
-        <RootContext.Provider value={{
+        <GameContext.Provider value={{
             isReversedPlayer,
             gameState,
             gameDispatch,
             boardRef,
         }}>
             {children}
-        </RootContext.Provider>
+        </GameContext.Provider>
     );
 };
 
-export const useRootContext = () => {
-    return useContext(RootContext);
+export const useGameContext = () => {
+    return useContext(GameContext);
 };

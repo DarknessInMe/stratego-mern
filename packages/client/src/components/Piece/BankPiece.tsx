@@ -3,10 +3,10 @@ import { Piece } from './Piece';
 import { BankPieceTypes } from './types';
 import { useDrag } from 'react-dnd';
 import { DragTypesEnum, GameStages } from 'shared/enums';
-import { useRootContext } from 'context/RootContext';
+import { useGameContext } from 'context/GameContext';
 
 export const BankPiece: React.FC<BankPieceTypes> = memo(({ rankName }) => {
-    const { gameState } = useRootContext();
+    const { gameState } = useGameContext();
     const pieceRef = useRef<HTMLDivElement | null>(null);
 
     const [{ isDragging }, dragRef] = useDrag(() => ({

@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
-import { useRootContext } from 'context/RootContext';
+import { useGameContext } from 'context/GameContext';
 import { CanMoveBoardPieceTo, HandlePieceMovingType, OnMoveByClick } from 'shared/types';
 import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 
 export const useMovePiece = () => {
-    const { boardRef, gameDispatch, gameState } = useRootContext();
+    const { boardRef, gameDispatch, gameState } = useGameContext();
     const { dropSelection, attackPiece } = useSelectionControllers(gameDispatch);
     const board = boardRef.current;
 

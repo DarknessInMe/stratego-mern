@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { BankPiece } from 'components/Piece';
-import { useRootContext } from 'context/RootContext';
+import { useGameContext } from 'context/GameContext';
 import { generateInitSetup } from 'shared/utils';
 import { useDrop } from 'react-dnd';
 import { DragTypesEnum, GameStages, PieceNameEnum } from 'shared/enums';
@@ -14,7 +14,7 @@ interface IDrop {
 }
 
 export const PieceBankSection: React.FC = () => {
-    const { gameState, gameDispatch, boardRef } = useRootContext();
+    const { gameState, gameDispatch, boardRef } = useGameContext();
     const { addToBank } = useBankControllers(gameDispatch);
     const { toggleMode } = useGameCoreControllers(gameDispatch);
 

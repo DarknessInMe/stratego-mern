@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
-import { useRootContext } from 'context/RootContext';
+import { useGameContext } from 'context/GameContext';
 import { CoordinatesType } from 'shared/types';
 import { BasePiece } from 'core/Pieces';
 import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 
 export const useSelection = () => {
-    const { gameState, gameDispatch, boardRef } = useRootContext();
+    const { gameState, gameDispatch, boardRef } = useGameContext();
     const { selectPiece: markPieceAsSelected } = useSelectionControllers(gameDispatch);
     const board = boardRef.current;
 

@@ -1,11 +1,11 @@
 import React, { memo, Fragment } from 'react';
 import { CellFactory } from 'components/CellFactory';
-import { useRootContext } from 'context/RootContext';
+import { useGameContext } from 'context/GameContext';
 import clsx from 'clsx';
 import { GameStages } from 'shared/enums';
 
 export const BoardSection: React.FC = memo(() => {
-    const { gameState, isReversedPlayer } = useRootContext();
+    const { gameState, isReversedPlayer } = useGameContext();
     const isSetPiecesStage = gameState.mode === GameStages.SET_PIECES;
 
     return (

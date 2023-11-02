@@ -40,7 +40,7 @@ export interface ITeamsState {
     opponentPlayer: TeamsEnum,
 }
 
-export interface IRootContextValue {
+export interface IGameContextValue {
     boardRef: React.MutableRefObject<Board>,
     isReversedPlayer: boolean,
     gameState: IGameState,

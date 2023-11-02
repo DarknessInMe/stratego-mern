@@ -3,7 +3,7 @@ import { Piece } from './Piece';
 import { IBoardPieceProps } from './interfaces';
 import { useDrag } from 'react-dnd';
 import { DragTypesEnum, GameStages } from 'shared/enums';
-import { useRootContext } from 'context/RootContext';
+import { useGameContext } from 'context/GameContext';
 import { useCellCoordinates } from 'hooks/useCellCoordinates';
 import { useSelection } from 'hooks/useSelection';
 import { usePieceFromBoardDnD } from 'hooks/usePieceFromBoardDnD';
@@ -15,14 +15,14 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
     coordinates,
     className,
 }) => {
-    const { boardRef, gameState } = useRootContext();
+    const { boardRef, gameState } = useGameContext();
     const pieceRef = useCellCoordinates(coordinates);
     const { isCellHighlighted, selectPiece } = useSelection();
     const { onMoveByClick } = useMovePiece();
 
     const isSelected = isCellHighlighted(coordinates);
     const board = boardRef.current;
-    
+
     const [{ isDragging }, dragRef] = useDrag(() => ({
         type: DragTypesEnum.PIECE_FROM_BOARD,
         item: {
