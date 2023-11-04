@@ -21,13 +21,19 @@ export abstract class BasePiece {
     readonly weight: PieceWeightEnum;
     readonly team: TeamsEnum;
 
-    constructor(x: number, y: number, rankName: PieceNameEnum, team: TeamsEnum) {
+    constructor(
+        x: number, 
+        y: number, 
+        rankName: PieceNameEnum, 
+        team: TeamsEnum,
+        id?: string
+    ) {
         this.x = x;
         this.y = y;
         this.rankName = rankName;
         this.weight = this.getPieceWeightByRank(rankName);
         this.team = team;
-        this.id = uuidv4();
+        this.id = id || uuidv4();
     }
 
     abstract initAvailablePath(board: Board): CoordinatesType[]

@@ -20,3 +20,10 @@ export interface ISession {
     ownerId: string,
     users: IUser[],
 }
+
+export interface IDispositionItem {
+    x: number,
+    y: number,
+    rankName: string,
+    id: string,
+}

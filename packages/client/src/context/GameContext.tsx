@@ -6,11 +6,12 @@ import React, {
 } from 'react';
 import { Board } from 'core/Board';
 import { IContextProps, IGameContextValue } from 'shared/interfaces';
-import { TeamsEnum } from '@stratego/common';
+import { IDispositionItem, RESPONSE_EVENTS, TeamsEnum } from '@stratego/common';
 import { useSessionContext } from './SessionContext';
 import { useGameState } from 'store';
 import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 import { useGameCoreControllers } from 'store/game/hooks/useGameCoreControllers';
+import { socket } from 'socket';
 
 const GameContext = createContext<IGameContextValue>({} as IGameContextValue);
 
@@ -23,9 +24,18 @@ export const GameProvider: React.FC<IContextProps> = ({ children }) => {
 
 	const boardRef = useRef(new Board(updateCells));
     const isReversedPlayer = gameState.teams.currentPlayer === TeamsEnum.BLUE_TEAM;
-    
+
+    const onDispositionReceiver = (disposition: IDispositionItem[]) => {
+        boardRef.current.registerDisposition(disposition, gameState.teams.opponentPlayer);
+    };
+
 	useEffect(() => {
 		boardRef.current.init(setField);
+        socket.root.on(RESPONSE_EVENTS.ON_DISPOSITION_RECEIVED, onDispositionReceiver);
+
+        return () => {
+            socket.root.off(RESPONSE_EVENTS.ON_DISPOSITION_RECEIVED, onDispositionReceiver);
+        };
 	}, []);
 
     useEffect(() => {

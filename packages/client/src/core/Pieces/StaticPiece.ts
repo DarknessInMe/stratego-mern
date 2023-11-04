@@ -4,8 +4,14 @@ import { TeamsEnum } from '@stratego/common';
 import { CoordinatesType } from 'shared/types';
 
 export class StaticPiece extends BasePiece {
-    constructor(x: number, y: number, rankName: PieceNameEnum, team: TeamsEnum) {
-        super(x, y, rankName, team);
+    constructor(
+        x: number, 
+        y: number, 
+        rankName: PieceNameEnum, 
+        team: TeamsEnum,
+        id?: string
+    ) {
+        super(x, y, rankName, team, id);
     }
 
     canMove(): boolean {

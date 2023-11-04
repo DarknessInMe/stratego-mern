@@ -6,8 +6,10 @@ import {
     REQ_HEADERS, 
     IUpdateUser,
     IUserStatus,
+    IDispositionItem,
 } from '@stratego/common';
 import { NullableType } from 'shared/types';
+import { ICell } from 'shared/interfaces';
 
 const URL = process.env.NODE_ENV === 'production' ? undefined : process.env.BACKEND_URL;
 
@@ -52,6 +54,10 @@ class SocketManager {
 
     async startGame(): Promise<boolean> {
         return await this.root.emitWithAck(REQUEST_EVENTS.START_GAME);
+    }
+
+    async sendDisposition(disposition: IDispositionItem[]): Promise<void> {
+        return await this.root.emitWithAck(REQUEST_EVENTS.SEND_DISPOSITION, disposition);
     }
 }
 

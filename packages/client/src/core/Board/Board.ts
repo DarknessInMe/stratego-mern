@@ -1,8 +1,11 @@
 import { BoardFieldType, CoordinatesType } from 'shared/types';
 import { ICell } from 'shared/interfaces';
-import { EnvironmentEnum, FightResultEnum } from 'shared/enums';
+import { EnvironmentEnum, FightResultEnum, PieceNameEnum } from 'shared/enums';
 import { WATER_POSITION } from './constants';
 import { BasePiece } from 'core/Pieces';
+import { ALLOWED_SETUP_RANGES } from 'shared/constants';
+import { IDispositionItem, TeamsEnum } from '@stratego/common';
+import { piecePicker } from 'shared/utils';
 
 type UpdateCoreStateType = (cells: ICell[]) => void;
 
@@ -59,6 +62,39 @@ export class Board {
         } catch {
             return null;
         }
+    }
+
+    registerDisposition(disposition: IDispositionItem[], team: TeamsEnum) {
+        const cellsToUpdate: ICell[] = [];
+
+        disposition.forEach(({ x, y, rankName, id }) => {
+            const nameGuard = rankName as PieceNameEnum;
+            const pieceConstructor = piecePicker(nameGuard);
+            const piece = new pieceConstructor(x, y, nameGuard, team, id);
+            const cell = this.getCell(x, y);
+
+            this.pieces.set(piece.id, piece);
+            cell.pieceId = piece.id;
+
+            cellsToUpdate.push(cell);
+        });
+
+        this.updateCoreState(cellsToUpdate);
+    }
+
+    extractDisposition(team: TeamsEnum): IDispositionItem[] {
+        const [start, end] = ALLOWED_SETUP_RANGES[team];
+
+        return this.field.slice(start, end + 1).flat().map(cell => {
+            const piece = this.pieces.get(cell.pieceId);
+
+            return {
+                x: piece.x,
+                y: piece.y,
+                rankName: piece.rankName,
+                id: piece.id,
+            };
+        });
     }
 
     registerPiece(piece: BasePiece, x: number, y: number) {

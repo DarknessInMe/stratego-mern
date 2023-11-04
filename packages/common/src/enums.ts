@@ -8,7 +8,8 @@ export enum REQUEST_EVENTS {
     UPDATE_USER = 'update-user',
     JOIN_USER = 'join-user',
     KICK_USER = 'kick-user',
-    START_GAME = 'start-game'
+    START_GAME = 'start-game',
+    SEND_DISPOSITION = 'send-disposition',
 }
 
 export enum RESPONSE_EVENTS {
@@ -17,6 +18,7 @@ export enum RESPONSE_EVENTS {
     ON_USER_LEAVE = 'on-user-leave',
     ON_USER_KICK = 'on-user-kick',
     ON_GAME_STARTED = 'on-game-started',
+    ON_DISPOSITION_RECEIVED = 'on-disposition-received',
 }
 
 export enum REQ_HEADERS {

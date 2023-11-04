@@ -5,8 +5,14 @@ import { CoordinatesType } from 'shared/types';
 import { TeamsEnum } from '@stratego/common';
 
 export class ScoutPiece extends BasePiece {
-    constructor(x: number, y: number, rankName: PieceNameEnum, team: TeamsEnum) {
-        super(x, y, rankName, team);
+    constructor(
+        x: number, 
+        y: number, 
+        rankName: PieceNameEnum, 
+        team: TeamsEnum,
+        id?: string
+    ) {
+        super(x, y, rankName, team, id);
     }
 
     private traverseX(board: Board, start: number, modifier: number) {

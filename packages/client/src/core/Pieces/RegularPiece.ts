@@ -5,8 +5,14 @@ import { TeamsEnum } from '@stratego/common';
 import { CoordinatesType } from 'shared/types';
 
 export class RegularPiece extends BasePiece {
-    constructor(x: number, y: number, rankName: PieceNameEnum, team: TeamsEnum) {
-        super(x, y, rankName, team);
+    constructor(
+        x: number, 
+        y: number, 
+        rankName: PieceNameEnum, 
+        team: TeamsEnum,
+        id?: string
+    ) {
+        super(x, y, rankName, team, id);
     }
 
     canBeat(enemyRank: PieceNameEnum) {
