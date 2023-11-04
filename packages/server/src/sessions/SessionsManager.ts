@@ -1,5 +1,5 @@
 import { Session } from './Session';
-import { TeamsEnum, UserPayloadType } from '@stratego/common';
+import { TeamsEnum } from '@stratego/common';
 import { createUser } from '@/shared/utils';
 
 export class SessionsManager {
@@ -42,33 +42,6 @@ export class SessionsManager {
         session.users.push(newUser);
 
         return { session, user: newUser };
-    }
-
-
-    updateUser(sessionId: string, userId: string, payload: UserPayloadType) {
-        const session = this.sessions.get(sessionId);
-
-        if (!session) {
-            throw new Error(`Session with ${sessionId} id doesn't exist`);
-        }
-
-        const userIndex = session.users.findIndex(({ id }) => id === userId);
-
-        if (userIndex < 0) {
-            throw new Error(`Required user wasn't found`);
-        }
-
-        const user = session.users[userIndex];
-        let key: keyof UserPayloadType;
-
-        for (key in payload) {
-            // idk wtf is that, but it works: https://stackoverflow.com/a/77134454
-            user[key] = payload[key] as never;
-        }
-
-        session.users[userIndex] = user;
-
-        return user;
     }
 
     handleLeave(sessionId: string, userId: string) {

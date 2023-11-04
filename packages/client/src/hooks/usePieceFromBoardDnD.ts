@@ -6,7 +6,7 @@ import { useMovePiece } from './useMovePiece';
 export const usePieceFromBoardDnD = (cell: ICell) => {
     const { canMoveBoardPieceTo, handlePieceMoving } = useMovePiece();
 
-    const dropResult = useDrop(() => ({
+    return useDrop(() => ({
         accept: DragTypesEnum.PIECE_FROM_BOARD,
         collect: monitor => ({
             isOver: !!monitor.isOver(),
@@ -19,5 +19,4 @@ export const usePieceFromBoardDnD = (cell: ICell) => {
         },
     }), [cell.x, cell.y]);
 
-    return dropResult;
 };

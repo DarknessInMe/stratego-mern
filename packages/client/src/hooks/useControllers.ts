@@ -1,3 +1,4 @@
+import { IUserStatus } from '@stratego/common';
 import { useSessionContext } from 'context/SessionContext';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'router';
@@ -9,7 +10,8 @@ export const useControllers = () => {
     const { 
         setSession,
         currentUser,
-        handleUserUpdating,
+        userStatuses,
+        handleStatusUpdating,
     } = useSessionContext();
 
     const onCreate = async () => {
@@ -48,20 +50,30 @@ export const useControllers = () => {
         }
     };
 
-    const onToggleStatus = async () => {
+    const onChangeStatus = async (status: Partial<IUserStatus>) => {
         try {
-            const updatedUser = await socket.updateUser({
-                isReady: !currentUser.isReady,
-            });
+            const updatedStatus = await socket.updateUser(status);
 
-            if (updatedUser === null) {
+            if (updatedStatus === null) {
                 return;
             }
 
-            handleUserUpdating(updatedUser);
+            handleStatusUpdating(updatedStatus);
         } catch {
             //
         }
+    };
+
+    const onToggleLobby = async () => {
+        await onChangeStatus({
+            isLobbyReady: !userStatuses[currentUser.id].isLobbyReady,
+        });
+    };
+
+    const onToggleGame = async () => {
+        await onChangeStatus({
+            isGameReady: !userStatuses[currentUser.id].isGameReady,
+        });
     };
 
     const onLeaveRoom = () => {
@@ -103,9 +115,10 @@ export const useControllers = () => {
     return {
         onCreate,
         onJoin,
-        onToggleStatus,
+        onToggleLobby,
         onLeaveRoom,
         onKickUser,
         onStartGame,
+        onToggleGame,
     };
 };

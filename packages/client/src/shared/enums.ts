@@ -40,6 +40,7 @@ export enum DragTypesEnum {
 
 export enum GameStages {
     SET_PIECES = 'SET_PIECES',
+    READY = 'READY',
     GAME_IN_PROCESS = 'GAME_IN_PROCESS',
 };
 

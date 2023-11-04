@@ -7,13 +7,13 @@ import { WarFog } from 'components/WarFog';
 
 export const BoardSection: React.FC = memo(() => {
     const { gameState, isReversedPlayer } = useGameContext();
-    const isSetPiecesStage = gameState.mode === GameStages.SET_PIECES;
+    const isSetupStage = gameState.mode !== GameStages.GAME_IN_PROCESS;
 
     return (
         <div className={clsx(
             'screen__section', 
             'screen__section_main',
-            isSetPiecesStage && 'screen__section_eclipsed'
+            isSetupStage && 'screen__section_eclipsed'
         )}>
             <div className={clsx('board', isReversedPlayer && 'board_reversed')}>
                 {gameState.field.map((row, lineIndex) => (
@@ -28,7 +28,7 @@ export const BoardSection: React.FC = memo(() => {
                         ))}
                     </Fragment>
                 ))}
-                {isSetPiecesStage && (
+                {isSetupStage && (
                     <WarFog 
                         opponentPlayer={gameState.teams.opponentPlayer}
                         isReversed={isReversedPlayer}

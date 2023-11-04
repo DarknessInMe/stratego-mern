@@ -31,8 +31,10 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         collect: (monitor) => ({
             isDragging: !!monitor.isDragging(),
         }),
-        canDrag: () => team === gameState.teams.currentPlayer,
-    }));
+        canDrag: () => team === gameState.teams.currentPlayer && gameState.mode !== GameStages.READY,
+    }), [gameState.teams.currentPlayer, gameState.mode]);
+
+    const [, dropRef] = usePieceFromBoardDnD(board.getCell(coordinates.x, coordinates.y));
 
     const definePieceHidden = () => {
         if (team === gameState.teams.currentPlayer) {
@@ -43,7 +45,6 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
         return gameState.selection.attackedPieceId !== currentPiece?.id;
     };
 
-    const [, dropRef] = usePieceFromBoardDnD(board.getCell(coordinates.x, coordinates.y));
     const isHidden = definePieceHidden();
 
     useEffect(() => {

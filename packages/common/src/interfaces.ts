@@ -1,10 +1,18 @@
 import { TeamsEnum } from './enums';
-import { UserPayloadType } from './types'; 
 
 export interface IUser {
-    id: string
-    isReady: boolean,
+    id: string,
     team: TeamsEnum,
+}
+
+export interface IUserStatus {
+    isLobbyReady: boolean,
+    isGameReady: boolean,
+}
+
+export interface IUpdateUser {
+    status: Partial<IUserStatus>,
+    userId: string,
 }
 
 export interface ISession {

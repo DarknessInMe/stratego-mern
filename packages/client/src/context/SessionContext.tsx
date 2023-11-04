@@ -5,18 +5,21 @@ import React, {
     useEffect,
     useMemo,
 } from 'react';
-import { ISession, IUser } from '@stratego/common';
+import { ISession, IUpdateUser, IUser } from '@stratego/common';
 import { IContextProps, ISessionContextValue } from 'shared/interfaces';
 import { socket } from 'socket';
 import { RESPONSE_EVENTS } from '@stratego/common';
 import { getUserId } from 'shared/utils';
 import { ROUTES } from 'router';
 import { useNavigate } from 'react-router-dom';
+import { UsersStatusStoreType } from 'shared/types';
 
 const SessionContext = createContext<ISessionContextValue>(null);
 
 export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
     const [session, setSession] = useState<ISession | null>(null);
+    const [userStatuses, setUserStatuses] = useState<UsersStatusStoreType>({});
+
     const history = useNavigate();
     
     const currentUser = useMemo(() => {
@@ -42,17 +45,14 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
         setSession(null);
     };
 
-    const handleUserUpdating = (updatedUser: IUser) => {
-        setSession((prevSession) => {
-            if (!prevSession) {
-                return prevSession;
+    const handleStatusUpdating = ({ userId, status }: IUpdateUser) => {
+        setUserStatuses((prevStatuses) => ({
+            ...prevStatuses,
+            [userId]: {
+                ...prevStatuses[userId],
+                ...status,
             }
-
-            return {
-                ...prevSession,
-                users: prevSession.users.map(user => user.id !== updatedUser.id ? user : updatedUser),
-            };
-        });
+        }));
     };
 
     const handleUserLeaving = (userId: string) => {
@@ -73,15 +73,35 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
     };
 
     useEffect(() => {
+        setUserStatuses((prevStatuses) => {
+            if (!session) {
+                return {};
+            }
+
+            const statusesCopy: UsersStatusStoreType = {};
+
+            session.users.forEach(({ id }) => {
+                if (!prevStatuses[id]) {
+                    statusesCopy[id] = { isGameReady: false, isLobbyReady: false };
+                } else {
+                    statusesCopy[id] = prevStatuses[id];
+                }
+            });
+
+            return statusesCopy;
+        });
+    }, [session?.users]);
+
+    useEffect(() => {
         socket.root.on(RESPONSE_EVENTS.ON_USER_JOIN, handleUserJoining);
-        socket.root.on(RESPONSE_EVENTS.ON_USER_UPDATE, handleUserUpdating);
+        socket.root.on(RESPONSE_EVENTS.ON_USER_UPDATE, handleStatusUpdating);
         socket.root.on(RESPONSE_EVENTS.ON_USER_LEAVE, handleUserLeaving);
         socket.root.on(RESPONSE_EVENTS.ON_USER_KICK, handleUserKicking);
         socket.root.on(RESPONSE_EVENTS.ON_GAME_STARTED, handleGameStarting);
 
         return () => {
             socket.root.off(RESPONSE_EVENTS.ON_USER_JOIN, handleUserJoining);
-            socket.root.off(RESPONSE_EVENTS.ON_USER_UPDATE, handleUserUpdating);
+            socket.root.off(RESPONSE_EVENTS.ON_USER_UPDATE, handleStatusUpdating);
             socket.root.off(RESPONSE_EVENTS.ON_USER_LEAVE, handleUserLeaving);
             socket.root.off(RESPONSE_EVENTS.ON_USER_KICK, handleUserKicking);
             socket.root.off(RESPONSE_EVENTS.ON_GAME_STARTED, handleGameStarting);
@@ -92,8 +112,10 @@ export const SessionProvider: React.FC<IContextProps> = ({ children }) => {
         <SessionContext.Provider value={{
             session,
             setSession,
+            userStatuses,
+            setUserStatuses,
             currentUser,
-            handleUserUpdating,
+            handleStatusUpdating,
         }}>
             {children}
         </SessionContext.Provider>

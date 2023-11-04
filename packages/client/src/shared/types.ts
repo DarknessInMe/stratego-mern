@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import { PIECES_SETUP } from './constants';
 import { ICell } from './interfaces';
+import { IUserStatus } from '@stratego/common';
 
 export type ReactSetStateType<T> = React.Dispatch<React.SetStateAction<T>>;
 
@@ -19,3 +20,5 @@ export type OnMoveByClick = (cellPosition: CoordinatesType) => void;
 export type ReactComponentWithRefType<Props, Ref extends HTMLElement = HTMLDivElement> = ReturnType<typeof forwardRef<Ref, Props>>;
 
 export type NullableType<T> = T | null;
+
+export type UsersStatusStoreType = Record<string, IUserStatus>;

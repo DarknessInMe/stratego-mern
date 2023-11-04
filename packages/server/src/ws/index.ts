@@ -1,7 +1,7 @@
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import { instrument } from '@socket.io/admin-ui';
-import { REQUEST_EVENTS, RESPONSE_EVENTS, UserPayloadType } from '@stratego/common';
+import { IUpdateUser, IUserStatus, REQUEST_EVENTS, RESPONSE_EVENTS } from '@stratego/common';
 import { SessionsManager } from '@/sessions/SessionsManager';
 import { REQ_HEADERS } from '@stratego/common';
 
@@ -53,13 +53,16 @@ export class SocketManager {
                 }
             });
 
-            socket.on(REQUEST_EVENTS.UPDATE_USER, (updatePayload: UserPayloadType, respond) => {
+            socket.on(REQUEST_EVENTS.UPDATE_USER, (updatePayload: Partial<IUserStatus>, respond) => {
                 try {
                     const { sessionId, userId } = this.extractHeaders(socket);
-                    const updatedUser = sessionsManager.updateUser(sessionId, userId, updatePayload);
+                    const response: IUpdateUser = {
+                        userId,
+                        status: updatePayload,
+                    };
 
-                    socket.broadcast.to(sessionId).emit(RESPONSE_EVENTS.ON_USER_UPDATE, updatedUser);
-                    respond(updatedUser);
+                    socket.broadcast.to(sessionId).emit(RESPONSE_EVENTS.ON_USER_UPDATE, response);
+                    respond(response);
                 } catch {
                     respond(null);
                 }

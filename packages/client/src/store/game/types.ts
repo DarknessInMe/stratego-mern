@@ -1,4 +1,4 @@
-import { PieceNameEnum } from 'shared/enums';
+import { GameStages, PieceNameEnum } from 'shared/enums';
 import { ActionsEnum } from './enums';
 import { IGameState } from './interfaces';
 import { BoardFieldType } from 'shared/types';
@@ -15,7 +15,7 @@ export type ActionType =
     ActionPatternTypes<ActionsEnum.DROP_SELECTION> |
     ActionPatternTypes<ActionsEnum.ATTACK_PIECE, string> |
     ActionPatternTypes<ActionsEnum.SELECT_PIECE, string> |
-    ActionPatternTypes<ActionsEnum.TOGGLE_MODE> |
+    ActionPatternTypes<ActionsEnum.SET_MODE, GameStages> |
     ActionPatternTypes<ActionsEnum.SET_FIELD, BoardFieldType> |
     ActionPatternTypes<ActionsEnum.UPDATE_CELLS, ICell[]>
 

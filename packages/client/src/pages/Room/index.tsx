@@ -6,19 +6,21 @@ import { ROUTES } from 'router';
 import { useControllers } from 'hooks/useControllers';
 
 export const Room = memo(() => {
-    const { session, currentUser } = useSessionContext();
-    const { onToggleStatus, onLeaveRoom, onKickUser, onStartGame } = useControllers();
+    const { session, currentUser, userStatuses } = useSessionContext();
+    const { onToggleLobby, onLeaveRoom, onKickUser, onStartGame } = useControllers();
 
     const link = `${window.origin}/join/${session?.id}`;
     const isOwner = currentUser?.id === session?.ownerId;
 
     const isReadyToStart = useMemo(() => {
-        if (!session || session?.users?.length !== 2) {
+        const statuses = Object.values(userStatuses);
+
+        if (statuses.length !== 2) {
             return false;
         }
 
-        return session.users.every(({ isReady }) => isReady);
-    }, [session]);
+        return statuses.every(({ isLobbyReady }) => isLobbyReady);
+    }, [userStatuses]);
 
     const copyLink = () => {
         navigator.clipboard.writeText(link);
@@ -78,6 +80,7 @@ export const Room = memo(() => {
                     {session.users.map((user, index) => {
                         const isCurrentUser = currentUser?.id === user.id;
                         const showKick = isOwner && user.id !== currentUser?.id;
+                        const status = userStatuses[user.id];
 
                         return (
                             <div
@@ -90,15 +93,15 @@ export const Room = memo(() => {
                                 </span>
                                 <span>{user.id === session.ownerId ? 'Owner' : ''}</span>
                                 <span
-                                    className={clsx('user-item__status', user.isReady && 'user-item_ready')}
+                                    className={clsx('user-item__status', status?.isLobbyReady && 'user-item_ready')}
                                 >
-                                    {user.isReady ? 'Ready' : 'Not ready'} 
+                                    {status?.isLobbyReady ? 'Ready' : 'Not ready'} 
                                 </span>
                                 {isCurrentUser && (
                                     <button
-                                        onClick={onToggleStatus}
+                                        onClick={onToggleLobby}
                                     >
-                                        {user.isReady ? 'Cancel' : 'Get ready'}
+                                        {status?.isLobbyReady ? 'Cancel' : 'Get ready'}
                                     </button>
                                 )}
                                 {showKick && (

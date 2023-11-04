@@ -7,9 +7,9 @@ import { BoardFieldType } from 'shared/types';
 import { ICell } from 'shared/interfaces';
 
 export const gameCoreSlice = (state: IGameState) => ({
-    [ActionsEnum.TOGGLE_MODE]: (): IGameState => ({
+    [ActionsEnum.SET_MODE]: (mode: GameStages): IGameState => ({
         ...state,
-        mode: state.mode === GameStages.GAME_IN_PROCESS ? GameStages.SET_PIECES : GameStages.GAME_IN_PROCESS,
+        mode,
     }),
     [ActionsEnum.SET_FIELD]: (field: BoardFieldType): IGameState => ({
         ...state,
@@ -30,8 +30,9 @@ export const gameCoreSlice = (state: IGameState) => ({
 });
 
 export const useGameCoreControllers = (dispatch: GameStateDispatchType) => {
-    const toggleMode = useCallback(() => {
-        dispatch({ type: ActionsEnum.TOGGLE_MODE });
+    const setMode = useCallback((mode: GameStages) => {
+        console.log('mode', mode);
+        dispatch({ type: ActionsEnum.SET_MODE, payload: mode });
     }, []);
 
     const setField = useCallback((field: BoardFieldType) => {
@@ -43,7 +44,7 @@ export const useGameCoreControllers = (dispatch: GameStateDispatchType) => {
     }, []);
 
     return {
-        toggleMode,
+        setMode,
         setField,
         updateCells,
     };

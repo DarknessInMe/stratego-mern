@@ -1,5 +1,5 @@
 import { TeamsEnum } from '@stratego/common';
-import { PieceNameEnum, PieceWeightEnum } from './enums';
+import { GameStages, PieceNameEnum, PieceWeightEnum } from './enums';
 
 export const PIECES = {
     [PieceNameEnum.SPY]: PieceWeightEnum.SPY,

@@ -1,6 +1,12 @@
 import { getUserId } from 'shared/utils';
 import { Socket, io } from 'socket.io-client';
-import { ISession, IUser, REQUEST_EVENTS, REQ_HEADERS, UserPayloadType } from '@stratego/common';
+import { 
+    ISession, 
+    REQUEST_EVENTS, 
+    REQ_HEADERS, 
+    IUpdateUser,
+    IUserStatus,
+} from '@stratego/common';
 import { NullableType } from 'shared/types';
 
 const URL = process.env.NODE_ENV === 'production' ? undefined : process.env.BACKEND_URL;
@@ -36,7 +42,7 @@ class SocketManager {
         return await this.root.emitWithAck(REQUEST_EVENTS.JOIN_USER);
     }
 
-    async updateUser(payload: UserPayloadType): Promise<NullableType<IUser>> {
+    async updateUser(payload: Partial<IUserStatus>): Promise<NullableType<IUpdateUser>> {
         return await this.root.emitWithAck(REQUEST_EVENTS.UPDATE_USER, payload);
     }
 

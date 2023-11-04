@@ -1,8 +1,9 @@
 import { EnvironmentEnum, PieceNameEnum } from './enums';
-import { TeamsEnum, ISession, IUser } from '@stratego/common';
+import { TeamsEnum, ISession, IUser, IUpdateUser } from '@stratego/common';
 import { 
     CoordinatesType, 
-    ReactSetStateType, 
+    ReactSetStateType,
+    UsersStatusStoreType, 
 } from './types';
 import { ConnectableElement } from 'react-dnd';
 import { GameStateDispatchType, IGameState } from 'store';
@@ -50,8 +51,10 @@ export interface IGameContextValue {
 export interface ISessionContextValue {
     session: ISession | null,
     setSession: ReactSetStateType<ISession | null>,
+    userStatuses: UsersStatusStoreType,
+    setUserStatuses: ReactSetStateType<UsersStatusStoreType>,
     currentUser: IUser,
-    handleUserUpdating: (updatedUser: IUser) => void,
+    handleStatusUpdating: (updatedStatus: IUpdateUser) => void,
 }
 
 export interface IBankToBoardDragObject {

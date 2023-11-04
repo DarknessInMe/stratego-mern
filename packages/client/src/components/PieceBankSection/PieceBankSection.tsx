@@ -5,8 +5,9 @@ import { generateInitSetup } from 'shared/utils';
 import { useDrop } from 'react-dnd';
 import { DragTypesEnum, GameStages, PieceNameEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
-import { useBankControllers } from 'store';
-import { useGameCoreControllers } from 'store/game/hooks/useGameCoreControllers';
+import { useBankControllers, useGameCoreControllers } from 'store';
+import { useSessionContext } from 'context/SessionContext';
+import { useControllers } from 'hooks/useControllers';
 
 interface IDrop {
     rankName: PieceNameEnum,
@@ -14,11 +15,16 @@ interface IDrop {
 }
 
 export const PieceBankSection: React.FC = () => {
+    const { session, currentUser, userStatuses } = useSessionContext();
     const { gameState, gameDispatch, boardRef } = useGameContext();
+
+    const { onToggleGame } = useControllers(); 
     const { addToBank } = useBankControllers(gameDispatch);
-    const { toggleMode } = useGameCoreControllers(gameDispatch);
+    const { setMode } = useGameCoreControllers(gameDispatch);
 
     const isGameInProcess = gameState.mode === GameStages.GAME_IN_PROCESS;
+    const currentUserStatus = userStatuses[currentUser.id];
+    const isBankNotEmpty = Object.values(gameState.bank).some(count => count !== 0);
     const board = boardRef.current;
 
     const [_, dropRef] = useDrop(() => ({
@@ -37,15 +43,38 @@ export const PieceBankSection: React.FC = () => {
         return generateInitSetup(gameState.bank);
     }, [gameState.bank]);
 
+    const onReady = () => {
+        onToggleGame();
+        setMode(gameState.mode === GameStages.SET_PIECES ? GameStages.READY : GameStages.SET_PIECES);
+    };
+
     return (
         <div 
             className='screen__section screen__section_secondary'
             ref={dropRef}
         >
-            <div className='dev-kit'>
-                <button onClick={toggleMode}>Toggle mode</button>
-                <span>Current mode: {gameState.mode}</span>
-            </div>
+            <section style={{ width: '100%' }}>
+                <ul>
+                    {session.users.map(({ id }, index) => {
+                        const isCurrentUser = id === currentUser.id;
+                        const status = userStatuses[id];
+
+                        return (
+                            <li>
+                                User {index} {isCurrentUser ? '(You)' : ''} {status?.isGameReady ? 'Ready' : 'Not Ready'}
+                            </li>
+                        );
+                    })}
+                </ul>
+                <div>
+                    <button
+                        disabled={isBankNotEmpty}
+                        onClick={onReady}
+                    >
+                        {currentUserStatus?.isGameReady ? 'Cancel' : 'Ready'}
+                    </button>
+                </div>
+            </section>
             <div className={`bank ${isGameInProcess ? 'bank_in-game' : ''}`}>
                 {bankArray.map((item, index) => {
                     return (
