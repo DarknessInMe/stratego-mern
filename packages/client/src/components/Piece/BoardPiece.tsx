@@ -41,8 +41,9 @@ export const BoardPiece: React.FC<IBoardPieceProps> = memo(({
             return false;
         }
         const currentPiece = board.getPieceByCoordinates(coordinates.x, coordinates.y);
+        const { attackerPieceId, defenderPieceId } = gameState.selection;
 
-        return gameState.selection.attackedPieceId !== currentPiece?.id;
+        return !([attackerPieceId, defenderPieceId].includes(currentPiece?.id));
     };
 
     const isHidden = definePieceHidden();

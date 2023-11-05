@@ -15,9 +15,9 @@ export const useSelection = () => {
     }, []);
 
     const isCellHighlighted = useCallback((cellCoordinates: CoordinatesType) => {
-        const { selectedPieceId, attackedPieceId } = gameState.selection;
+        const { selectedPieceId, attackerPieceId, defenderPieceId } = gameState.selection;
 
-        if (!selectedPieceId || !!attackedPieceId) {
+        if (!selectedPieceId || [attackerPieceId, defenderPieceId].some(id => !!id)) {
             return false;
         }
 
@@ -25,7 +25,7 @@ export const useSelection = () => {
         const isHighlightedCell = currentAvailablePath.some(({ x, y }) => cellCoordinates.x === x && cellCoordinates.y === y);
 
         return isHighlightedCell;
-    }, [gameState.selection.selectedPieceId, gameState.selection.attackedPieceId]);
+    }, [gameState.selection]);
 
     return {
         selectPiece,

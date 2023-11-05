@@ -10,6 +10,7 @@ export enum REQUEST_EVENTS {
     KICK_USER = 'kick-user',
     START_GAME = 'start-game',
     SEND_DISPOSITION = 'send-disposition',
+    MOVE_PIECE = 'move-piece',
 }
 
 export enum RESPONSE_EVENTS {
@@ -19,6 +20,7 @@ export enum RESPONSE_EVENTS {
     ON_USER_KICK = 'on-user-kick',
     ON_GAME_STARTED = 'on-game-started',
     ON_DISPOSITION_RECEIVED = 'on-disposition-received',
+    ON_PIECE_MOVED = 'on-piece-moved',
 }
 
 export enum REQ_HEADERS {

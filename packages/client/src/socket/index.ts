@@ -7,9 +7,9 @@ import {
     IUpdateUser,
     IUserStatus,
     IDispositionItem,
+    IPieceMovePayload,
 } from '@stratego/common';
 import { NullableType } from 'shared/types';
-import { ICell } from 'shared/interfaces';
 
 const URL = process.env.NODE_ENV === 'production' ? undefined : process.env.BACKEND_URL;
 
@@ -58,6 +58,10 @@ class SocketManager {
 
     async sendDisposition(disposition: IDispositionItem[]): Promise<void> {
         return await this.root.emitWithAck(REQUEST_EVENTS.SEND_DISPOSITION, disposition);
+    }
+
+    async notifyAboutPieceMoving(payload: IPieceMovePayload) {
+        return await this.root.emitWithAck(REQUEST_EVENTS.MOVE_PIECE, payload);
     }
 }
 

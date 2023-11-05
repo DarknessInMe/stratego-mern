@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { Board } from 'core/Board';
 import { IContextProps, IGameContextValue } from 'shared/interfaces';
-import { IDispositionItem, RESPONSE_EVENTS, TeamsEnum } from '@stratego/common';
+import { IDispositionItem, IPieceMovePayload, RESPONSE_EVENTS, TeamsEnum } from '@stratego/common';
 import { useSessionContext } from './SessionContext';
 import { useGameState } from 'store';
 import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
@@ -22,8 +22,9 @@ export const GameProvider: React.FC<IContextProps> = ({ children }) => {
     const [gameState, gameDispatch] = useGameState(currentUser);
 
     const { setField, updateCells } = useGameCoreControllers(gameDispatch);
-    const { dropSelection } = useSelectionControllers(gameDispatch);
+    const { dropSelection, attackPiece } = useSelectionControllers(gameDispatch);
 
+    const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 	const boardRef = useRef(new Board(updateCells));
     const isReversedPlayer = gameState.teams.currentPlayer === TeamsEnum.BLUE_TEAM;
 
@@ -31,29 +32,47 @@ export const GameProvider: React.FC<IContextProps> = ({ children }) => {
         boardRef.current.registerDisposition(disposition, gameState.teams.opponentPlayer);
     };
 
+    const onPieceMoved = (movingPayload: IPieceMovePayload) => {
+        const { to, id } = movingPayload;
+        const targetCell = boardRef.current.getCell(to.x, to.y);
+        const movedPiece = boardRef.current.getPieceById(id);
+
+        if (targetCell.pieceId) {
+            return attackPiece({
+                attackerPieceId: movedPiece.id,
+                defenderPieceId: targetCell.pieceId,
+            });
+        }
+
+        boardRef.current.movePiece(movedPiece, to.x, to.y);
+    };
+
 	useEffect(() => {
 		boardRef.current.init(setField);
         socket.root.on(RESPONSE_EVENTS.ON_DISPOSITION_RECEIVED, onDispositionReceiver);
+        socket.root.on(RESPONSE_EVENTS.ON_PIECE_MOVED, onPieceMoved);
 
         return () => {
             socket.root.off(RESPONSE_EVENTS.ON_DISPOSITION_RECEIVED, onDispositionReceiver);
+            socket.root.off(RESPONSE_EVENTS.ON_PIECE_MOVED, onPieceMoved);
+            clearTimeout(timeoutRef.current);
         };
 	}, []);
 
     useEffect(() => {
-        const { attackedPieceId, selectedPieceId } = gameState.selection;
+        const { attackerPieceId, defenderPieceId } = gameState.selection;
 
-        if (!attackedPieceId) {
+        if (!defenderPieceId || !attackerPieceId) {
             return;
         }
 
-        boardRef.current.initAttack(selectedPieceId, attackedPieceId);
+        boardRef.current.initAttack(attackerPieceId, defenderPieceId);
 
-        setTimeout(() => {
-            boardRef.current.applyAttackResult(selectedPieceId, attackedPieceId);
+        timeoutRef.current = setTimeout(() => {
+            boardRef.current.applyAttackResult(attackerPieceId, defenderPieceId);
             dropSelection();
         }, 2000);
-    }, [gameState.selection.attackedPieceId]);
+    }, [gameState.selection.attackerPieceId, gameState.selection.defenderPieceId]);
 
     return (
         <GameContext.Provider value={{

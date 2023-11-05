@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { useGameContext } from 'context/GameContext';
 import { CanMoveBoardPieceTo, HandlePieceMovingType, OnMoveByClick } from 'shared/types';
 import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
+import { socket } from 'socket';
 
 export const useMovePiece = () => {
     const { boardRef, gameDispatch, gameState } = useGameContext();
@@ -18,8 +19,19 @@ export const useMovePiece = () => {
             return;
         }
 
+        socket.notifyAboutPieceMoving({
+            to: {
+                x: targetCell.x,
+                y: targetCell.y
+            },
+            id: draggedPiece.id,
+        });
+
         if (targetCell.pieceId) {
-            return attackPiece(targetCell.pieceId);
+            return attackPiece({
+                attackerPieceId: draggedPiece.id,
+                defenderPieceId: targetCell.pieceId,
+            });
         }
         
         board.movePiece(draggedPiece, newPosition.x, newPosition.y);

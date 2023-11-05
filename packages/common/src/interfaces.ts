@@ -27,3 +27,11 @@ export interface IDispositionItem {
     rankName: string,
     id: string,
 }
+
+export interface IPieceMovePayload {
+    to: {
+        x: number,
+        y: number,
+    },
+    id: string,
+}

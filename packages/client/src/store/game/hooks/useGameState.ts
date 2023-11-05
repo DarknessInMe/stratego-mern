@@ -14,7 +14,8 @@ const getInitialState = (currentUser: IUser): IGameState => ({
     mode: GameStages.SET_PIECES,
     selection: {
         selectedPieceId: null,
-        attackedPieceId: null,
+        attackerPieceId: null,
+        defenderPieceId: null,
     },
     teams: {
         currentPlayer: currentUser.team,

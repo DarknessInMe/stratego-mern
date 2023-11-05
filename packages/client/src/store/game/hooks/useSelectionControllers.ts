@@ -1,21 +1,22 @@
 import { useCallback } from 'react';
 import { GameStateDispatchType } from 'store/game/types';
 import { ActionsEnum } from 'store/game/enums';
-import { IGameState } from 'store/game/interfaces';
+import { IAttackPiece, IGameState } from 'store/game/interfaces';
 
 export const selectionSlice = (state: IGameState) => ({
     [ActionsEnum.DROP_SELECTION]: (): IGameState => ({
         ...state,
         selection: {
-            attackedPieceId: null,
             selectedPieceId: null,
+            attackerPieceId: null,
+            defenderPieceId: null,
         }
     }),
-    [ActionsEnum.ATTACK_PIECE]: (attackedPieceId: string): IGameState => ({
+    [ActionsEnum.ATTACK_PIECE]: (attackPayload: IAttackPiece): IGameState => ({
         ...state,
         selection: {
-            ...state.selection,
-            attackedPieceId,
+            selectedPieceId: null,
+            ...attackPayload,
         },
     }),
     [ActionsEnum.SELECT_PIECE]: (selectedPieceId: string): IGameState => ({
@@ -32,8 +33,8 @@ export const useSelectionControllers = (dispatch: GameStateDispatchType) => {
         dispatch({ type: ActionsEnum.DROP_SELECTION });
     }, []);
 
-    const attackPiece = useCallback((pieceId: string) => {
-        dispatch({ type: ActionsEnum.ATTACK_PIECE, payload: pieceId });
+    const attackPiece = useCallback((attackPayload: IAttackPiece) => {
+        dispatch({ type: ActionsEnum.ATTACK_PIECE, payload: attackPayload });
     }, []);
 
     const selectPiece = useCallback((pieceId: string) => {

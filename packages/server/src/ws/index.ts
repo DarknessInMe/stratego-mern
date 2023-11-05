@@ -1,7 +1,7 @@
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
 import { instrument } from '@socket.io/admin-ui';
-import { IDispositionItem, IUpdateUser, IUserStatus, REQUEST_EVENTS, RESPONSE_EVENTS } from '@stratego/common';
+import { IDispositionItem, IPieceMovePayload, IUpdateUser, IUserStatus, REQUEST_EVENTS, RESPONSE_EVENTS } from '@stratego/common';
 import { SessionsManager } from '@/sessions/SessionsManager';
 import { REQ_HEADERS } from '@stratego/common';
 
@@ -118,6 +118,16 @@ export class SocketManager {
                     const { sessionId } = this.extractHeaders(socket);
 
                     socket.to(sessionId).emit(RESPONSE_EVENTS.ON_DISPOSITION_RECEIVED, payload);
+                } catch {
+                    //
+                }
+            });
+
+            socket.on(REQUEST_EVENTS.MOVE_PIECE, (payload: IPieceMovePayload) => {
+                try {
+                    const { sessionId } = this.extractHeaders(socket);
+
+                    socket.to(sessionId).emit(RESPONSE_EVENTS.ON_PIECE_MOVED, payload);
                 } catch {
                     //
                 }

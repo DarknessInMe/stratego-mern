@@ -10,3 +10,8 @@ export interface IGameState {
     selection: ISelectionState,
     teams: ITeamsState,
 }
+
+export interface IAttackPiece {
+    defenderPieceId: string,
+    attackerPieceId: string,
+}

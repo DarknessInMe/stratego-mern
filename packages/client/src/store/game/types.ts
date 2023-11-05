@@ -1,6 +1,6 @@
 import { GameStages, PieceNameEnum } from 'shared/enums';
 import { ActionsEnum } from './enums';
-import { IGameState } from './interfaces';
+import { IAttackPiece, IGameState } from './interfaces';
 import { BoardFieldType } from 'shared/types';
 import { ICell } from 'shared/interfaces';
 
@@ -14,7 +14,7 @@ export type ActionType =
     ActionPatternTypes<ActionsEnum.REMOVE_FROM_BANK, PieceNameEnum> |
     ActionPatternTypes<ActionsEnum.CLEAR_BANK> |
     ActionPatternTypes<ActionsEnum.DROP_SELECTION> |
-    ActionPatternTypes<ActionsEnum.ATTACK_PIECE, string> |
+    ActionPatternTypes<ActionsEnum.ATTACK_PIECE, IAttackPiece> |
     ActionPatternTypes<ActionsEnum.SELECT_PIECE, string> |
     ActionPatternTypes<ActionsEnum.SET_MODE, GameStages> |
     ActionPatternTypes<ActionsEnum.SET_FIELD, BoardFieldType> |

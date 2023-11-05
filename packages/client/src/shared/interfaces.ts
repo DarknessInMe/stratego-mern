@@ -33,7 +33,8 @@ export interface IContextProps {
 
 export interface ISelectionState {
     selectedPieceId: string | null,
-    attackedPieceId: string | null,
+    defenderPieceId: string | null,
+    attackerPieceId: string | null,
 }
 
 export interface ITeamsState {
