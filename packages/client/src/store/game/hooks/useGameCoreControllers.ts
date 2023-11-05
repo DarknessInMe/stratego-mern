@@ -31,7 +31,6 @@ export const gameCoreSlice = (state: IGameState) => ({
 
 export const useGameCoreControllers = (dispatch: GameStateDispatchType) => {
     const setMode = useCallback((mode: GameStages) => {
-        console.log('mode', mode);
         dispatch({ type: ActionsEnum.SET_MODE, payload: mode });
     }, []);
 

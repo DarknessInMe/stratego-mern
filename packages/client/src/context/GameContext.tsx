@@ -12,8 +12,10 @@ import { useGameState } from 'store';
 import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 import { useGameCoreControllers } from 'store/game/hooks/useGameCoreControllers';
 import { socket } from 'socket';
+import { Devtools } from 'components/Devtools';
 
 const GameContext = createContext<IGameContextValue>({} as IGameContextValue);
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 export const GameProvider: React.FC<IContextProps> = ({ children }) => {
     const { currentUser } = useSessionContext();
@@ -60,6 +62,7 @@ export const GameProvider: React.FC<IContextProps> = ({ children }) => {
             gameDispatch,
             boardRef,
         }}>
+            {isDevelopment && <Devtools />}
             {children}
         </GameContext.Provider>
     );

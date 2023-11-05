@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { memo, useMemo } from 'react';
 import { BankPiece } from 'components/Piece';
 import { useGameContext } from 'context/GameContext';
 import { generateInitSetup } from 'shared/utils';
@@ -8,17 +8,16 @@ import { CoordinatesType } from 'shared/types';
 import { useBankControllers, useGameCoreControllers } from 'store';
 import { useSessionContext } from 'context/SessionContext';
 import { useControllers } from 'hooks/useControllers';
-import { socket } from 'socket';
+import { useGameStartCountDown } from './hooks/useGameStartCountdown';
 
 interface IDrop {
     rankName: PieceNameEnum,
     coordinates: CoordinatesType | null,
 }
 
-export const PieceBankSection: React.FC = () => {
+export const PieceBankSection: React.FC = memo(() => {
     const { session, currentUser, userStatuses } = useSessionContext();
     const { gameState, gameDispatch, boardRef } = useGameContext();
-    const [countdown, setCountdown] = useState<number | null>(null);
 
     const { onToggleGame } = useControllers(); 
     const { addToBank } = useBankControllers(gameDispatch);
@@ -29,6 +28,17 @@ export const PieceBankSection: React.FC = () => {
     const isBankNotEmpty = Object.values(gameState.bank).some(count => count !== 0);
     const board = boardRef.current;
 
+    const bankArray = useMemo(() => {
+        return generateInitSetup(gameState.bank);
+    }, [gameState.bank]);
+
+    const isGameReady = useMemo(() => {
+        const statuses = Object.values(userStatuses);
+
+        return statuses.length === 2 && statuses.every(({ isGameReady }) => isGameReady);
+    }, [userStatuses]);
+
+    const { countdown } = useGameStartCountDown(isGameReady); 
     const [_, dropRef] = useDrop(() => ({
         accept: DragTypesEnum.PIECE_FROM_BOARD,
         drop: ({ rankName, coordinates }: IDrop) => {
@@ -41,47 +51,10 @@ export const PieceBankSection: React.FC = () => {
         canDrop: () => !isGameInProcess,
       }), [gameState.mode]);
 
-    const bankArray = useMemo(() => {
-        return generateInitSetup(gameState.bank);
-    }, [gameState.bank]);
-
     const onReady = () => {
         onToggleGame();
         setMode(gameState.mode === GameStages.SET_PIECES ? GameStages.READY : GameStages.SET_PIECES);
     };
-
-    useEffect(() => {
-        const statuses = Object.values(userStatuses);
-        let interval = null;
-
-        if (statuses.length !== 2) {
-            return;
-        }
-
-        if (statuses.every(({ isGameReady }) => isGameReady)) {
-            setCountdown(10);
-            socket.sendDisposition(board.extractDisposition(gameState.teams.currentPlayer));
-            interval = setInterval(() => {
-                setCountdown(prevCount => {
-                    if (typeof prevCount !== 'number') {
-                        return prevCount;
-                    }
-
-                    if (prevCount === 0) {
-                        clearInterval(interval);
-                        setMode(GameStages.GAME_IN_PROCESS);
-                        return null;
-                    }
-
-                    return prevCount - 1;
-                });
-            }, 1000);
-        }
-
-        return () => {
-            clearInterval(interval);
-        };
-    }, [userStatuses]);
 
     return (
         <div 
@@ -95,7 +68,7 @@ export const PieceBankSection: React.FC = () => {
                         const status = userStatuses[id];
 
                         return (
-                            <li>
+                            <li key={`user-status-${id}`}>
                                 User {index} {isCurrentUser ? '(You)' : ''} {status?.isGameReady ? 'Ready' : 'Not Ready'}
                             </li>
                         );
@@ -127,4 +100,4 @@ export const PieceBankSection: React.FC = () => {
             </div>
         </div>
     );
-};
+});

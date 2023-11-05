@@ -19,6 +19,18 @@ export const bankSlice = (state: IGameState) => ({
             [rankName]: state.bank[rankName] - 1,
         }
     }),
+    [ActionsEnum.CLEAR_BANK]: (): IGameState => {
+        const bankCopy = { ...state.bank };
+
+        for (const rankName in bankCopy) {
+            bankCopy[rankName] = 0;
+        }
+
+        return {
+            ...state,
+            bank: bankCopy,
+        };
+    }
 });
 
 export const useBankControllers = (dispatch: GameStateDispatchType) => {
@@ -30,8 +42,13 @@ export const useBankControllers = (dispatch: GameStateDispatchType) => {
         dispatch({ type: ActionsEnum.REMOVE_FROM_BANK, payload: rankName });
     }, []);
 
+    const clearBank = useCallback(() => {
+        dispatch({ type: ActionsEnum.CLEAR_BANK });
+    }, []);
+
     return {
         addToBank,
         removeFromBank,
+        clearBank,
     };
 };

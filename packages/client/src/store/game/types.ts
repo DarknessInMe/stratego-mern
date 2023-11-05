@@ -12,6 +12,7 @@ export type ActionPatternTypes<T extends ActionsEnum, Y = void> = {
 export type ActionType = 
     ActionPatternTypes<ActionsEnum.ADD_TO_BANK, PieceNameEnum> |
     ActionPatternTypes<ActionsEnum.REMOVE_FROM_BANK, PieceNameEnum> |
+    ActionPatternTypes<ActionsEnum.CLEAR_BANK> |
     ActionPatternTypes<ActionsEnum.DROP_SELECTION> |
     ActionPatternTypes<ActionsEnum.ATTACK_PIECE, string> |
     ActionPatternTypes<ActionsEnum.SELECT_PIECE, string> |

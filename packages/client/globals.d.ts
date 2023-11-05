@@ -5,7 +5,9 @@ declare module '*.svg' {
 
 declare global {
     interface Window {
-        spawnOpponent: any;
+        _devTools: {
+            [key: string]: any
+        };
     }
 }
 
