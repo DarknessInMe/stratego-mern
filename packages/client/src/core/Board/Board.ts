@@ -6,14 +6,15 @@ import { BasePiece } from 'core/Pieces';
 import { ALLOWED_SETUP_RANGES } from 'shared/constants';
 import { IDispositionItem, TeamsEnum } from '@stratego/common';
 import { piecePicker } from 'shared/utils';
+import { Registry } from 'core/Registry';
 
 type UpdateCoreStateType = (cells: ICell[]) => void;
 
 export class Board {
     field: BoardFieldType | null = null;
-    pieces = new Map<string, BasePiece>();
 
-    readonly updateCoreState: UpdateCoreStateType;
+    private readonly registry = new Registry();
+    private readonly updateCoreState: UpdateCoreStateType;
     
     constructor(updateCoreState: UpdateCoreStateType) {
         this.updateCoreState = updateCoreState;
@@ -51,7 +52,7 @@ export class Board {
     }
 
     getPieceById(id: string) {
-        return this.pieces.get(id);
+        return this.registry.getPieceById(id);
     }
 
     getPieceByCoordinates(x: number, y: number) {
@@ -73,7 +74,7 @@ export class Board {
             const piece = new pieceConstructor(x, y, nameGuard, team, id);
             const cell = this.getCell(x, y);
 
-            this.pieces.set(piece.id, piece);
+            this.registry.registerPiece(piece);
             cell.pieceId = piece.id;
 
             cellsToUpdate.push(cell);
@@ -86,7 +87,7 @@ export class Board {
         const [start, end] = ALLOWED_SETUP_RANGES[team];
 
         return this.field.slice(start, end + 1).flat().map(cell => {
-            const piece = this.pieces.get(cell.pieceId);
+            const piece = this.getPieceById(cell.pieceId);
 
             return {
                 x: piece.x,
@@ -98,7 +99,7 @@ export class Board {
     }
 
     registerPiece(piece: BasePiece, x: number, y: number) {
-        this.pieces.set(piece.id, piece);
+        this.registry.registerPiece(piece);
 
         const cell = this.getCell(x, y);
 
@@ -113,7 +114,7 @@ export class Board {
             const piece = this.getPieceByCoordinates(x, y);
             const cell = this.removePieceFrom(x, y);
     
-            this.pieces.delete(piece.id);
+            this.registry.deletePiece(piece);
             cellsToUpdate.push(cell);
         });
 
