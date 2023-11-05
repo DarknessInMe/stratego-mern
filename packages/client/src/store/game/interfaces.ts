@@ -1,3 +1,4 @@
+import { TeamsEnum } from '@stratego/common';
 import { PIECES_SETUP } from 'shared/constants';
 import { GameStages } from 'shared/enums';
 import { ITeamsState, ISelectionState } from 'shared/interfaces';
@@ -9,6 +10,7 @@ export interface IGameState {
     mode: GameStages,
     selection: ISelectionState,
     teams: ITeamsState,
+    turn: TeamsEnum,
 }
 
 export interface IAttackPiece {

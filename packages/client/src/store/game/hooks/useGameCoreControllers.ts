@@ -5,6 +5,7 @@ import { IGameState } from 'store/game/interfaces';
 import { GameStages } from 'shared/enums';
 import { BoardFieldType } from 'shared/types';
 import { ICell } from 'shared/interfaces';
+import { TeamsEnum } from '@stratego/common';
 
 export const gameCoreSlice = (state: IGameState) => ({
     [ActionsEnum.SET_MODE]: (mode: GameStages): IGameState => ({
@@ -26,7 +27,11 @@ export const gameCoreSlice = (state: IGameState) => ({
             ...state,
             field: fieldCopy,
         };
-    }
+    },
+    [ActionsEnum.TOGGLE_TURN]: (): IGameState => ({
+        ...state,
+        turn: state.turn === TeamsEnum.RED_TEAM ? TeamsEnum.BLUE_TEAM : TeamsEnum.RED_TEAM,
+    })
 });
 
 export const useGameCoreControllers = (dispatch: GameStateDispatchType) => {
@@ -42,9 +47,14 @@ export const useGameCoreControllers = (dispatch: GameStateDispatchType) => {
         dispatch({ type: ActionsEnum.UPDATE_CELLS, payload: cells });
     }, []);
 
+    const toggleTurn = useCallback(() => {
+        dispatch({ type: ActionsEnum.TOGGLE_TURN });
+    }, []);
+
     return {
         setMode,
         setField,
         updateCells,
+        toggleTurn,
     };
 };

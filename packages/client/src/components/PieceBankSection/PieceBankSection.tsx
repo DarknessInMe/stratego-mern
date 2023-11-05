@@ -74,7 +74,7 @@ export const PieceBankSection: React.FC = memo(() => {
                         );
                     })}
                 </ul>
-                {gameState.mode !== GameStages.GAME_IN_PROCESS && (
+                {gameState.mode !== GameStages.GAME_IN_PROCESS ? (
                     <div>
                         <button
                             disabled={isBankNotEmpty || countdown !== null}
@@ -82,6 +82,10 @@ export const PieceBankSection: React.FC = memo(() => {
                         >
                             {currentUserStatus?.isGameReady ? 'Cancel' : 'Ready'}
                         </button>
+                    </div>
+                ) : (
+                    <div>
+                        Current turn: {gameState.turn}
                     </div>
                 )}
                 {countdown !== null && (

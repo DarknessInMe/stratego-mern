@@ -20,7 +20,8 @@ const getInitialState = (currentUser: IUser): IGameState => ({
     teams: {
         currentPlayer: currentUser.team,
         opponentPlayer: currentUser.team === TeamsEnum.RED_TEAM ? TeamsEnum.BLUE_TEAM : TeamsEnum.RED_TEAM,
-    }
+    },
+    turn: TeamsEnum.RED_TEAM,
 });
 
 const reducer = (state: IGameState, action: ActionType): IGameState => {

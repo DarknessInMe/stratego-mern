@@ -45,6 +45,7 @@ export interface ITeamsState {
 export interface IGameContextValue {
     boardRef: React.MutableRefObject<Board>,
     isReversedPlayer: boolean,
+    isCurrentPlayerTurn: boolean,
     gameState: IGameState,
     gameDispatch: GameStateDispatchType,
 }

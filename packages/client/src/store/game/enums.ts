@@ -8,4 +8,5 @@ export enum ActionsEnum {
     SET_MODE = 'SET_MODE',
     UPDATE_CELLS = 'UPDATE_CELLS',
     SET_FIELD = 'SET_FIELD',
+    TOGGLE_TURN = 'TOGGLE_TURN',
 }

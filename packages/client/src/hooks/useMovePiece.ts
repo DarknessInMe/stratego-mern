@@ -3,11 +3,29 @@ import { useGameContext } from 'context/GameContext';
 import { CanMoveBoardPieceTo, HandlePieceMovingType, OnMoveByClick } from 'shared/types';
 import { useSelectionControllers } from 'store/game/hooks/useSelectionControllers';
 import { socket } from 'socket';
+import { BasePiece } from 'core/Pieces';
+import { ICell } from 'shared/interfaces';
+import { useGameCoreControllers } from 'store';
 
 export const useMovePiece = () => {
     const { boardRef, gameDispatch, gameState } = useGameContext();
     const { dropSelection, attackPiece } = useSelectionControllers(gameDispatch);
+    const { toggleTurn } = useGameCoreControllers(gameDispatch);
+
     const board = boardRef.current;
+
+    const handleAttackOrMove = useCallback((piece: BasePiece, targetCell: ICell) => {
+        if (targetCell.pieceId) {
+            return attackPiece({
+                attackerPieceId: piece.id,
+                defenderPieceId: targetCell.pieceId,
+            });
+        }
+        
+        board.movePiece(piece, targetCell.x, targetCell.y);
+        dropSelection();
+        toggleTurn();
+    }, []);
 
     const handlePieceMoving = useCallback<HandlePieceMovingType>((pieceQuery, newPosition) => {
         const targetCell = board.getCell(newPosition.x, newPosition.y);
@@ -27,15 +45,7 @@ export const useMovePiece = () => {
             id: draggedPiece.id,
         });
 
-        if (targetCell.pieceId) {
-            return attackPiece({
-                attackerPieceId: draggedPiece.id,
-                defenderPieceId: targetCell.pieceId,
-            });
-        }
-        
-        board.movePiece(draggedPiece, newPosition.x, newPosition.y);
-        dropSelection();
+        handleAttackOrMove(draggedPiece, targetCell);
     }, []);
 
     const canMoveBoardPieceTo = useCallback<CanMoveBoardPieceTo>((movedFrom, moveTo) => {
@@ -65,5 +75,6 @@ export const useMovePiece = () => {
         handlePieceMoving,
         canMoveBoardPieceTo,
         onMoveByClick,
+        handleAttackOrMove,
     };
 };

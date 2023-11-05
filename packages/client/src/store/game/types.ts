@@ -18,7 +18,8 @@ export type ActionType =
     ActionPatternTypes<ActionsEnum.SELECT_PIECE, string> |
     ActionPatternTypes<ActionsEnum.SET_MODE, GameStages> |
     ActionPatternTypes<ActionsEnum.SET_FIELD, BoardFieldType> |
-    ActionPatternTypes<ActionsEnum.UPDATE_CELLS, ICell[]>
+    ActionPatternTypes<ActionsEnum.UPDATE_CELLS, ICell[]> |
+    ActionPatternTypes<ActionsEnum.TOGGLE_TURN>
 
 export type StrategyType = {
     [Property in keyof typeof ActionsEnum]: (payload?: any) => IGameState
