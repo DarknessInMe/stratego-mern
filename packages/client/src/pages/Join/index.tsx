@@ -1,10 +1,10 @@
 import React, { memo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useControllers } from 'hooks/useControllers';
+import { useSessionControllers } from 'hooks/useSessionControllers';
 import { ROUTES } from 'router';
 
 export const Join = memo(() => {
-    const { onJoin } = useControllers();
+    const { onJoin } = useSessionControllers();
     const history = useNavigate();
     const { id } = useParams();
 

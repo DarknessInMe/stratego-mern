@@ -3,11 +3,11 @@ import clsx from 'clsx';
 import { useSessionContext } from 'context/SessionContext';
 import { Navigate } from 'react-router-dom';
 import { ROUTES } from 'router';
-import { useControllers } from 'hooks/useControllers';
+import { useSessionControllers } from 'hooks/useSessionControllers';
 
 export const Room = memo(() => {
     const { session, currentUser, userStatuses } = useSessionContext();
-    const { onToggleLobby, onLeaveRoom, onKickUser, onStartGame } = useControllers();
+    const { onToggleLobby, onLeaveRoom, onKickUser, onStartGame } = useSessionControllers();
 
     const link = `${window.origin}/join/${session?.id}`;
     const isOwner = currentUser?.id === session?.ownerId;

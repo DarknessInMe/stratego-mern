@@ -1,20 +1,21 @@
-import { IUserStatus } from '@stratego/common';
+import { useCallback } from 'react';
+import { IUpdateUser, IUserStatus } from '@stratego/common';
 import { useSessionContext } from 'context/SessionContext';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { ROUTES } from 'router';
 import { socket } from 'socket';
 import { v4 as uuidv4 } from 'uuid';
 
-export const useControllers = () => {
+export const useSessionControllers = () => {
     const history = useNavigate();
     const { 
         setSession,
         currentUser,
         userStatuses,
-        handleStatusUpdating,
+        setUserStatuses,
     } = useSessionContext();
 
-    const onCreate = async () => {
+    const onCreate = useCallback(async () => {
         try {
             const sessionId = uuidv4();
 
@@ -31,9 +32,9 @@ export const useControllers = () => {
         } catch {
             socket.disconnect();
         }
-    };
+    }, []);
 
-    const onJoin = async (roomId) => {
+    const onJoin = useCallback(async (roomId) => {
         try {
             socket.connect(roomId);
             const session = await socket.joinRoom();
@@ -48,9 +49,9 @@ export const useControllers = () => {
             socket.disconnect();
             history(ROUTES.HOME);
         }
-    };
+    }, []);
 
-    const onChangeStatus = async (status: Partial<IUserStatus>) => {
+    const onChangeStatus = useCallback(async (status: Partial<IUserStatus>) => {
         try {
             const updatedStatus = await socket.updateUser(status);
 
@@ -62,26 +63,36 @@ export const useControllers = () => {
         } catch {
             //
         }
-    };
+    }, []);
 
-    const onToggleLobby = async () => {
+    const onToggleLobby = useCallback(async () => {
         await onChangeStatus({
             isLobbyReady: !userStatuses[currentUser.id].isLobbyReady,
         });
-    };
+    }, [userStatuses, currentUser?.id]);
 
-    const onToggleGame = async () => {
+    const onToggleGame = useCallback(async () => {
         await onChangeStatus({
             isGameReady: !userStatuses[currentUser.id].isGameReady,
         });
-    };
+    }, [userStatuses, currentUser?.id]);
 
-    const onLeaveRoom = () => {
+    const onLeaveRoom = useCallback(() => {
         socket.disconnect();
         setSession(null);
-    };
+    }, []);
 
-    const onKickUser = async (userId: string) => {
+    const handleStatusUpdating = useCallback(({ userId, status }: IUpdateUser) => {
+        setUserStatuses((prevStatuses) => ({
+            ...prevStatuses,
+            [userId]: {
+                ...prevStatuses[userId],
+                ...status,
+            }
+        }));
+    }, []);
+
+    const onKickUser = useCallback(async (userId: string) => {
         try {
             const canBeKicked = await socket.kickUser();
 
@@ -102,15 +113,15 @@ export const useControllers = () => {
         } catch {
             //
         }
-    };
+    }, []);
 
-    const onStartGame = async () => {
+    const onStartGame = useCallback(async () => {
         const canBeStarted = await socket.startGame();
 
         if (canBeStarted) {
             history(ROUTES.GAME);
         }
-    };
+    }, []);
 
     return {
         onCreate,
@@ -120,5 +131,6 @@ export const useControllers = () => {
         onKickUser,
         onStartGame,
         onToggleGame,
+        handleStatusUpdating,
     };
 };

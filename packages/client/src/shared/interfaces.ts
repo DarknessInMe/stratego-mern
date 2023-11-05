@@ -1,5 +1,5 @@
 import { EnvironmentEnum, PieceNameEnum } from './enums';
-import { TeamsEnum, ISession, IUser, IUpdateUser } from '@stratego/common';
+import { TeamsEnum, ISession, IUser } from '@stratego/common';
 import { 
     CoordinatesType, 
     ReactSetStateType,
@@ -56,7 +56,6 @@ export interface ISessionContextValue {
     userStatuses: UsersStatusStoreType,
     setUserStatuses: ReactSetStateType<UsersStatusStoreType>,
     currentUser: IUser,
-    handleStatusUpdating: (updatedStatus: IUpdateUser) => void,
 }
 
 export interface IBankToBoardDragObject {

@@ -7,7 +7,7 @@ import { DragTypesEnum, GameStages, PieceNameEnum } from 'shared/enums';
 import { CoordinatesType } from 'shared/types';
 import { useBankControllers, useGameCoreControllers } from 'store';
 import { useSessionContext } from 'context/SessionContext';
-import { useControllers } from 'hooks/useControllers';
+import { useSessionControllers } from 'hooks/useSessionControllers';
 import { useGameStartCountDown } from './hooks/useGameStartCountdown';
 
 interface IDrop {
@@ -19,7 +19,7 @@ export const PieceBankSection: React.FC = memo(() => {
     const { session, currentUser, userStatuses } = useSessionContext();
     const { gameState, gameDispatch, boardRef } = useGameContext();
 
-    const { onToggleGame } = useControllers(); 
+    const { onToggleGame } = useSessionControllers(); 
     const { addToBank } = useBankControllers(gameDispatch);
     const { setMode } = useGameCoreControllers(gameDispatch);
 

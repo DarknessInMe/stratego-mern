@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
 import clsx from 'clsx';
-import { useControllers } from 'hooks/useControllers';
+import { useSessionControllers } from 'hooks/useSessionControllers';
 
 export const Home = () => {
-    const { onCreate, onJoin } = useControllers();
+    const { onCreate, onJoin } = useSessionControllers();
     const inputRef = useRef<HTMLInputElement>(null);
 
     return (
